@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class ServerList {
     private ArrayList<Server> serverList;
+    private Server Servers;
 
     public ServerList(){
         serverList = new ArrayList<>();
@@ -20,5 +21,16 @@ public class ServerList {
         }
         server += "</div></html>";
         return server;
+    }
+
+    public Server getServer(int positie){
+        if(serverList.size() > 0) {
+            for (int i = 0; i < serverList.size(); i++) {
+                if (i == positie) {
+                    Servers = serverList.get(i);
+                }
+            }
+        }
+        return Servers;
     }
 }

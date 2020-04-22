@@ -4,9 +4,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class ApplicatieFrame extends JFrame implements ActionListener {
-    private ServerList serverList;
+    private ArrayList<String> lijst;
+    private ArrayList<Server> serverArrayList;
     private JFrame frame;
     private JButton jboptimalisatie;
     private JLabel jlservers;
@@ -24,36 +29,44 @@ public class ApplicatieFrame extends JFrame implements ActionListener {
         jboptimalisatie.addActionListener(this);
         frame.add(jboptimalisatie);
 
-        //declaratie van Serverlist
-        ServerList list = new ServerList();
+        lijst = new ArrayList<>();
+        serverArrayList = new ArrayList<>();
 
-        //declaratie en initializatie van servers
-        Server pfSense = new Server("pfSense", 4000, 0.99998);
+        ServerList serverLijst = new ServerList();
 
-        Server HAL9001DB = new Server("HAL9001DB", 5100, 0.90);
-        Server HAL9002DB = new Server("HAL9002DB",7700, 0.95);
-        Server HAL9003DB = new Server("HAL9003DB",12200, 0.98);
+        try {
+            File Servers = new File("./Servers.txt");
+            Scanner Reader = new Scanner(Servers);
+            while (Reader.hasNextLine()) {
+                String data = Reader.nextLine();
+                lijst.add(data);
+            }
+            Reader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
 
-        Server HAL9001W = new Server("HAL9001W",2200, 0.80);
-        Server HAL9002W = new Server("HAL9002W",3200, 0.90);
-        Server HAL9003W = new Server("HAL9003W",5100, 0.95);
+        for(String data : lijst){
+            String[] test = data.split(",", 0);
+            try {
+                int test1 = Integer.parseInt(test[1]);
+                double test2 = Double.parseDouble(test[2]);
+                int test3 = Integer.parseInt(test[3]);
+                Server server = new Server(test[0], test1, test2, test3);
+                serverLijst.voegServerToe(server);
+                serverArrayList.add(server);
+            }
+            catch(ArrayIndexOutOfBoundsException ignored){ }
+        }
+        //Berekenen optimale samenstelling bij 99,99%
+        Server.BerekenBeschikbaarheid(serverLijst.getServer(0), serverLijst.getServer(1), serverLijst.getServer(1), serverLijst.getServer(1), serverLijst.getServer(2), serverLijst.getServer(4),serverLijst.getServer(5), serverLijst.getServer(5), serverLijst.getServer(5), serverLijst.getServer(5));
+        Server.BerekenBeschikbaarheid(serverLijst.getServer(0), serverLijst.getServer(1), serverLijst.getServer(4));
 
-        //Voeg server toe aan ServerList
-        list.voegServerToe(pfSense);
-        list.voegServerToe(HAL9001DB);
-        list.voegServerToe(HAL9002DB);
-        list.voegServerToe(HAL9003DB);
-        list.voegServerToe(HAL9001W);
-        list.voegServerToe(HAL9002W);
-        list.voegServerToe(HAL9003W);
-
-        //Berkenen optimale samenstelling bij 99,99%
-        Server.Bereken(HAL9001DB, HAL9002DB, HAL9002DB, HAL9002DB, HAL9001W, HAL9001W, HAL9001W, HAL9002W, pfSense);
-        Server.Bereken(HAL9001DB, HAL9002DB, HAL9003DB);
 
         //aanmaken nieuwe JLabel voor de lijst met beschikbare servers
         jlservers = new JLabel();
-        jlservers.setText(list.printServerList());
+        jlservers.setText(serverLijst.printServerList());
         jlservers.setHorizontalAlignment(SwingConstants.CENTER);
         Dimension d1 = new Dimension(500,150);
         jlservers.setPreferredSize(d1);
