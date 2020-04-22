@@ -49,6 +49,7 @@ public class ApplicatieFrame extends JFrame implements ActionListener {
 
         //Berkenen optimale samenstelling bij 99,99%
         Server.Bereken(HAL9001DB, HAL9002DB, HAL9002DB, HAL9002DB, HAL9001W, HAL9001W, HAL9001W, HAL9002W, pfSense);
+        Server.Bereken(HAL9001DB, HAL9002DB, HAL9003DB);
 
         //aanmaken nieuwe JLabel voor de lijst met beschikbare servers
         jlservers = new JLabel();
