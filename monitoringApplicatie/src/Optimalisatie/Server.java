@@ -1,6 +1,5 @@
 package Optimalisatie;
 
-import java.util.ArrayList;
 
 public class Server {
     private String naam;
@@ -16,11 +15,11 @@ public class Server {
 
     public String toString(){
         beschikbaarheid = beschikbaarheid * 100;
-        return "Naam: " + naam + ", prijs: " + prijs + ", beschikbaarheidspercentage: " + beschikbaarheid + "%";
+        return "Naam: " + naam + ", prijs: " + prijs + " euro, beschikbaarheidspercentage: " + beschikbaarheid + "%";
     }
 
 
-    //berekening voor 2 servers
+    //percentage berekening voor 2 servers
     public static void Bereken(Server server1, Server server2){
         //bereken de beschikbaarheid
         double beschikbaarheid = 1-(1-server1.beschikbaarheid)*(1-server2.beschikbaarheid);
@@ -30,7 +29,7 @@ public class Server {
         System.out.println("de jaarlijkse prijs is: " + prijs);
     }
 
-    //berekening voor 3 servers
+    //percentage berekening voor 3 servers
     public static void Bereken(Server server1, Server server2, Server server3){
         //bereken de beschikbaarheid
         double beschikbaarheid = 1-(1-server1.beschikbaarheid)*(1-server2.beschikbaarheid)*(1-server3.beschikbaarheid);
@@ -40,7 +39,7 @@ public class Server {
         System.out.println("de jaarlijkse prijs is: " + prijs);
     }
 
-    //berekening voor 4 servers
+    //percentage berekening voor 4 servers
     public static void Bereken(Server server1, Server server2, Server server3, Server server4){
         //bereken de beschikbaarheid
         double beschikbaarheid = 1-(1-server1.beschikbaarheid)*(1-server2.beschikbaarheid)*(1-server3.beschikbaarheid)*(1-server4.beschikbaarheid);
@@ -50,7 +49,7 @@ public class Server {
         System.out.println("de jaarlijkse prijs is: " + prijs);
     }
 
-    //berekening voor 5 servers
+    //percentage berekening voor 5 servers
     public static void Bereken(Server server1, Server server2, Server server3, Server server4, Server server5){
         //bereken de beschikbaarheid
         double beschikbaarheid = 1-(1-server1.beschikbaarheid)*(1-server2.beschikbaarheid)*(1-server3.beschikbaarheid)*(1-server4.beschikbaarheid)*(1-server5.beschikbaarheid);
@@ -60,7 +59,7 @@ public class Server {
         System.out.println("de jaarlijkse prijs is: " + prijs);
     }
 
-    //berekening voor 6 servers
+    //percentage berekening voor 6 servers
     public static void Bereken(Server server1, Server server2, Server server3, Server server4, Server server5, Server server6){
         //bereken de beschikbaarheid
         double beschikbaarheid = 1-(1-server1.beschikbaarheid)*(1-server2.beschikbaarheid)*(1-server3.beschikbaarheid)*(1-server4.beschikbaarheid)*(1-server5.beschikbaarheid)*(1-server6.beschikbaarheid);
@@ -70,7 +69,7 @@ public class Server {
         System.out.println("de jaarlijkse prijs is: " + prijs);
     }
 
-    //berekening voor 7 servers
+    //percentage berekening voor 7 servers
     public static void Bereken(Server server1, Server server2, Server server3, Server server4, Server server5, Server server6, Server server7){
         //bereken de beschikbaarheid
         double beschikbaarheid = 1-(1-server1.beschikbaarheid)*(1-server2.beschikbaarheid)*(1-server3.beschikbaarheid)*(1-server4.beschikbaarheid)*(1-server5.beschikbaarheid)*(1-server6.beschikbaarheid)*(1-server7.beschikbaarheid);
@@ -80,7 +79,7 @@ public class Server {
         System.out.println("de jaarlijkse prijs is: " + prijs);
     }
 
-    //berekening voor 8 servers
+    //percentage berekening voor 8 servers
     public static void Bereken(Server server1, Server server2, Server server3, Server server4, Server server5, Server server6, Server server7, Server server8){
         //bereken de beschikbaarheid
         double beschikbaarheid = 1-(1-server1.beschikbaarheid)*(1-server2.beschikbaarheid)*(1-server3.beschikbaarheid)*(1-server4.beschikbaarheid)*(1-server5.beschikbaarheid)*(1-server6.beschikbaarheid)*(1-server7.beschikbaarheid)*(1-server8.beschikbaarheid);
@@ -90,7 +89,7 @@ public class Server {
         System.out.println("de jaarlijkse prijs is: " + prijs);
     }
 
-    //berekening voor 9 servers
+    //percentage berekening voor 9 servers
     public static void Bereken(Server server1, Server server2, Server server3, Server server4, Server server5, Server server6, Server server7, Server server8, Server server9){
         //bereken de beschikbaarheid
         double beschikbaarheid = 1-(1-server1.beschikbaarheid)*(1-server2.beschikbaarheid)*(1-server3.beschikbaarheid)*(1-server4.beschikbaarheid)*(1-server5.beschikbaarheid)*(1-server6.beschikbaarheid)*(1-server7.beschikbaarheid)*(1-server8.beschikbaarheid)*(1-server9.beschikbaarheid);
