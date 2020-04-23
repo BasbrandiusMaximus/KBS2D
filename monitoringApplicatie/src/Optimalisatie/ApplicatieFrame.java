@@ -32,7 +32,6 @@ public class ApplicatieFrame extends JFrame implements ActionListener {
         lijst = new ArrayList<>();
         serverArrayList = new ArrayList<>();
 
-        ServerList serverLijst = new ServerList();
 
         try {
             File Servers = new File("./Servers.txt");
@@ -47,31 +46,34 @@ public class ApplicatieFrame extends JFrame implements ActionListener {
             e.printStackTrace();
         }
 
+        ServerList serverLijst = new ServerList(); //ServerList aanmaken
+
         for(String data : lijst){
             String[] test = data.split(",", 0);
             try {
-                int test1 = Integer.parseInt(test[1]);
-                double test2 = Double.parseDouble(test[2]);
-                int test3 = Integer.parseInt(test[3]);
+                int test1 = Integer.parseInt(test[1]); //prijs
+                double test2 = Double.parseDouble(test[2]); //beschikbaarheid
+                int test3 = Integer.parseInt(test[3]); //type
                 Server server = new Server(test[0], test1, test2, test3);
                 serverLijst.voegServerToe(server);
                 serverArrayList.add(server);
             }
             catch(ArrayIndexOutOfBoundsException ignored){ }
         }
+        System.out.println(serverLijst.printServerList());
         //Berekenen optimale samenstelling bij 99,99%
-        Server.BerekenBeschikbaarheid(serverLijst.getServer(0), serverLijst.getServer(1), serverLijst.getServer(1), serverLijst.getServer(1), serverLijst.getServer(2), serverLijst.getServer(4),serverLijst.getServer(5), serverLijst.getServer(5), serverLijst.getServer(5), serverLijst.getServer(5));
-        Server.BerekenBeschikbaarheid(serverLijst.getServer(0), serverLijst.getServer(1), serverLijst.getServer(4));
-
+        //Server.BerekenBeschikbaarheid(serverLijst.getServer(0), serverLijst.getServer(1), serverLijst.getServer(1), serverLijst.getServer(1), serverLijst.getServer(2), serverLijst.getServer(4),serverLijst.getServer(5), serverLijst.getServer(5), serverLijst.getServer(5), serverLijst.getServer(5));
+        //Server.BerekenBeschikbaarheid(serverLijst.getServer(0), serverLijst.getServer(1));
+        //Server.serversUitrekenen(0.9999999, 3, serverArrayList);
 
         //aanmaken nieuwe JLabel voor de lijst met beschikbare servers
         jlservers = new JLabel();
+        System.out.println(serverLijst.printServerList());
         jlservers.setText(serverLijst.printServerList());
         jlservers.setHorizontalAlignment(SwingConstants.CENTER);
         Dimension d1 = new Dimension(500,150);
         jlservers.setPreferredSize(d1);
         frame.add(jlservers);
-
         frame.setVisible(true);
     }
 

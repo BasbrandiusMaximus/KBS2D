@@ -15,6 +15,7 @@ public class ServerList {
     }
 
     public String printServerList(){
+
         String server = "<html><div style='text-align: center;'>Beschikbare servers: <br/>";
         for(Server servers : serverList){
             server += servers + "<br/>";

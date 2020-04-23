@@ -2,6 +2,7 @@ package Optimalisatie;
 
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 public class Server {
     private String naam;
@@ -14,6 +15,7 @@ public class Server {
         this.naam = naam;
         this.prijs = prijs;
         this.beschikbaarheid = beschikbaarheid;
+        this.type = type;
     }
 
     public String toString(){
@@ -115,8 +117,10 @@ public class Server {
 // error messages
 // rekening houden met goedkoopste optie
 
-    public static void serversUitrekenen(double beschikbaarheid, int aantalServers) {
+    public static void serversUitrekenen(double beschikbaarheid, int aantalServers, ArrayList<Server> serverList) {
         ArrayList<Double> lijst1 = new ArrayList<>();
+        ArrayList<Double> lijst2 = new ArrayList<>();
+        ArrayList<Server> lijst3 = new ArrayList<>();
         lijst1.add(0.99998);
         lijst1.add(0.90);
         lijst1.add(0.95);
@@ -124,17 +128,71 @@ public class Server {
         lijst1.add(0.90);
         lijst1.add(0.80);
         lijst1.add(0.95);
-        
+
         Double uitkomst;
-        if(aantalServers == 2){
+        if(aantalServers == 3){
             for (int a = 0; a < lijst1.size(); a++) {
                 for (int b = 0; b < lijst1.size(); b++) {
-                    uitkomst = 1 - (1 - lijst1.get(a)) * (1 - lijst1.get(b));
-                    if (uitkomst == beschikbaarheid) {
-                        System.out.println("Beschikbaarheid: " + uitkomst + ", Server 1: " + lijst1.get(a) + ", Server 2: " + lijst1.get(b));
+                    for(int c = 0; c < lijst1.size(); c++) {
+                        uitkomst = 1 - (1 - lijst1.get(a)) * (1 - lijst1.get(b)) * (1-lijst1.get(c));
+                        //System.out.println("Uitkomst: " + uitkomst);
+                        if (uitkomst == beschikbaarheid) {
+                            if (!(lijst2.contains(lijst1.get(a)) || lijst2.contains(lijst1.get(b)) || lijst2.contains(lijst1.get(c)))) {
+                                lijst2.add(lijst1.get(a));
+                                lijst2.add(lijst1.get(b));
+                                lijst2.add(lijst1.get(c));
+                                //System.out.println(lijst1.get(a) + " " + lijst1.get(b) + " " + lijst1.get(c));
+                            }
+                        }
                     }
                 }
             }
+        }
+
+
+        //Geven server opstelling
+            System.out.println("Server opstelling: ");
+            for (int z = 0; z < lijst2.size(); z++) {
+                for (Server servers : serverList) {
+                    //System.out.println(servers);
+                    if (lijst2.get(z).equals(servers.beschikbaarheid)) { //haalt dubbelen eruit
+                        lijst3.add(servers);
+                        //System.out.println(servers);
+                    }
+                }
+            }
+
+        ArrayList<Server> lijstpfSense = new ArrayList<>();
+        ArrayList<Server> lijstdb = new ArrayList<>();
+        ArrayList<Server> lijstwb = new ArrayList<>();
+
+        for(Server serverlijst3 : lijst3){
+            //System.out.println(serverlijst3); //sorteer servers op type
+            if(serverlijst3.type == 0){
+                lijstpfSense.add(serverlijst3); //de pfSense
+            }
+
+            if(serverlijst3.type == 1){
+                lijstdb.add(serverlijst3); //alle db servers
+            }
+
+            if(serverlijst3.type == 2){
+                lijstwb.add(serverlijst3); //alle wb servers
+            }
+        }
+
+        int test = 1;
+        //Hier kun je alle verschillende servers filteren bv op goedkoopste of aantal
+        for(Server pfSense : lijstpfSense){
+            System.out.println(pfSense);
+        }
+
+        for(Server dbservers : lijstdb){
+            System.out.println(dbservers);
+        }
+
+        for(Server wbservers : lijstwb){
+            System.out.println(wbservers);
         }
     }
 }
