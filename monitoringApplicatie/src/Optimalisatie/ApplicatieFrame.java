@@ -12,6 +12,7 @@ import java.util.Scanner;
 public class ApplicatieFrame extends JFrame implements ActionListener {
     private ArrayList<String> lijst;
     private ArrayList<Server> serverArrayList;
+    private ArrayList<Double> doubleArrayList;
     private JFrame frame;
     private JButton jboptimalisatie;
     private JLabel jlservers;
@@ -47,6 +48,7 @@ public class ApplicatieFrame extends JFrame implements ActionListener {
         }
 
         ServerList serverLijst = new ServerList(); //ServerList aanmaken
+        doubleArrayList = new ArrayList<>();
 
         for(String data : lijst){
             String[] test = data.split(",", 0);
@@ -57,18 +59,17 @@ public class ApplicatieFrame extends JFrame implements ActionListener {
                 Server server = new Server(test[0], test1, test2, test3);
                 serverLijst.voegServerToe(server);
                 serverArrayList.add(server);
+                doubleArrayList.add(test2);
             }
             catch(ArrayIndexOutOfBoundsException ignored){ }
         }
-        System.out.println(serverLijst.printServerList());
         //Berekenen optimale samenstelling bij 99,99%
         //Server.BerekenBeschikbaarheid(serverLijst.getServer(0), serverLijst.getServer(1), serverLijst.getServer(1), serverLijst.getServer(1), serverLijst.getServer(2), serverLijst.getServer(4),serverLijst.getServer(5), serverLijst.getServer(5), serverLijst.getServer(5), serverLijst.getServer(5));
-        //Server.BerekenBeschikbaarheid(serverLijst.getServer(0), serverLijst.getServer(1));
-        //Server.serversUitrekenen(0.9999999, 3, serverArrayList);
+
+        //0.99999999999984
 
         //aanmaken nieuwe JLabel voor de lijst met beschikbare servers
         jlservers = new JLabel();
-        System.out.println(serverLijst.printServerList());
         jlservers.setText(serverLijst.printServerList());
         jlservers.setHorizontalAlignment(SwingConstants.CENTER);
         Dimension d1 = new Dimension(500,150);
@@ -80,7 +81,7 @@ public class ApplicatieFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         //Als er op de optimalisatie button gedrukt wordt, dan wordt je naar de optimalisatie dialoog gestuurd. Zie OptimalisatieDialog.java
         if (e.getSource() == jboptimalisatie){
-            OptimalisatieDialog optimalisatiedialog = new OptimalisatieDialog();
+            OptimalisatieDialog optimalisatiedialog = new OptimalisatieDialog(serverArrayList, doubleArrayList);
         }
     }
 }

@@ -1,5 +1,7 @@
 package Test;
 
+import Optimalisatie.Server;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -22,7 +24,7 @@ public class Test {
     private String data;
     private ArrayList<String> Split;
 
-    public Test(double beschikbaarheid){
+    public Test(double beschikbaarheid) {
         this.beschikbaarheid = beschikbaarheid;
         lijst1 = new ArrayList<>();
         lijst1.add(0.99998);
@@ -45,12 +47,12 @@ public class Test {
 
         //met 2 servers
         for (int i = 0; i < lijst1.size(); i++) {
-           for (int k = 0; k < lijst1.size(); k++) {
-           uitkomst = 1 - (1 - lijst1.get(i)) * (1 - lijst1.get(k));
-               if (uitkomst == beschikbaarheid) {
-                   System.out.println("Beschikbaarheid: " + uitkomst + ", Server 1: " + lijst1.get(i) + ", Server 2: " + lijst1.get(k));
+            for (int k = 0; k < lijst1.size(); k++) {
+                uitkomst = 1 - (1 - lijst1.get(i)) * (1 - lijst1.get(k));
+                if (uitkomst == beschikbaarheid) {
+                    System.out.println("Beschikbaarheid: " + uitkomst + ", Server 1: " + lijst1.get(i) + ", Server 2: " + lijst1.get(k));
                 }
-           }
+            }
         }
 
         //minimaal 1 webserver, 1 db server en 1 firewall
@@ -59,8 +61,8 @@ public class Test {
         //met 3 servers
         for (int i = 0; i < lijst1.size(); i++) {
             for (int k = 0; k < lijst1.size(); k++) {
-                for(int l = 0; l < lijst1.size(); l++) {
-                    uitkomst = 1-(1-lijst1.get(i))*(1-lijst1.get(k))*(1-lijst1.get(l));
+                for (int l = 0; l < lijst1.size(); l++) {
+                    uitkomst = 1 - (1 - lijst1.get(i)) * (1 - lijst1.get(k)) * (1 - lijst1.get(l));
                     if (uitkomst == beschikbaarheid) {
                         System.out.println("Beschikbaarheid: " + uitkomst + ", Server 1: " + lijst1.get(i) + ", Server 2: " + lijst1.get(k) + ", Server 3: " + lijst1.get(l));
                     }
@@ -68,43 +70,6 @@ public class Test {
             }
         }
     }
-//TODO: goedkoopste optie
-    public void serversUitrekenenCompact(double beschikbaarheid){
-        //met 2 servers
-        for (int a = 0; a < lijst1.size(); a++) {
-            for (int b = 0; b < lijst1.size(); b++) {
-                uitkomst = 1 - (1 - lijst1.get(a)) * (1 - lijst1.get(b));
-                if (uitkomst == beschikbaarheid) {
-                    System.out.println("Beschikbaarheid: " + uitkomst + ", Server 1: " + lijst1.get(a) + ", Server 2: " + lijst1.get(b));
-                }
-
-            }
-        }
-    }
-
-    public void readFile(){
-        try {
-            File Servers = new File("./Servers.txt");
-            Scanner Reader = new Scanner(Servers);
-            while (Reader.hasNextLine()) {
-                data = Reader.nextLine();
-                lijst2.add(data);
-            }
-            Reader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-    }
-
-    public void turnListToVariables(){
-        for(String data : lijst2){
-            String[] test = data.split(",", 0);
-
-        }
-        for(String splits : Split){
-            System.out.println(splits);
-        }
-    }
-
 }
+//TODO: goedkoopste optie
+
