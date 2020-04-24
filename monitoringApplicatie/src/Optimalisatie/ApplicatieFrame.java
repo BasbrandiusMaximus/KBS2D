@@ -63,10 +63,6 @@ public class ApplicatieFrame extends JFrame implements ActionListener {
             }
             catch(ArrayIndexOutOfBoundsException ignored){ }
         }
-        //Berekenen optimale samenstelling bij 99,99%
-        //Server.BerekenBeschikbaarheid(serverLijst.getServer(0), serverLijst.getServer(1), serverLijst.getServer(1), serverLijst.getServer(1), serverLijst.getServer(2), serverLijst.getServer(4),serverLijst.getServer(5), serverLijst.getServer(5), serverLijst.getServer(5), serverLijst.getServer(5));
-
-        //0.99999999999984
 
         //aanmaken nieuwe JLabel voor de lijst met beschikbare servers
         jlservers = new JLabel();

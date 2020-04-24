@@ -113,13 +113,11 @@ public class Server {
         System.out.println("de jaarlijkse prijs is: " + prijs);
     }
 
-//TODO:
-// error messages
-// rekening houden met goedkoopste optie
 
     public static String serversUitrekenen(double beschikbaarheid, int aantalServers, ArrayList<Server> serverList, ArrayList<Double> lijst1) {
         ArrayList<Double> lijst2 = new ArrayList<>();
         lijst1.remove(0);
+
 
         Double uitkomst;
         if (aantalServers == 3) {
@@ -238,6 +236,7 @@ public class Server {
         }
 
         if (aantalServers == 8) {
+            //System.out.println("8 work");
             for (int z = 0; z < lijst1.size(); z++) {
                 for (int aa = 0; aa < lijst1.size(); aa++) {
                     for (int bb = 0; bb < lijst1.size(); bb++) {
@@ -248,6 +247,7 @@ public class Server {
                                         uitkomst = 1 - (1 - lijst1.get(z)) * (1 - lijst1.get(aa)) * (1 - lijst1.get(bb)) * (1 - lijst1.get(cc)) * (1 - lijst1.get(dd)) * (1 - lijst1.get(ee)) * (1 - lijst1.get(ff)) * (1 - 0.99998);
                                         //System.out.println("Uitkomst: " + uitkomst);
                                         if (uitkomst == beschikbaarheid) {
+                                            //System.out.println(uitkomst);
                                             if (!(lijst2.contains(lijst1.get(z)) || lijst2.contains(lijst1.get(aa)) || lijst2.contains(lijst1.get(bb)) || lijst2.contains(lijst1.get(cc)) || lijst2.contains(lijst1.get(dd)) || lijst2.contains(lijst1.get(ee)) || lijst2.contains(lijst1.get(ff)) || lijst2.contains(0.99998))) {
                                                 lijst2.add(lijst1.get(z));
                                                 lijst2.add(lijst1.get(aa));
@@ -278,11 +278,11 @@ public class Server {
                                 for (int ee = 0; ee < lijst1.size(); ee++) {
                                     for (int ff = 0; ff < lijst1.size(); ff++) {
                                         for (int gg = 0; gg < lijst1.size(); gg++) {
-                                            uitkomst = 1 - (1 - lijst1.get(z)) * (1 - lijst1.get(aa)) * (1 - lijst1.get(bb)) * (1 - lijst1.get(cc)) * (1- lijst1.get(dd)) * (1 - lijst1.get(ee)) * (1 - lijst1.get(ff)) * (1 - lijst1.get(gg)) * (1 - 0.99998);
+                                            uitkomst = 1 - (1 - lijst1.get(z)) * (1 - lijst1.get(aa)) * (1 - lijst1.get(bb)) * (1 - lijst1.get(cc)) * (1 - lijst1.get(dd)) * (1 - lijst1.get(ee)) * (1 - lijst1.get(ff)) * (1 - lijst1.get(gg)) * (1 - 0.99998);
                                             //System.out.println("Uitkomst: " + uitkomst);
                                             if (uitkomst == beschikbaarheid) {
-                                                if (!(lijst2.contains(lijst1.get(dd)) || lijst2.contains(lijst1.get(aa)) || lijst2.contains(lijst1.get(bb)) || lijst2.contains(lijst1.get(cc)) || lijst2.contains(lijst1.get(dd)) || lijst2.contains(lijst1.get(ee)) || lijst2.contains(lijst1.get(ff)) || lijst2.contains(lijst1.get(gg)) || lijst2.contains(0.99998))) {
-                                                    lijst2.add(lijst1.get(dd));
+                                                if (!(lijst2.contains(lijst1.get(z)) || lijst2.contains(lijst1.get(aa)) || lijst2.contains(lijst1.get(bb)) || lijst2.contains(lijst1.get(cc)) || lijst2.contains(lijst1.get(dd)) || lijst2.contains(lijst1.get(ee)) || lijst2.contains(lijst1.get(ff)) || lijst2.contains(lijst1.get(gg)) || lijst2.contains(0.99998))) {
+                                                    lijst2.add(lijst1.get(z));
                                                     lijst2.add(lijst1.get(aa));
                                                     lijst2.add(lijst1.get(dd));
                                                     lijst2.add(lijst1.get(dd));
@@ -291,7 +291,7 @@ public class Server {
                                                     lijst2.add(lijst1.get(ff));
                                                     lijst2.add(lijst1.get(gg));
                                                     lijst2.add(0.99998);
-                                                    //System.out.println(lijst1.get(dd) + " " + lijst1.get(aa) + " " + lijst1.get(bb) + " " + lijst1.get(dd) + " " + lijst1.get(dd) + " " + lijst1.get(ee) + " " + lijst1.get(ff) + " " + lijst1.get(gg) + " " + 0.99998);
+                                                    //System.out.println(lijst1.get(z) + " " + lijst1.get(aa) + " " + lijst1.get(bb) + " " + lijst1.get(cc) + " " + lijst1.get(dd) + " " + lijst1.get(ee) + " " + lijst1.get(ff) + " " + lijst1.get(gg) + " " + 0.99998);
                                                 }
                                             }
                                         }
@@ -313,12 +313,12 @@ public class Server {
                                 for (int ee = 0; ee < lijst1.size(); ee++) {
                                     for (int ff = 0; ff < lijst1.size(); ff++) {
                                         for (int gg = 0; gg < lijst1.size(); gg++) {
-                                            for(int hh = 0; hh < lijst1.size(); hh++) {
+                                            for (int hh = 0; hh < lijst1.size(); hh++) {
                                                 uitkomst = 1 - (1 - lijst1.get(z)) * (1 - lijst1.get(aa)) * (1 - lijst1.get(bb)) * (1 - lijst1.get(cc)) * (1 - lijst1.get(dd)) * (1 - lijst1.get(ee)) * (1 - lijst1.get(ff)) * (1 - lijst1.get(gg)) * (1 - lijst1.get(hh)) * (1 - 0.99998);
                                                 //System.out.println("Uitkomst: " + uitkomst);
                                                 if (uitkomst == beschikbaarheid) {
-                                                    if (!(lijst2.contains(lijst1.get(dd)) || lijst2.contains(lijst1.get(aa)) || lijst2.contains(lijst1.get(bb)) || lijst2.contains(lijst1.get(cc)) || lijst2.contains(lijst1.get(dd)) || lijst2.contains(lijst1.get(ee)) || lijst2.contains(lijst1.get(ff)) || lijst2.contains(lijst1.get(gg)) || lijst2.contains(lijst1.get(hh)) || lijst2.contains(0.99998))) {
-                                                        lijst2.add(lijst1.get(dd));
+                                                    if (!(lijst2.contains(lijst1.get(z)) || lijst2.contains(lijst1.get(aa)) || lijst2.contains(lijst1.get(bb)) || lijst2.contains(lijst1.get(cc)) || lijst2.contains(lijst1.get(dd)) || lijst2.contains(lijst1.get(ee)) || lijst2.contains(lijst1.get(ff)) || lijst2.contains(lijst1.get(gg)) || lijst2.contains(lijst1.get(hh)) || lijst2.contains(0.99998))) {
+                                                        lijst2.add(lijst1.get(z));
                                                         lijst2.add(lijst1.get(aa));
                                                         lijst2.add(lijst1.get(dd));
                                                         lijst2.add(lijst1.get(dd));
@@ -328,7 +328,7 @@ public class Server {
                                                         lijst2.add(lijst1.get(gg));
                                                         lijst2.add(lijst1.get(hh));
                                                         lijst2.add(0.99998);
-                                                        //System.out.println(lijst1.get(dd) + " " + lijst1.get(aa) + " " + lijst1.get(bb) + " " + lijst1.get(dd) + " " + lijst1.get(dd) + " " + lijst1.get(ee) + " " + lijst1.get(ff) + " " + lijst1.get(gg) + " " + lijst1.get(hh) + " " + 0.99998);
+                                                        //System.out.println(lijst1.get(z) + " " + lijst1.get(aa) + " " + lijst1.get(bb) + " " + lijst1.get(cc) + " " + lijst1.get(dd) + " " + lijst1.get(ee) + " " + lijst1.get(ff) + " " + lijst1.get(gg) + " " + lijst1.get(hh) + " " + 0.99998);
                                                     }
                                                 }
                                             }
@@ -342,111 +342,141 @@ public class Server {
             }
         }
 
-        int teller90 = 0;
-        int teller80 = 0;
-        int teller95 = 0;
-        int teller98 = 0;
-        for(int zz = 0; zz < lijst2.size(); zz++){
-            if(lijst2.get(zz) == 0.90){
-                teller90++;
-            }
-            if(lijst2.get(zz) == 0.80){
-                teller80++;
-            }
-            if(lijst2.get(zz) == 0.95){
-                teller95++;
-            }
-            if(lijst2.get(zz) == 0.98){
-                teller98++;
-            }
+        int checkforuitkomst = 0;
+        for (Double lijst : lijst2) {
+            checkforuitkomst++;
+            //System.out.println(lijst);
         }
 
-        int prijs = 0;
-        int aantaldb = 0;
-        int aantalwb = 0;
-        ArrayList<Server> opstelling = new ArrayList<>();
-        //add minimum servers
-        if(teller90 >= 3 && (aantaldb == 0 || aantalwb == 0)){
-            for(Server servers : serverList){
-                if(servers.beschikbaarheid == 0.90 && servers.type == 1){
-                    opstelling.add(servers);
-                    prijs += servers.prijs;
-                    opstelling.add(servers);
-                    prijs += servers.prijs;
-                }
-                if(servers.beschikbaarheid == 0.90 && servers.type == 2){
-                    opstelling.add(servers);
-                    prijs += servers.prijs;
-                }
+        if (checkforuitkomst == 1) {
+            return "Error! Bij dit percentage kan geen samenstelling gemaakt worden met " + aantalServers;
+        } else {
 
+
+            int teller90 = 0;
+            int teller80 = 0;
+            int teller95 = 0;
+            int teller98 = 0;
+            for (int zz = 0; zz < lijst2.size(); zz++) {
+                if (lijst2.get(zz) == 0.90) {
+                    teller90++;
+                }
+                if (lijst2.get(zz) == 0.80) {
+                    teller80++;
+                }
+                if (lijst2.get(zz) == 0.95) {
+                    teller95++;
+                }
+                if (lijst2.get(zz) == 0.98) {
+                    teller98++;
+                }
             }
-        }
-        aantaldb = 2;
-        teller90=teller90-3;
+
+            int prijs = 0;
+            int aantaldb = 0;
+            int aantalwb = 0;
+            ArrayList<Server> opstelling = new ArrayList<>();
+            //add minimum servers
+            if (teller90 >= 3 && (aantaldb == 0 || aantalwb == 0)) {
+                for (Server servers : serverList) {
+                    if (servers.beschikbaarheid == 0.90 && servers.type == 1) {
+                        opstelling.add(servers);
+                        prijs += servers.prijs;
+                        opstelling.add(servers);
+                        prijs += servers.prijs;
+                    }
+                    if (servers.beschikbaarheid == 0.90 && servers.type == 2) {
+                        opstelling.add(servers);
+                        prijs += servers.prijs;
+                    }
+
+                }
+            }
+            aantaldb = 2;
+            teller90 = teller90 - 3;
 
 
-        if(teller90 != 0) {
-            for (int l = 0; l < teller90; l++) {
-                for(Server servers : serverList) {
-                    if(aantaldb < 2 && teller90 >= 2){
-                        if(servers.beschikbaarheid == 0.90 && servers.type == 1){ //if there aren't 3 servers
+            if (teller90 != 0) {
+                for (int l = 0; l < teller90; l++) {
+                    for (Server servers : serverList) {
+                        if (aantaldb < 2 && teller90 >= 2) {
+                            if (servers.beschikbaarheid == 0.90 && servers.type == 1) { //if there aren't 3 servers
+                                opstelling.add(servers);
+                                prijs += servers.prijs;
+                                aantaldb++;
+                            }
+                        }
+                        if (servers.beschikbaarheid == 0.90 && servers.type == 2 && aantaldb == 2) {
                             opstelling.add(servers);
                             prijs += servers.prijs;
-                            aantaldb++;
                         }
                     }
-                    if (servers.beschikbaarheid == 0.90 && servers.type == 2 && aantaldb == 2) {
+                }
+            }
+
+            teller90 = 0;
+
+            for (int k = 0; k < teller80; k++) {
+                for (Server servers : serverList) {
+                    if (servers.beschikbaarheid == 0.80) {
                         opstelling.add(servers);
                         prijs += servers.prijs;
                     }
                 }
             }
-        }
 
-        teller90 = 0;
+            int teller = 0;
+            if(teller98 == 0 && teller80 == 0 && teller90 == 0 && teller95 == 7) {
+                //System.out.println("if in");
+                for(Server servers : serverList){
+                    if(teller < 2 && servers.type == 1 && servers.beschikbaarheid == 0.95){
+                        opstelling.add(servers);
+                        prijs += servers.prijs;
+                    }
+                    if(teller < 7 && teller >= 2 && servers.type == 2 && servers.beschikbaarheid == 0.95){
+                        opstelling.add(servers);
+                        prijs += servers.prijs;
+                    }
+                    if(teller == 7){
+                        teller95 = 0;
+                        break;
+                    }
+                    teller++;
+                }
 
-        for(int k = 0; k < teller80; k++){
-            for(Server servers : serverList) {
-                if (servers.beschikbaarheid == 0.80) {
+            }
+
+            for (int k = 0; k < teller95; k++) {
+                for (Server servers : serverList) {
+                    if (servers.beschikbaarheid == 0.95 && servers.type == 2) {
+                        opstelling.add(servers);
+                        prijs += servers.prijs;
+                    }
+                }
+            }
+
+            for (int k = 0; k < teller98; k++) {
+                for (Server servers : serverList) {
+                    if (servers.beschikbaarheid == 0.98 && servers.type == 2) {
+                        opstelling.add(servers);
+                        prijs += servers.prijs;
+                    }
+                }
+            }
+
+            for (Server servers : serverList) {
+                if (servers.type == 0) {
                     opstelling.add(servers);
                     prijs += servers.prijs;
                 }
             }
-        }
 
-        for(int k = 0; k < teller95; k++){
-            for(Server servers : serverList) {
-                if (servers.beschikbaarheid == 0.95 && servers.type == 2) {
-                    opstelling.add(servers);
-                    prijs += servers.prijs;
-                }
+            String serveropstelling = "<html><div>Totale prijs: " + prijs + "<br/>";
+            for (Server sopstelling : opstelling) {
+                serveropstelling += sopstelling + "<br/>";
             }
-        }
-
-        for(int k = 0; k < teller98; k++){
-            for(Server servers : serverList) {
-                if (servers.beschikbaarheid == 0.98 && servers.type == 2) {
-                    opstelling.add(servers);
-                    prijs += servers.prijs;
-                }
-            }
-        }
-
-        for(Server servers : serverList){
-            if(servers.type == 0){
-                opstelling.add(servers);
-                prijs += servers.prijs;
-            }
-        }
-
-        String serveropstelling = "<html><div>Totale prijs: " + prijs + "<br/>";
-        for(Server sopstelling : opstelling){
-            serveropstelling += sopstelling + "<br/>";
-        }
-        serveropstelling += "</div></html>";
-        return serveropstelling;
-
-
+            serveropstelling += "</div></html>";
+            return serveropstelling;
 
 
 //        //Geven server opstelling
@@ -494,6 +524,7 @@ public class Server {
 //            }
         }
     }
+}
 
 
 

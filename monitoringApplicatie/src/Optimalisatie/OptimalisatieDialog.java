@@ -12,12 +12,10 @@ public class OptimalisatieDialog extends JDialog implements ActionListener {
     private JTextField jtAantalservers;
     private JLabel jlServersamenstelling;
     private JButton jbBereken;
-    private int aantalServers;
     private ArrayList<Server> serverArrayList;
     private ArrayList<Double> doubleArrayList;
 
     public OptimalisatieDialog(ArrayList<Server> serverArrayList, ArrayList<Double> doubleArrayList){
-        this.aantalServers = aantalServers;
         this.serverArrayList = serverArrayList;
         this.doubleArrayList = doubleArrayList;
         //Aanmaken optimalisatie dialoog
