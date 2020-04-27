@@ -15,6 +15,7 @@ public class ApplicatieFrame extends JFrame implements ActionListener {
     private ArrayList<Double> doubleArrayList;
     private JFrame frame;
     private JButton jboptimalisatie;
+    private JButton jbontwerpen;
     private JLabel jlservers;
 
     public ApplicatieFrame(){
@@ -29,6 +30,11 @@ public class ApplicatieFrame extends JFrame implements ActionListener {
         jboptimalisatie = new JButton("Optimalisatie functie");
         jboptimalisatie.addActionListener(this);
         frame.add(jboptimalisatie);
+
+        jbontwerpen = new JButton("Ontwerpen");
+        jbontwerpen.addActionListener(this);
+        frame.add(jbontwerpen);
+
 
         lijst = new ArrayList<>();
         serverArrayList = new ArrayList<>();
@@ -78,6 +84,10 @@ public class ApplicatieFrame extends JFrame implements ActionListener {
         //Als er op de optimalisatie button gedrukt wordt, dan wordt je naar de optimalisatie dialoog gestuurd. Zie OptimalisatieDialog.java
         if (e.getSource() == jboptimalisatie){
             OptimalisatieDialog optimalisatiedialog = new OptimalisatieDialog(serverArrayList, doubleArrayList);
+        }
+
+        if(e.getSource() == jbontwerpen){
+            OntwerpDialog ontwerpdialog = new OntwerpDialog();
         }
     }
 }
