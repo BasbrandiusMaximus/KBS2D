@@ -1,4 +1,4 @@
-package Optimalisatie;
+package Applicatie;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,11 +18,11 @@ public class ApplicatieFrame extends JFrame implements ActionListener {
     private JButton jbontwerpen;
     private JLabel jlservers;
 
-    public ApplicatieFrame(){
+    public ApplicatieFrame() {
         //Aanmaken applicatie frame
         frame = new JFrame();
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        frame.setSize(600,400);
+        frame.setSize(600, 400);
         frame.setTitle("Applicatie");
         frame.setLayout(new FlowLayout());
 
@@ -56,7 +56,7 @@ public class ApplicatieFrame extends JFrame implements ActionListener {
         ServerList serverLijst = new ServerList(); //ServerList aanmaken
         doubleArrayList = new ArrayList<>();
 
-        for(String data : lijst){
+        for (String data : lijst) {
             String[] test = data.split(",", 0);
             try {
                 int test1 = Integer.parseInt(test[1]); //prijs
@@ -66,15 +66,15 @@ public class ApplicatieFrame extends JFrame implements ActionListener {
                 serverLijst.voegServerToe(server);
                 serverArrayList.add(server);
                 doubleArrayList.add(test2);
+            } catch (ArrayIndexOutOfBoundsException ignored) {
             }
-            catch(ArrayIndexOutOfBoundsException ignored){ }
         }
 
         //aanmaken nieuwe JLabel voor de lijst met beschikbare servers
         jlservers = new JLabel();
         jlservers.setText(serverLijst.printServerList());
         jlservers.setHorizontalAlignment(SwingConstants.CENTER);
-        Dimension d1 = new Dimension(500,150);
+        Dimension d1 = new Dimension(500, 150);
         jlservers.setPreferredSize(d1);
         frame.add(jlservers);
         frame.setVisible(true);
@@ -82,12 +82,12 @@ public class ApplicatieFrame extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         //Als er op de optimalisatie button gedrukt wordt, dan wordt je naar de optimalisatie dialoog gestuurd. Zie OptimalisatieDialog.java
-        if (e.getSource() == jboptimalisatie){
+        if (e.getSource() == jboptimalisatie) {
             OptimalisatieDialog optimalisatiedialog = new OptimalisatieDialog(serverArrayList, doubleArrayList);
         }
 
-        if(e.getSource() == jbontwerpen){
-            OntwerpDialog ontwerpdialog = new OntwerpDialog();
+        if (e.getSource() == jbontwerpen) {
+            OntwerpDialog ontwerpdialog = new OntwerpDialog(serverArrayList);
         }
     }
 }

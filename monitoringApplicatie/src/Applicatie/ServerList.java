@@ -1,4 +1,4 @@
-package Optimalisatie;
+package Applicatie;
 
 import java.util.ArrayList;
 

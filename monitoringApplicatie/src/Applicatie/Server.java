@@ -1,8 +1,7 @@
-package Optimalisatie;
+package Applicatie;
 
 
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 
 public class Server {
     private String naam;
@@ -21,6 +20,10 @@ public class Server {
     public String toString(){
         String bheid = Double.toString(beschikbaarheid * 100);
         return "Naam: " + naam + ", prijs: " + prijs + " euro, beschikbaarheidspercentage: " + bheid + "%";
+    }
+
+    public String getNaam() {
+        return naam;
     }
 
     //percentage berekening voor 2 servers
