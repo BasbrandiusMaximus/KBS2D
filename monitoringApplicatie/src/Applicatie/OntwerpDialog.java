@@ -25,7 +25,8 @@ public class OntwerpDialog extends JDialog implements MouseListener{
     private int index = 0;
     private JPanel[] ArrayComponent;
     private JLabel Ontwerpnaam;
-
+//TODO: Layout mooier maken
+    
     public OntwerpDialog(ArrayList<Server> serverArrayList){
         this.serverArrayList = serverArrayList;
         //Aanmaken ontwerp dialoog
@@ -99,7 +100,7 @@ public class OntwerpDialog extends JDialog implements MouseListener{
             component.add(Ontwerpnaam);
             Ontwerpnaam.addMouseListener(this); //voeg mouselistener toe aan naam JLabel
             component.setVisible(false);
-            ArrayComponent[i] = component;
+            ArrayComponent[i] = component; //voeg component toe aan array
             jpOntwerp.add(component);
         }
 
@@ -136,16 +137,12 @@ public class OntwerpDialog extends JDialog implements MouseListener{
 
         //Kijkt of er op de rechter muis is gedrukt.
         if (SwingUtilities.isRightMouseButton(e) && e.getClickCount() == 1) {
-            JLabel label = (JLabel) e.getSource();
-            for (Server server : serverArrayList) {
-                if (server.getNaam().equals(label.getText())) {
-                    for (int i = 0; i < ArrayComponent.length; i++) {
-                        if (ArrayComponent[i].getComponent(1) == label) {
-                            JLabel lbl = (JLabel) ArrayComponent[i].getComponent(1); //Haalt JLabel op van JPanel Component waarop met de rechtermuis is geklikt.
-                            lbl.setText("server"); //Veranderd JLabel naar 'server'
-                            ArrayComponent[i].setVisible(false); //Zet JPanel op invisble
-                        }
-                    }
+            JLabel label = (JLabel) e.getSource(); //JLabel waarop geklikt is. Dit is een servernaam.
+            for (int i = 0; i < ArrayComponent.length; i++) {
+                if (ArrayComponent[i].getComponent(1) == label) { //Kijkt welke component in de array hetzelfde is als de label waarop geklikt is.
+                    JLabel lbl = (JLabel) ArrayComponent[i].getComponent(1); //Haalt JLabel op van JPanel Component waarop met de rechtermuis is geklikt.
+                    lbl.setText("server"); //Veranderd JLabel naar 'server'
+                    ArrayComponent[i].setVisible(false); //Zet JPanel op invisble
                 }
             }
         }
