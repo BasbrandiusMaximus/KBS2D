@@ -12,14 +12,19 @@ import java.awt.datatransfer.Transferable;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class OntwerpDialog extends JDialog implements MouseListener{
     private JDialog dialog;
     private JPanel jpComponents;
     private JPanel jpOntwerp;
-    private JLabel test;
     private ArrayList<Server> serverArrayList;
+    private int aantalServers = 10;
+    private int index = 0;
+    private JPanel[] ArrayComponent;
+    private JLabel Ontwerpnaam;
 
     public OntwerpDialog(ArrayList<Server> serverArrayList){
         this.serverArrayList = serverArrayList;
@@ -70,17 +75,33 @@ public class OntwerpDialog extends JDialog implements MouseListener{
         jpOntwerp = new JPanel();
         jpOntwerp.setSize(400, 350);
         jpOntwerp.setBorder(BorderFactory.createLineBorder(Color.black)); //setborder naar zwart
-        jpOntwerp.setLayout(new GridLayout(2,5));
+        jpOntwerp.setLayout(new GridLayout(4,7));
         Border borderO = jpOntwerp.getBorder();
         Border marginO = new EmptyBorder(10,30,5,30);
         jpOntwerp.setBorder(new CompoundBorder(marginO, borderO)); //add margin aan de JPanel
         dialog.add(jpOntwerp, BorderLayout.CENTER); //set JPanel naar het midden (center) van de JDialog
 
-        test = new JLabel("test");
-        test.setVisible(false);
-        jpOntwerp.add(test);
-
         dialog.add(jpOntwerp);
+
+
+        ArrayComponent = new JPanel[aantalServers];
+        //Aanmaken JPanels voor servers die aan het ontwerp toe worden gevoegd. Ze staan eerst onzichtbaar omdat je anders de servers niet kan toevoegen
+        //en zou je een andere dialog nodig hebben. Daarom staan ze eerst op setVisible(false) en worden ze op setVisible(true) gezet als er een server aan wordt
+        //toegevoegd.
+        for(int i = 0; i < aantalServers; i++) {
+            JPanel component = new JPanel();
+            component.setLayout(new GridLayout(2,1));
+            JLabel icon = new JLabel(); //Maak JLabel voor icoon
+            icon.setIcon(getImage("/server.png", 30, 30)); //Voeg icoon toe aan JLabel
+            component.add(icon);
+            Ontwerpnaam = new JLabel(); //Maak JLabel met naam van server
+            Ontwerpnaam.setText("server");
+            component.add(Ontwerpnaam);
+            Ontwerpnaam.addMouseListener(this); //voeg mouselistener toe aan naam JLabel
+            component.setVisible(false);
+            ArrayComponent[i] = component;
+            jpOntwerp.add(component);
+        }
 
 
         dialog.setVisible(true);
@@ -98,18 +119,38 @@ public class OntwerpDialog extends JDialog implements MouseListener{
         }
     }
 
-
     @Override
     public void mouseClicked(MouseEvent e) {
-        JLabel label = (JLabel) e.getSource();
-        System.out.println(label.getText());
-        for(Server server : serverArrayList){
-            if(server.getNaam().equals(label.getText())){
-                test.setText(server.getNaam());
-                test.setVisible(true);
+        //Kijkt of er op de linker muis gedrukt is.
+        if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
+            JLabel label = (JLabel) e.getSource(); //JLabel waarop geklikt is. Dit is een servernaam.
+                    for (JPanel componenten : ArrayComponent) {
+                        JLabel lbl = (JLabel) componenten.getComponent(1); //JLabel in ontwerp JPanel bij default is dit 'server'
+                        if (lbl.getText().equals("server")) { //Check of er een JLabel is in de lijst die 'server' heet.
+                            lbl.setText(label.getText()); //Veranderd 'server' in de naam van de aangeklikte server.
+                            componenten.setVisible(true); //Laat ontwerp component zien
+                            break; //Zorgt ervoor dat de server maar 1 keer toegevoegd wordt.
+                        }
+                    }
+        }
+
+        //Kijkt of er op de rechter muis is gedrukt.
+        if (SwingUtilities.isRightMouseButton(e) && e.getClickCount() == 1) {
+            JLabel label = (JLabel) e.getSource();
+            for (Server server : serverArrayList) {
+                if (server.getNaam().equals(label.getText())) {
+                    for (int i = 0; i < ArrayComponent.length; i++) {
+                        if (ArrayComponent[i].getComponent(1) == label) {
+                            JLabel lbl = (JLabel) ArrayComponent[i].getComponent(1); //Haalt JLabel op van JPanel Component waarop met de rechtermuis is geklikt.
+                            lbl.setText("server"); //Veranderd JLabel naar 'server'
+                            ArrayComponent[i].setVisible(false); //Zet JPanel op invisble
+                        }
+                    }
+                }
             }
         }
     }
+
     @Override
     public void mousePressed(MouseEvent e) {
 
