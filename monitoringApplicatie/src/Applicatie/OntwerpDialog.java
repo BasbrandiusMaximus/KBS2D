@@ -28,7 +28,7 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
     private ArrayList<String> stringArrayList;
     private JButton jbbewerken;
     private int TellerOntwerp;
-//TODO: Layout mooier maken en kijken welke attributen een lokale variabele kan worden.
+//TODO: Layout mooier maken en kijken welke attributen een lokale variabele kan worden. + Kijken welke stukken code methodes kunnen worden zodat ik die kan hergebruiken.
 
     public OntwerpDialog(ArrayList<Server> serverArrayList){
         this.serverArrayList = serverArrayList;
