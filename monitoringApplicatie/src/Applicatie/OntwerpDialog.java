@@ -6,17 +6,16 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 
-public class OntwerpDialog extends JDialog implements MouseListener{
+public class OntwerpDialog extends JDialog implements MouseListener, ActionListener {
     private JDialog dialog;
     private JPanel jpComponents;
     private JPanel jpOntwerp;
@@ -25,8 +24,12 @@ public class OntwerpDialog extends JDialog implements MouseListener{
     private int index = 0;
     private JPanel[] ArrayComponent;
     private JLabel Ontwerpnaam;
-//TODO: Layout mooier maken
-    
+    private JButton jbopslaan;
+    private ArrayList<String> stringArrayList;
+    private JButton jbbewerken;
+    private int TellerOntwerp;
+//TODO: Layout mooier maken en kijken welke attributen een lokale variabele kan worden.
+
     public OntwerpDialog(ArrayList<Server> serverArrayList){
         this.serverArrayList = serverArrayList;
         //Aanmaken ontwerp dialoog
@@ -34,8 +37,8 @@ public class OntwerpDialog extends JDialog implements MouseListener{
         dialog.setModal(true);
         dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         dialog.setSize(900,400);
-        dialog.setTitle("Ontwerp functie");
-        dialog.setLayout(new BorderLayout());
+        dialog.setTitle("Ontwerp maken");
+        dialog.setLayout(new FlowLayout());
 
 
         //Aanmaken JPanel voor de infrastructuurcomponenten
@@ -74,7 +77,7 @@ public class OntwerpDialog extends JDialog implements MouseListener{
 
         //Aanmaken JPanel voor ontwerp
         jpOntwerp = new JPanel();
-        jpOntwerp.setSize(400, 350);
+        jpOntwerp.setSize(500, 350);
         jpOntwerp.setBorder(BorderFactory.createLineBorder(Color.black)); //setborder naar zwart
         jpOntwerp.setLayout(new GridLayout(4,7));
         Border borderO = jpOntwerp.getBorder();
@@ -104,6 +107,11 @@ public class OntwerpDialog extends JDialog implements MouseListener{
             jpOntwerp.add(component);
         }
 
+        jbopslaan = new JButton("Opslaan");
+        jbopslaan.addActionListener(this);
+        dialog.add(jbopslaan);
+
+        stringArrayList = new ArrayList<>();
 
         dialog.setVisible(true);
     }
@@ -130,6 +138,7 @@ public class OntwerpDialog extends JDialog implements MouseListener{
                         if (lbl.getText().equals("server")) { //Check of er een JLabel is in de lijst die 'server' heet.
                             lbl.setText(label.getText()); //Veranderd 'server' in de naam van de aangeklikte server.
                             componenten.setVisible(true); //Laat ontwerp component zien
+                            stringArrayList.add(lbl.getText());
                             break; //Zorgt ervoor dat de server maar 1 keer toegevoegd wordt.
                         }
                     }
@@ -138,9 +147,10 @@ public class OntwerpDialog extends JDialog implements MouseListener{
         //Kijkt of er op de rechter muis is gedrukt.
         if (SwingUtilities.isRightMouseButton(e) && e.getClickCount() == 1) {
             JLabel label = (JLabel) e.getSource(); //JLabel waarop geklikt is. Dit is een servernaam.
-            for (int i = 0; i < ArrayComponent.length; i++) {
+            for (int i = 0; i < ArrayComponent.length; i++) { //for loop kan !niet! vervangen worden door een foreach omdat je de int i nodig hebt in de loop.
                 if (ArrayComponent[i].getComponent(1) == label) { //Kijkt welke component in de array hetzelfde is als de label waarop geklikt is.
                     JLabel lbl = (JLabel) ArrayComponent[i].getComponent(1); //Haalt JLabel op van JPanel Component waarop met de rechtermuis is geklikt.
+                    stringArrayList.remove(lbl.getText());
                     lbl.setText("server"); //Veranderd JLabel naar 'server'
                     ArrayComponent[i].setVisible(false); //Zet JPanel op invisble
                 }
@@ -149,23 +159,46 @@ public class OntwerpDialog extends JDialog implements MouseListener{
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
+    public void mousePressed(MouseEvent e) { }
 
     @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
+    public void mouseReleased(MouseEvent e) { }
 
     @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
+    public void mouseEntered(MouseEvent e) { }
 
     @Override
-    public void mouseExited(MouseEvent e) {
+    public void mouseExited(MouseEvent e) { }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == jbopslaan){ //Als op de Opslaan button is gedrukt
+            String text = "";
+            for(String strings : stringArrayList){ //Maakt een string met alle servers om in het Ontwerp[nummer].txt bestand te duwen
+                text += strings + "\n";
+            }
+            String url = "monitoringApplicatie/src/Ontwerpen/";
+            url += "Ontwerp" + TellerOntwerp + ".txt";
+            //Maak file als het nog niet bestaat en schrijf erin.
+            try {
+                File path = new File(url);
+                File file = new File(path.getAbsolutePath()); //Maak dynamische url
+                FileWriter Writer = new FileWriter(file);
+                Writer.write(text);
+                Writer.close();
+                System.out.println("Successfully wrote to the file.");
+                stringArrayList.clear(); //Clear arraylist met servers
+                TellerOntwerp = TellerOntwerp + 1;
+                for(JPanel component : ArrayComponent){ //Clear componenten in ontwerp JPanel
+                    JLabel removeall = (JLabel) component.getComponent(1);
+                    removeall.setText("server");
+                    component.setVisible(false);
+                }
+            } catch (IOException ioe) {
+                System.out.println("An error occurred.");
+                ioe.printStackTrace();//error handling
+            }
+        }
     }
 }
 

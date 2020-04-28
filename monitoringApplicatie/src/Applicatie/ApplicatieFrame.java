@@ -31,7 +31,7 @@ public class ApplicatieFrame extends JFrame implements ActionListener {
         jboptimalisatie.addActionListener(this);
         frame.add(jboptimalisatie);
 
-        jbontwerpen = new JButton("Ontwerpen");
+        jbontwerpen = new JButton("Ontwerpen bekijken en maken");
         jbontwerpen.addActionListener(this);
         frame.add(jbontwerpen);
 
@@ -87,7 +87,7 @@ public class ApplicatieFrame extends JFrame implements ActionListener {
         }
 
         if (e.getSource() == jbontwerpen) {
-            OntwerpDialog ontwerpdialog = new OntwerpDialog(serverArrayList);
+            BewerkDialog bewerkDialog = new BewerkDialog(serverArrayList);
         }
     }
 }
