@@ -10,17 +10,14 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ApplicatieFrame extends JFrame implements ActionListener {
-    private ArrayList<String> lijst;
     private ArrayList<Server> serverArrayList;
     private ArrayList<Double> doubleArrayList;
-    private JFrame frame;
     private JButton jboptimalisatie;
     private JButton jbontwerpen;
-    private JLabel jlservers;
 
     public ApplicatieFrame() {
         //Aanmaken applicatie frame
-        frame = new JFrame();
+        JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.setSize(600, 400);
         frame.setTitle("Applicatie");
@@ -36,7 +33,7 @@ public class ApplicatieFrame extends JFrame implements ActionListener {
         frame.add(jbontwerpen);
 
 
-        lijst = new ArrayList<>();
+        ArrayList<String> lijst = new ArrayList<>();
         serverArrayList = new ArrayList<>();
 
 
@@ -71,7 +68,7 @@ public class ApplicatieFrame extends JFrame implements ActionListener {
         }
 
         //aanmaken nieuwe JLabel voor de lijst met beschikbare servers
-        jlservers = new JLabel();
+        JLabel jlservers = new JLabel();
         jlservers.setText(serverLijst.printServerList());
         jlservers.setHorizontalAlignment(SwingConstants.CENTER);
         Dimension d1 = new Dimension(500, 150);

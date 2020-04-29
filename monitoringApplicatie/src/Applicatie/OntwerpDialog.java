@@ -16,24 +16,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class OntwerpDialog extends JDialog implements MouseListener, ActionListener {
-    private JDialog dialog;
-    private JPanel jpComponents;
-    private JPanel jpOntwerp;
-    private ArrayList<Server> serverArrayList;
-    private int aantalServers = 10;
-    private int index = 0;
+    private ArrayList<Server> serverArrayList; //Deze maak ik expres geen lokale variable voor waneer ik hem nodig heb.
     private JPanel[] ArrayComponent;
-    private JLabel Ontwerpnaam;
     private JButton jbopslaan;
     private ArrayList<String> stringArrayList;
-    private JButton jbbewerken;
-    private int TellerOntwerp;
-//TODO: Layout mooier maken en kijken welke attributen een lokale variabele kan worden. + Kijken welke stukken code methodes kunnen worden zodat ik die kan hergebruiken.
+//TODO: Layout mooier maken + Kijken welke stukken code methodes kunnen worden zodat ik die kan hergebruiken.
 
     public OntwerpDialog(ArrayList<Server> serverArrayList){
         this.serverArrayList = serverArrayList;
         //Aanmaken ontwerp dialoog
-        dialog = new JDialog();
+        JDialog dialog = new JDialog();
         dialog.setModal(true);
         dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         dialog.setSize(900,400);
@@ -42,7 +34,7 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
 
 
         //Aanmaken JPanel voor de infrastructuurcomponenten
-        jpComponents = new JPanel();
+        JPanel jpComponents = new JPanel();
         jpComponents.setLayout(new FlowLayout());
         Dimension dimensionPanelComponents = new Dimension(200, 350);
         jpComponents.setPreferredSize(dimensionPanelComponents);
@@ -76,7 +68,7 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
         jpComponents.add(jpcomponent);
 
         //Aanmaken JPanel voor ontwerp
-        jpOntwerp = new JPanel();
+        JPanel jpOntwerp = new JPanel();
         jpOntwerp.setSize(500, 350);
         jpOntwerp.setBorder(BorderFactory.createLineBorder(Color.black)); //setborder naar zwart
         jpOntwerp.setLayout(new GridLayout(4,7));
@@ -88,6 +80,7 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
         dialog.add(jpOntwerp);
 
 
+        int aantalServers = 10;
         ArrayComponent = new JPanel[aantalServers];
         //Aanmaken JPanels voor servers die aan het ontwerp toe worden gevoegd. Ze staan eerst onzichtbaar omdat je anders de servers niet kan toevoegen
         //en zou je een andere dialog nodig hebben. Daarom staan ze eerst op setVisible(false) en worden ze op setVisible(true) gezet als er een server aan wordt
@@ -98,7 +91,7 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
             JLabel icon = new JLabel(); //Maak JLabel voor icoon
             icon.setIcon(getImage("/server.png", 30, 30)); //Voeg icoon toe aan JLabel
             component.add(icon);
-            Ontwerpnaam = new JLabel(); //Maak JLabel met naam van server
+            JLabel Ontwerpnaam = new JLabel(); //Maak JLabel met naam van server
             Ontwerpnaam.setText("server");
             component.add(Ontwerpnaam);
             Ontwerpnaam.addMouseListener(this); //voeg mouselistener toe aan naam JLabel
@@ -173,22 +166,32 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == jbopslaan){ //Als op de Opslaan button is gedrukt
-            String text = "";
+            StringBuilder text = new StringBuilder();
             for(String strings : stringArrayList){ //Maakt een string met alle servers om in het Ontwerp[nummer].txt bestand te duwen
-                text += strings + "\n";
+                text.append(strings).append("\n");
             }
             String url = "monitoringApplicatie/src/Ontwerpen/";
+            File folder = new File(url);
+            File[] listOfFiles = folder.listFiles();
+
+            ArrayList<File> fileArrayList = new ArrayList<>();
+            for (File file : listOfFiles) { //Er wordt geen nullpointerexception gegeven als er geen files in de directory staan. Er wordt dan simpelweg een 0 aan de fileArrayList meegegeven.
+                if (file.isFile()) {
+                    fileArrayList.add(file); //Voeg alle ontwerpen toe aan de array.
+                }
+            }
+
+            int TellerOntwerp = fileArrayList.size() + 1; //Haal nummer ontwerp op: aantal ontwerpen + 1
+
             url += "Ontwerp" + TellerOntwerp + ".txt";
             //Maak file als het nog niet bestaat en schrijf erin.
             try {
                 File path = new File(url);
                 File file = new File(path.getAbsolutePath()); //Maak dynamische url
                 FileWriter Writer = new FileWriter(file);
-                Writer.write(text);
+                Writer.write(text.toString());
                 Writer.close();
-                System.out.println("Successfully wrote to the file.");
                 stringArrayList.clear(); //Clear arraylist met servers
-                TellerOntwerp = TellerOntwerp + 1;
                 for(JPanel component : ArrayComponent){ //Clear componenten in ontwerp JPanel
                     JLabel removeall = (JLabel) component.getComponent(1);
                     removeall.setText("server");
