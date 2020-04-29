@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
 
-public class BewerkDialog extends JDialog implements ActionListener {
+public class BekijkDialog extends JDialog implements ActionListener {
     private JButton jbMaken;
     private ArrayList<Server> serverArrayList;
     private JButton jbOpenen;
@@ -20,7 +20,8 @@ public class BewerkDialog extends JDialog implements ActionListener {
     private JPanel[] ArrayComponent;
     private JButton jbBewerken;
 
-    public BewerkDialog(ArrayList<Server> serverArrayList){
+
+    public BekijkDialog(ArrayList<Server> serverArrayList){
         this.serverArrayList = serverArrayList;
         JDialog dialog = new JDialog();
         dialog.setModal(true);
@@ -98,7 +99,7 @@ public class BewerkDialog extends JDialog implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == jbMaken) {
-            OntwerpDialog ontwerpDialog = new OntwerpDialog(serverArrayList);
+            OntwerpDialog ontwerpDialog = new OntwerpDialog(serverArrayList, "Geen");
         }
         if(e.getSource() == jbOpenen){
             int teller = 0;
@@ -107,7 +108,8 @@ public class BewerkDialog extends JDialog implements ActionListener {
                 lbl.setText("server");
                 c.setVisible(false);
             }
-            String url = "";
+
+           String url = "";
             try {
                 String x = Objects.requireNonNull(comboBox.getSelectedItem()).toString(); //Pak naam van het bestand dat geselecteerd is in de comboBox
                 url += "monitoringApplicatie/src/Ontwerpen/" + x; //Maak url
@@ -115,6 +117,7 @@ public class BewerkDialog extends JDialog implements ActionListener {
             catch(NullPointerException ne){
                 System.out.println("Er zijn geen ontwerpen! Sla een ontwerp op om hem te bekijken.");
             }
+
             try { //Lees Ontwerp text file
                 File path = new File(url);
                 File file = new File(path.getAbsolutePath());
@@ -134,7 +137,13 @@ public class BewerkDialog extends JDialog implements ActionListener {
         }
 
         if(e.getSource() == jbBewerken){
-            System.out.println("Work in progress!");
+            try {
+                String x = Objects.requireNonNull(comboBox.getSelectedItem()).toString(); //Pak naam van het bestand dat geselecteerd is in de comboBox
+                OntwerpDialog ontwerpDialog = new OntwerpDialog(serverArrayList, x);
+            }
+            catch(NullPointerException ne){
+                System.out.println("Er zijn geen ontwerpen! Sla een ontwerp op om hem te bewerken");
+            }
         }
     }
 }

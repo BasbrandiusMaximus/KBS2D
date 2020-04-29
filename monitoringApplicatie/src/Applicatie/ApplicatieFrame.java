@@ -84,7 +84,7 @@ public class ApplicatieFrame extends JFrame implements ActionListener {
         }
 
         if (e.getSource() == jbontwerpen) {
-            BewerkDialog bewerkDialog = new BewerkDialog(serverArrayList);
+            BekijkDialog bekijkDialog = new BekijkDialog(serverArrayList);
         }
     }
 }
