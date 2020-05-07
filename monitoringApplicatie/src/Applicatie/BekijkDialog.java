@@ -19,6 +19,8 @@ public class BekijkDialog extends JDialog implements ActionListener {
     private JComboBox<String> comboBox;
     private JPanel[] ArrayComponent;
     private JButton jbBewerken;
+    private JLabel jlbeschikbaarheid;
+    private JLabel jlprijs;
 
 
     public BekijkDialog(ArrayList<Server> serverArrayList){
@@ -81,6 +83,11 @@ public class BekijkDialog extends JDialog implements ActionListener {
             jpBekijk.add(component);
         }
 
+        jlbeschikbaarheid = new JLabel("Beschikbaarheid: 0%");
+        dialog.add(jlbeschikbaarheid);
+        jlprijs = new JLabel("Prijs: 0 euro");
+        dialog.add(jlprijs);
+
         dialog.setVisible(true);
     }
 
@@ -124,10 +131,18 @@ public class BekijkDialog extends JDialog implements ActionListener {
                 Scanner myReader = new Scanner(file);
                 while (myReader.hasNextLine()) {
                     String data = myReader.nextLine();
+                    if(data.startsWith("Beschikbaarheid")){
+                        jlbeschikbaarheid.setText(data);
+                    }
+                    else if(data.startsWith("Prijs")){
+                        jlprijs.setText(data);
+                    }
+                    else{
                     JLabel lbl = (JLabel) ArrayComponent[teller].getComponent(1); //Voeg servers toe aan de Bekijk JPanel
                     lbl.setText(data);
                     ArrayComponent[teller].setVisible(true);
                     teller++;
+                    }
                 }
 
                 myReader.close();
@@ -141,6 +156,7 @@ public class BekijkDialog extends JDialog implements ActionListener {
                 String x = Objects.requireNonNull(comboBox.getSelectedItem()).toString(); //Pak naam van het bestand dat geselecteerd is in de comboBox
                 OntwerpDialog ontwerpDialog = new OntwerpDialog(serverArrayList, x);
             }
+
             catch(NullPointerException ne){
                 System.out.println("Er zijn geen ontwerpen! Sla een ontwerp op om hem te bewerken");
             }

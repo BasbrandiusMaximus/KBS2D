@@ -134,15 +134,14 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
         jbopslaan.addActionListener(this);
         dialog.add(jbopslaan);
 
-        jlbeschikbaarheid = new JLabel("Beschikbaarheid: ");
+        jlbeschikbaarheid = new JLabel("Beschikbaarheid: 0%");
         dialog.add(jlbeschikbaarheid);
 
-        jlprijs = new JLabel("Prijs: ");
+        jlprijs = new JLabel("Prijs: 0 euro");
         dialog.add(jlprijs);
 
         dialog.setVisible(true);
     }
-
 
 
     //Methode om image op te vragen, het te veranderen in een icoon en toe te voegen aan een JPanel
@@ -168,15 +167,11 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
                             lbl.setText(label.getText()); //Veranderd 'server' in de naam van de aangeklikte server.
                             componenten.setVisible(true); //Laat ontwerp component zien
                             stringArrayList.add(lbl.getText());
-                            if(stringArrayList.size() == 1) {
-                                for(Server servers : serverArrayList){
-                                        if (servers.getNaam().equals(lbl.getText())) {
-                                            jlbeschikbaarheid.setText("Beschikbaarheid: " + servers.getBeschikbaarheid());
-                                            jlprijs.setText("Prijs: " + servers.getPrijs());
-                                        }
-                                }
+                            if(stringArrayList.isEmpty()){
+                                jlbeschikbaarheid.setText("Beschikbaarheid: 0");
+                                jlprijs.setText("Prijs: 0");
                             }
-                            else{
+                            if(stringArrayList.size() != 0) {
                                 int teller = 0;
                                 Server[] berekenen = new Server[10];
                                 for(String namen : stringArrayList){
@@ -189,10 +184,8 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
                                 }
 
                                 List<Object> benp = Server.berekenBeschikbaarheid(berekenen);
-                                System.out.println(benp.get(0));
-                                System.out.println(benp.get(1));
-
-
+                                jlbeschikbaarheid.setText("Beschikbaarheid: " + benp.get(0) + "%");
+                                jlprijs.setText("Prijs: " + benp.get(1) + " euro");
                             }
                             break; //Zorgt ervoor dat de server maar 1 keer toegevoegd wordt.
                         }
@@ -208,6 +201,21 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
                     stringArrayList.remove(lbl.getText());
                     lbl.setText("server"); //Veranderd JLabel naar 'server'
                     ArrayComponent[i].setVisible(false); //Zet JPanel op invisble
+
+                    int teller = 0;
+                    Server[] berekenen = new Server[10];
+                    for(String namen : stringArrayList){
+                        for(Server servers : serverArrayList){
+                            if(servers.getNaam().equals(namen)){
+                                berekenen[teller] = servers;
+                                teller++;
+                            }
+                        }
+                    }
+
+                    List<Object> benp = Server.berekenBeschikbaarheid(berekenen);
+                    jlbeschikbaarheid.setText("Beschikbaarheid: " + benp.get(0) + "%");
+                    jlprijs.setText("Prijs: " + benp.get(1) + " euro");
                 }
             }
         }
@@ -237,6 +245,9 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
                     text.append(strings).append("\n");
                 }
 
+                text.append(jlbeschikbaarheid.getText()).append("\n");
+                text.append(jlprijs.getText());
+
                 try {
                     File path = new File(url);
                     File file = new File(path.getAbsolutePath()); //Maak dynamische url
@@ -252,6 +263,9 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
                     System.out.println("An error occurred.");
                     ioe.printStackTrace();//error handling
                 }
+
+                jlbeschikbaarheid.setText("Beschikbaarheid: 0%");
+                jlprijs.setText("Prijs: 0 euro");
             }
 
             else { //Als er geen ontwerp is geselecteerd
@@ -259,6 +273,10 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
                 for (String strings : stringArrayList) { //Maakt een string met alle servers om in het Ontwerp[nummer].txt bestand te duwen
                     text.append(strings).append("\n");
                 }
+
+                text.append(jlbeschikbaarheid.getText()).append("\n");
+                text.append(jlprijs.getText());
+
                 String url = "monitoringApplicatie/src/Ontwerpen/";
                 File folder = new File(url);
                 File[] listOfFiles = folder.listFiles();
@@ -290,6 +308,9 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
                     System.out.println("An error occurred.");
                     ioe.printStackTrace();//error handling
                 }
+
+                jlbeschikbaarheid.setText("Beschikbaarheid: 0%");
+                jlprijs.setText("Prijs: 0 euro");
             }
         }
     }
