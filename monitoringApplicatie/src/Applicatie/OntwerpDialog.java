@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -23,6 +24,8 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
     private JButton jbopslaan;
     private ArrayList<String> stringArrayList;
     private String ontwerpSelected;
+    private JLabel jlbeschikbaarheid;
+    private JLabel jlprijs;
 //TODO: Layout mooier maken + Kijken welke stukken code methodes kunnen worden zodat ik die kan hergebruiken.
 
     public OntwerpDialog(ArrayList<Server> serverArrayList, String ontwerpSelected){
@@ -131,6 +134,11 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
         jbopslaan.addActionListener(this);
         dialog.add(jbopslaan);
 
+        jlbeschikbaarheid = new JLabel("Beschikbaarheid: ");
+        dialog.add(jlbeschikbaarheid);
+
+        jlprijs = new JLabel("Prijs: ");
+        dialog.add(jlprijs);
 
         dialog.setVisible(true);
     }
@@ -160,6 +168,32 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
                             lbl.setText(label.getText()); //Veranderd 'server' in de naam van de aangeklikte server.
                             componenten.setVisible(true); //Laat ontwerp component zien
                             stringArrayList.add(lbl.getText());
+                            if(stringArrayList.size() == 1) {
+                                for(Server servers : serverArrayList){
+                                        if (servers.getNaam().equals(lbl.getText())) {
+                                            jlbeschikbaarheid.setText("Beschikbaarheid: " + servers.getBeschikbaarheid());
+                                            jlprijs.setText("Prijs: " + servers.getPrijs());
+                                        }
+                                }
+                            }
+                            else{
+                                int teller = 0;
+                                Server[] berekenen = new Server[10];
+                                for(String namen : stringArrayList){
+                                    for(Server servers : serverArrayList){
+                                        if(servers.getNaam().equals(namen)){
+                                            berekenen[teller] = servers;
+                                            teller++;
+                                        }
+                                    }
+                                }
+
+                                List<Object> benp = Server.berekenBeschikbaarheid(berekenen);
+                                System.out.println(benp.get(0));
+                                System.out.println(benp.get(1));
+
+
+                            }
                             break; //Zorgt ervoor dat de server maar 1 keer toegevoegd wordt.
                         }
                     }
@@ -220,7 +254,7 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
                 }
             }
 
-            else {
+            else { //Als er geen ontwerp is geselecteerd
                 StringBuilder text = new StringBuilder();
                 for (String strings : stringArrayList) { //Maakt een string met alle servers om in het Ontwerp[nummer].txt bestand te duwen
                     text.append(strings).append("\n");
