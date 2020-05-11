@@ -14,6 +14,7 @@ public class ApplicatieFrame extends JFrame implements ActionListener {
     private ArrayList<Double> doubleArrayList;
     private JButton jboptimalisatie;
     private JButton jbontwerpen;
+    private JButton jbmonitoren;
 
     public ApplicatieFrame() {
         //Aanmaken applicatie frame
@@ -31,6 +32,10 @@ public class ApplicatieFrame extends JFrame implements ActionListener {
         jbontwerpen = new JButton("Ontwerpen bekijken en maken");
         jbontwerpen.addActionListener(this);
         frame.add(jbontwerpen);
+
+        jbmonitoren = new JButton("Componenten monitoren");
+        jbmonitoren.addActionListener(this);
+        frame.add(jbmonitoren);
 
 
         ArrayList<String> lijst = new ArrayList<>();
@@ -85,6 +90,10 @@ public class ApplicatieFrame extends JFrame implements ActionListener {
 
         if (e.getSource() == jbontwerpen) {
             BekijkDialog bekijkDialog = new BekijkDialog(serverArrayList);
+        }
+
+        if (e.getSource() == jbmonitoren) {
+            MonitorDialog monitorDialog = new MonitorDialog();
         }
     }
 }
