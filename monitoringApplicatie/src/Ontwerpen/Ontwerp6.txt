@@ -1,4 +1,0 @@
-PfSense
-HAL9001DB
-Beschikbaarheid: 0.999998%
-Prijs: 9100 euro

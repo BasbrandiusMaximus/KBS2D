@@ -27,13 +27,14 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
     private JLabel jlbeschikbaarheid;
     private JLabel jlprijs;
     private JLabel jlfoutmelding;
+    private JDialog dialog;
 //TODO: Layout mooier maken + Kijken welke stukken code methodes kunnen worden zodat ik die kan hergebruiken.
 
     public OntwerpDialog(ArrayList<Server> serverArrayList, String ontwerpSelected){
         this.serverArrayList = serverArrayList;
         this.ontwerpSelected = ontwerpSelected;
         //Aanmaken ontwerp dialoog
-        JDialog dialog = new JDialog();
+        dialog = new JDialog();
         dialog.setModal(true);
         dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         dialog.setSize(900,400);
@@ -156,7 +157,6 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
 
         jbopslaan = new JButton("Opslaan");
         jbopslaan.addActionListener(this);
-        jbopslaan.addMouseListener(this);
         jbopslaan.setBackground(cnavbar);
         dialog.add(jbopslaan);
 
@@ -190,6 +190,7 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
         //Kijkt of er op de linker muis gedrukt is.
         if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
             JLabel label = (JLabel) e.getSource(); //JLabel waarop geklikt is. Dit is een servernaam.
+            // label = (JLabel) e.getComponent();
             for (JPanel componenten : ArrayComponent) {
                 JLabel lbl = (JLabel) componenten.getComponent(1); //JLabel in ontwerp JPanel bij default is dit 'server'
                 if (lbl.getText().equals("server")) { //Check of er een JLabel is in de lijst die 'server' heet.
@@ -228,6 +229,7 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
         //Kijkt of er op de rechter muis is gedrukt.
         if (SwingUtilities.isRightMouseButton(e) && e.getClickCount() == 1) {
             JLabel label = (JLabel) e.getSource(); //JLabel waarop geklikt is. Dit is een servernaam.
+            //JLabel label = (JLabel) e.getComponent();
             for (int i = 0; i < ArrayComponent.length; i++) { //for loop kan !niet! vervangen worden door een foreach omdat je de int i nodig hebt in de loop.
                 if (ArrayComponent[i].getComponent(1) == label) { //Kijkt welke component in de array hetzelfde is als de label waarop geklikt is.
                     JLabel lbl = (JLabel) ArrayComponent[i].getComponent(1); //Haalt JLabel op van JPanel Component waarop met de rechtermuis is geklikt.
@@ -272,6 +274,7 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
 
     @Override
     public void mouseEntered(MouseEvent e) {
+        //Layout knoppen
         if(e.getSource() == jbopslaan){
             jbopslaan.setBackground(new Color(230, 244, 255));
         }
@@ -287,93 +290,145 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == jbopslaan) { //Als op de Opslaan button is gedrukt
-            if(stringArrayList.size() == 0){
-                jlfoutmelding.setText("Het ontwerp is leeg, voeg een component toe aan het ontwerp om hem op te kunnen slaan.");
+            if (stringArrayList.size() == 0) {
                 jlfoutmelding.setVisible(true);
+                jlfoutmelding.setText("Het ontwerp is leeg, voeg een component toe aan het ontwerp om hem op te kunnen slaan.");
+            } else if (!(ontwerpSelected.equals("Geen"))) { //Als er een ontwerp geselecteerd is.
+                int checkpf = 0;
+                int checkdb = 0;
+                int checkwb = 0;
+                //checkt of het ontwerp valide is
+                for (String strings : stringArrayList) {
+                    for (Server servers : serverArrayList) {
+                        if (strings.equals(servers.getNaam())) {
+                            if (servers.getType() == 0) {
+                                checkpf++;
+                            }
+                            if (servers.getType() == 1) {
+                                checkdb++;
+                            }
+                            if (servers.getType() == 2) {
+                                checkwb++;
+                            }
+                        }
+                    }
+                }
+
+                if (checkpf >= 1 && checkdb >= 1 && checkwb >= 1) {
+                    jlfoutmelding.setText("");
+                    jlfoutmelding.setVisible(false);
+                    String url = "monitoringApplicatie/src/Ontwerpen/";
+                    url += ontwerpSelected;
+
+                    StringBuilder text = new StringBuilder();
+                    for (String strings : stringArrayList) { //Maakt een string met alle servers om in het Ontwerp[nummer].txt bestand te duwen
+                        text.append(strings).append("\n");
+                    }
+
+                    text.append(jlbeschikbaarheid.getText()).append("\n");
+                    text.append(jlprijs.getText());
+
+                    try {
+                        File path = new File(url);
+                        File file = new File(path.getAbsolutePath()); //Maak dynamische url
+                        FileWriter Writer = new FileWriter(file);
+                        Writer.write(text.toString());
+                        Writer.close();
+                        for (JPanel component : ArrayComponent) { //Clear componenten in ontwerp JPanel
+                            JLabel removeall = (JLabel) component.getComponent(1);
+                            removeall.setText("server");
+                            component.setVisible(false);
+                        }
+                    } catch (IOException ioe) {
+                        System.out.println("An error occurred.");
+                        ioe.printStackTrace();//error handling
+                    }
+
+                    jlbeschikbaarheid.setText("");
+                    jlbeschikbaarheid.setVisible(false);
+                    jlprijs.setText("");
+                    jlprijs.setVisible(false);
+                    dialog.dispose();
+                }
+                else{
+                    jlfoutmelding.setVisible(true);
+                    jlfoutmelding.setText("Dit is geen geldig ontwerp. Een ontwerp moet minimaal 1 pfSense, 1 databaseserver en 1 webserver hebben.");
+                }
             }
-            else if (!(ontwerpSelected.equals("Geen"))) { //Als er een ontwerp geselecteerd is.
-                jlfoutmelding.setText("");
-                jlfoutmelding.setVisible(false);
-                String url = "monitoringApplicatie/src/Ontwerpen/";
-                url += ontwerpSelected;
-
-                StringBuilder text = new StringBuilder();
-                for (String strings : stringArrayList) { //Maakt een string met alle servers om in het Ontwerp[nummer].txt bestand te duwen
-                    text.append(strings).append("\n");
-                }
-
-                text.append(jlbeschikbaarheid.getText()).append("\n");
-                text.append(jlprijs.getText());
-
-                try {
-                    File path = new File(url);
-                    File file = new File(path.getAbsolutePath()); //Maak dynamische url
-                    FileWriter Writer = new FileWriter(file);
-                    Writer.write(text.toString());
-                    Writer.close();
-                    for (JPanel component : ArrayComponent) { //Clear componenten in ontwerp JPanel
-                        JLabel removeall = (JLabel) component.getComponent(1);
-                        removeall.setText("server");
-                        component.setVisible(false);
-                    }
-                } catch (IOException ioe) {
-                    System.out.println("An error occurred.");
-                    ioe.printStackTrace();//error handling
-                }
-
-                jlbeschikbaarheid.setText("");
-                jlbeschikbaarheid.setVisible(false);
-                jlprijs.setText("");
-                jlprijs.setVisible(false);
-            }
-
-            else { //Als er geen ontwerp is geselecteerd
-                jlfoutmelding.setText("");
-                jlfoutmelding.setVisible(false);
-                StringBuilder text = new StringBuilder();
-                for (String strings : stringArrayList) { //Maakt een string met alle servers om in het Ontwerp[nummer].txt bestand te duwen
-                    text.append(strings).append("\n");
-                }
-
-                text.append(jlbeschikbaarheid.getText()).append("\n");
-                text.append(jlprijs.getText());
-
-                String url = "monitoringApplicatie/src/Ontwerpen/";
-                File folder = new File(url);
-                File[] listOfFiles = folder.listFiles();
-
-                ArrayList<File> fileArrayList = new ArrayList<>();
-                for (File file : listOfFiles) { //Er wordt geen nullpointerexception gegeven als er geen files in de directory staan. Er wordt dan simpelweg een 0 aan de fileArrayList meegegeven.
-                    if (file.isFile()) {
-                        fileArrayList.add(file); //Voeg alle ontwerpen toe aan de array.
+            else{ //Als er geen ontwerp is geselecteerd
+                int checkpf = 0;
+                int checkdb = 0;
+                int checkwb = 0;
+                //checkt of het ontwerp valide is
+                for (String strings : stringArrayList) {
+                    for (Server servers : serverArrayList) {
+                        if (strings.equals(servers.getNaam())) {
+                            if (servers.getType() == 0) {
+                                checkpf++;
+                            }
+                            if (servers.getType() == 1) {
+                                checkdb++;
+                            }
+                            if (servers.getType() == 2) {
+                                checkwb++;
+                            }
+                        }
                     }
                 }
 
-                int TellerOntwerp = fileArrayList.size() + 1; //Haal nummer ontwerp op: aantal ontwerpen + 1
+                if (checkpf >= 1 && checkdb >=1 && checkwb >= 1) {
 
-                url += "Ontwerp" + TellerOntwerp + ".txt";
-                //Maak file als het nog niet bestaat en schrijf erin.
-                try {
-                    File path = new File(url);
-                    File file = new File(path.getAbsolutePath()); //Maak dynamische url
-                    FileWriter Writer = new FileWriter(file);
-                    Writer.write(text.toString());
-                    Writer.close();
-                    stringArrayList.clear(); //Clear arraylist met servers
-                    for (JPanel component : ArrayComponent) { //Clear componenten in ontwerp JPanel
-                        JLabel removeall = (JLabel) component.getComponent(1);
-                        removeall.setText("server");
-                        component.setVisible(false);
+                    jlfoutmelding.setText("");
+                    jlfoutmelding.setVisible(false);
+                    StringBuilder text = new StringBuilder();
+                    for (String strings : stringArrayList) { //Maakt een string met alle servers om in het Ontwerp[nummer].txt bestand te duwen
+                        text.append(strings).append("\n");
                     }
-                } catch (IOException ioe) {
-                    System.out.println("An error occurred.");
-                    ioe.printStackTrace();//error handling
-                }
 
-                jlbeschikbaarheid.setText("");
-                jlbeschikbaarheid.setVisible(false);
-                jlprijs.setText("");
-                jlprijs.setVisible(false);
+                    text.append(jlbeschikbaarheid.getText()).append("\n");
+                    text.append(jlprijs.getText());
+
+                    String url = "monitoringApplicatie/src/Ontwerpen/";
+                    File folder = new File(url);
+                    File[] listOfFiles = folder.listFiles();
+
+                    ArrayList<File> fileArrayList = new ArrayList<>();
+                    for (File file : listOfFiles) { //Er wordt geen nullpointerexception gegeven als er geen files in de directory staan. Er wordt dan simpelweg een 0 aan de fileArrayList meegegeven.
+                        if (file.isFile()) {
+                            fileArrayList.add(file); //Voeg alle ontwerpen toe aan de array.
+                        }
+                    }
+
+                    int TellerOntwerp = fileArrayList.size() + 1; //Haal nummer ontwerp op: aantal ontwerpen + 1
+
+                    url += "Ontwerp" + TellerOntwerp + ".txt";
+                    //Maak file als het nog niet bestaat en schrijf erin.
+                    try {
+                        File path = new File(url);
+                        File file = new File(path.getAbsolutePath()); //Maak dynamische url
+                        FileWriter Writer = new FileWriter(file);
+                        Writer.write(text.toString());
+                        Writer.close();
+                        stringArrayList.clear(); //Clear arraylist met servers
+                        for (JPanel component : ArrayComponent) { //Clear componenten in ontwerp JPanel
+                            JLabel removeall = (JLabel) component.getComponent(1);
+                            removeall.setText("server");
+                            component.setVisible(false);
+                        }
+                    } catch (IOException ioe) {
+                        System.out.println("An error occurred.");
+                        ioe.printStackTrace();//error handling
+                    }
+
+                    jlbeschikbaarheid.setText("");
+                    jlbeschikbaarheid.setVisible(false);
+                    jlprijs.setText("");
+                    jlprijs.setVisible(false);
+                }
+                else{
+                    jlfoutmelding.setVisible(true);
+                    jlfoutmelding.setText("Dit is geen geldig ontwerp. Een ontwerp moet minimaal 1 pfSense, 1 databaseserver en 1 webserver hebben.");
+                }
             }
         }
     }
