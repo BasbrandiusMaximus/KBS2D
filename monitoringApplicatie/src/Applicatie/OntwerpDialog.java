@@ -37,7 +37,7 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
         dialog = new JDialog();
         dialog.setModal(true);
         dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        dialog.setSize(900,400);
+        dialog.setSize(1000,500);
         dialog.setTitle("Ontwerp maken");
         dialog.setLayout(new FlowLayout());
         Color background = new Color(230, 244, 255);
