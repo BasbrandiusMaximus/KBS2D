@@ -1,0 +1,5 @@
+PfSense
+HAL9003DB
+HAL9003W
+Beschikbaarheid: 0.99999998%
+Prijs: 21300 euro
