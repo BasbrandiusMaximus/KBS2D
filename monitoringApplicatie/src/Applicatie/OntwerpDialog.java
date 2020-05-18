@@ -215,11 +215,13 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
                             }
                         }
 
-                        List<Object> benp = Server.berekenBeschikbaarheid(berekenen);
-                        jlbeschikbaarheid.setText("Beschikbaarheid: " + benp.get(0) + "%");
-                        jlbeschikbaarheid.setVisible(true);
-                        jlprijs.setText("Prijs: " + benp.get(1) + " euro");
-                        jlprijs.setVisible(true);
+                        if (this.isValid(stringArrayList)) { //Als het ontwerp valide is dan laat hij het beschikbaarheidspercentage en de prijs zien.
+                            List<Object> benp = Server.berekenBeschikbaarheid(berekenen);
+                            jlbeschikbaarheid.setText("Beschikbaarheid: " + benp.get(0) + "%");
+                            jlbeschikbaarheid.setVisible(true);
+                            jlprijs.setText("Prijs: " + benp.get(1) + " euro");
+                            jlprijs.setVisible(true);
+                        }
                     }
                     break; //Zorgt ervoor dat de server maar 1 keer toegevoegd wordt.
                 }
@@ -255,7 +257,7 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
                         jlprijs.setVisible(false);
                         jlbeschikbaarheid.setVisible(false);
                     }
-                    else {
+                    else if(this.isValid(stringArrayList)){
                         jlbeschikbaarheid.setText("Beschikbaarheid: " + benp.get(0) + "%");
                         jlbeschikbaarheid.setVisible(true);
                         jlprijs.setText("Prijs: " + benp.get(1) + " euro");
@@ -294,27 +296,7 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
                 jlfoutmelding.setVisible(true);
                 jlfoutmelding.setText("Het ontwerp is leeg, voeg een component toe aan het ontwerp om hem op te kunnen slaan.");
             } else if (!(ontwerpSelected.equals("Geen"))) { //Als er een ontwerp geselecteerd is.
-                int checkpf = 0;
-                int checkdb = 0;
-                int checkwb = 0;
-                //checkt of het ontwerp valide is
-                for (String strings : stringArrayList) {
-                    for (Server servers : serverArrayList) {
-                        if (strings.equals(servers.getNaam())) {
-                            if (servers.getType() == 0) {
-                                checkpf++;
-                            }
-                            if (servers.getType() == 1) {
-                                checkdb++;
-                            }
-                            if (servers.getType() == 2) {
-                                checkwb++;
-                            }
-                        }
-                    }
-                }
-
-                if (checkpf >= 1 && checkdb >= 1 && checkwb >= 1) {
+                if (this.isValid(stringArrayList)) { //checkt of ontwerp valid is.
                     jlfoutmelding.setText("");
                     jlfoutmelding.setVisible(false);
                     String url = "monitoringApplicatie/src/Ontwerpen/";
@@ -356,28 +338,7 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
                 }
             }
             else{ //Als er geen ontwerp is geselecteerd
-                int checkpf = 0;
-                int checkdb = 0;
-                int checkwb = 0;
-                //checkt of het ontwerp valide is
-                for (String strings : stringArrayList) {
-                    for (Server servers : serverArrayList) {
-                        if (strings.equals(servers.getNaam())) {
-                            if (servers.getType() == 0) {
-                                checkpf++;
-                            }
-                            if (servers.getType() == 1) {
-                                checkdb++;
-                            }
-                            if (servers.getType() == 2) {
-                                checkwb++;
-                            }
-                        }
-                    }
-                }
-
-                if (checkpf >= 1 && checkdb >=1 && checkwb >= 1) {
-
+                if (this.isValid(stringArrayList)) {
                     jlfoutmelding.setText("");
                     jlfoutmelding.setVisible(false);
                     StringBuilder text = new StringBuilder();
@@ -430,6 +391,35 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
                     jlfoutmelding.setText("Dit is geen geldig ontwerp. Een ontwerp moet minimaal 1 pfSense, 1 databaseserver en 1 webserver hebben.");
                 }
             }
+        }
+    }
+
+    public boolean isValid(ArrayList<String> stringArrayList){ //checkt of het ontwerp valide is. Return true als het ontwerp valide is.
+        int checkpf = 0;
+        int checkdb = 0;
+        int checkwb = 0;
+
+        if(stringArrayList.isEmpty()){ //Als er geen componenten in het ontwerp staan, return dan altijd false.
+            return false;
+        }
+        else { //Kijkt of een ontwerp minimaal 1 pfSense, 1 dbserver en 1webserver bevat.
+            for (String strings : stringArrayList) {
+                for (Server servers : serverArrayList) {
+                    if (strings.equals(servers.getNaam())) {
+                        if (servers.getType() == 0) {
+                            checkpf++;
+                        }
+                        if (servers.getType() == 1) {
+                            checkdb++;
+                        }
+                        if (servers.getType() == 2) {
+                            checkwb++;
+                        }
+                    }
+                }
+            }
+
+            return checkpf >= 1 && checkdb >= 1 && checkwb >= 1; //returnt true als een opstellen een pfSense, een webserver en een databaseserver heeft.
         }
     }
 }
