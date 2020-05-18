@@ -215,9 +215,15 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
                             }
                         }
 
+                        List<Object> benp = Server.berekenBeschikbaarheid(berekenen);
                         if (this.isValid(stringArrayList)) { //Als het ontwerp valide is dan laat hij het beschikbaarheidspercentage en de prijs zien.
-                            List<Object> benp = Server.berekenBeschikbaarheid(berekenen);
                             jlbeschikbaarheid.setText("Beschikbaarheid: " + benp.get(0) + "%");
+                            jlbeschikbaarheid.setVisible(true);
+                            jlprijs.setText("Prijs: " + benp.get(1) + " euro");
+                            jlprijs.setVisible(true);
+                        }
+                        else{
+                            jlbeschikbaarheid.setText("Beschikbaarheid: 0%");
                             jlbeschikbaarheid.setVisible(true);
                             jlprijs.setText("Prijs: " + benp.get(1) + " euro");
                             jlprijs.setVisible(true);
@@ -259,6 +265,12 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
                     }
                     else if(this.isValid(stringArrayList)){
                         jlbeschikbaarheid.setText("Beschikbaarheid: " + benp.get(0) + "%");
+                        jlbeschikbaarheid.setVisible(true);
+                        jlprijs.setText("Prijs: " + benp.get(1) + " euro");
+                        jlprijs.setVisible(true);
+                    }
+                    else{
+                        jlbeschikbaarheid.setText("Beschikbaarheid: 0%");
                         jlbeschikbaarheid.setVisible(true);
                         jlprijs.setText("Prijs: " + benp.get(1) + " euro");
                         jlprijs.setVisible(true);
