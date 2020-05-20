@@ -75,8 +75,8 @@ public class ServerList {
             ArrayList<Server> combinatie = new ArrayList<>();
             ArrayList<Double> beschikbaarheidsPercentages = new ArrayList<>();
 
-            int web = 0;
-            int database = 0;
+            ArrayList<Server> tempDatabase = new ArrayList<>();
+            ArrayList<Server> tempWeb = new ArrayList<>();
             int prijs = 0;
 
             if (c.length() == aantal - 1)
@@ -90,25 +90,37 @@ public class ServerList {
                 {
                     prijs += s.getPrijs();
                     if (s.getType() == 1) {
-                        ++database;
+                        tempDatabase.add(s);
                     }
                     if (s.getType() == 2) {
-                        ++web;
+                        tempWeb.add(s);
                     }
                     beschikbaarheidsPercentages.add(s.getBeschikbaarheid());
                 }
 
                 double somBeschikbaarheidServers = 1;
-                for (Double beschikbaarheidsPercentage : beschikbaarheidsPercentages)
-                {
-                    somBeschikbaarheidServers = somBeschikbaarheidServers * (1 - beschikbaarheidsPercentage);
-                }
-                double serverBeschikbaarheid = 1 - somBeschikbaarheidServers;
+                double somWebBeschikbaarheid = 1;
+                double somDatabaseBeschikbaarheid = 1;
 
-                double combinatieBeschikbaarheid = (firewallBeschikbaarheid * serverBeschikbaarheid);
+                // Bereken totale beschikbaarheid van de webservers
+                for (Server server : tempWeb)
+                {
+                    somWebBeschikbaarheid = somWebBeschikbaarheid * (1 - server.getBeschikbaarheid());
+                }
+
+                // Bereken totale beschikbaarheid van de database servers
+                for (Server server : tempDatabase)
+                {
+                    somDatabaseBeschikbaarheid = somDatabaseBeschikbaarheid * (1 - server.getBeschikbaarheid());
+                }
+
+                somWebBeschikbaarheid = 1 - somWebBeschikbaarheid;
+                somDatabaseBeschikbaarheid = 1 - somDatabaseBeschikbaarheid;
+
+                double combinatieBeschikbaarheid = firewallBeschikbaarheid * somWebBeschikbaarheid * somDatabaseBeschikbaarheid;
 
                 // Validatie op basis van regels
-                if (web != 0 && database != 0)
+                if (tempWeb.size() != 0 && tempDatabase.size() != 0)
                 {
                     if (((prijs < goedkoopstePrijs) || (goedkoopstePrijs == 0)) && combinatieBeschikbaarheid >= beschikbaarheid)
                     {
@@ -117,6 +129,9 @@ public class ServerList {
                         besteCombinatie.addAll(combinatie);
                     }
                 }
+
+                tempWeb.clear();
+                tempDatabase.clear();
             }
         }
         geselecteerdeServers.addAll(besteCombinatie);
