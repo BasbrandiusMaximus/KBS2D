@@ -97,16 +97,7 @@ public class OptimalisatieDialog extends JDialog implements ActionListener, Mous
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {}
-
-    @Override
-    public void mousePressed(MouseEvent e) {}
-
-    @Override
-    public void mouseReleased(MouseEvent e) {}
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
+    public void mouseClicked(MouseEvent e) {
         if(e.getSource() == jbBereken){
             jbBereken.setBackground(new Color(230, 244, 255));
         }
@@ -121,17 +112,14 @@ public class OptimalisatieDialog extends JDialog implements ActionListener, Mous
     }
 
     @Override
-    public void mouseExited(MouseEvent e) {
-        if(e.getSource() == jbBereken){
-            jbBereken.setBackground(new Color(143, 163, 179));
-        }
+    public void mousePressed(MouseEvent e) {}
 
-        if(e.getSource() == jtBeschikbaarheid){
-            jtBeschikbaarheid.setBackground(new Color(143,163,179));
-        }
+    @Override
+    public void mouseReleased(MouseEvent e) {}
 
-        if(e.getSource() == jtAantalservers){
-            jtAantalservers.setBackground(new Color(143,163,179));
-        }
-    }
+    @Override
+    public void mouseEntered(MouseEvent e) {}
+
+    @Override
+    public void mouseExited(MouseEvent e) {}
 }

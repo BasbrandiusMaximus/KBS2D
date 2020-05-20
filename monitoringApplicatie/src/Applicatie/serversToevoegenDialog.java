@@ -4,13 +4,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class serversToevoegenDialog extends JDialog implements ActionListener {
+public class serversToevoegenDialog extends JDialog implements ActionListener, MouseListener {
     private JDialog dialog;
     private JButton jbopslaan;
     private JButton jbbewerken;
@@ -28,7 +30,8 @@ public class serversToevoegenDialog extends JDialog implements ActionListener {
     private JTextField jtprijs;
     private JComboBox<String> serverNamen;
     private ArrayList<Server> serverArrayList;
-
+    private Color background;
+    private Color cnavbar;
     public serversToevoegenDialog(ArrayList<Server> serverArrayList) {
         this.serverArrayList = serverArrayList;
         dialog = new JDialog();
@@ -36,13 +39,17 @@ public class serversToevoegenDialog extends JDialog implements ActionListener {
         dialog.setTitle("Serverlijst bewerken");
         dialog.setSize(600, 200);
         dialog.setModal(true);
-
         dialog.setLayout(new BorderLayout());
+        background = new Color(230, 244, 255); //230, 244, 255
+        cnavbar = new Color(143, 163, 179); //143, 163, 179
+        dialog.getContentPane().setBackground(background);
 
         JPanel jpconf = new JPanel();
+        jpconf.setBackground(background);
         dialog.add(jpconf, BorderLayout.NORTH);
 
         serverNamen = new JComboBox<>();
+        serverNamen.setBackground(cnavbar);
         serverNamen.addItem("<Nieuw>");
         for (Server server : serverArrayList) {
             serverNamen.addItem(server.getNaam()); //Add servers to comboBox
@@ -50,23 +57,42 @@ public class serversToevoegenDialog extends JDialog implements ActionListener {
 
         jpconf.add(serverNamen);
 
+        Dimension dbuttons = new Dimension(100,30);
+
         jbbewerken = new JButton("Bewerken");
+        jbbewerken.setBackground(cnavbar);
+        jbbewerken.setBorder(BorderFactory.createLineBorder(cnavbar));
+        jbbewerken.setPreferredSize(dbuttons);
         jbbewerken.addActionListener(this);
+        jbbewerken.addMouseListener(this);
         jpconf.add(jbbewerken);
 
         jbopslaan = new JButton("Opslaan");
+        jbopslaan.setBackground(cnavbar);
+        jbopslaan.setPreferredSize(dbuttons);
+        jbopslaan.setBorder(BorderFactory.createLineBorder(cnavbar));
         jbopslaan.addActionListener(this);
+        jbopslaan.addMouseListener(this);
         jpconf.add(jbopslaan);
 
         jbverwijderen = new JButton("Verwijderen");
+        jbverwijderen.setBackground(cnavbar);
+        jbverwijderen.setPreferredSize(dbuttons);
+        jbverwijderen.setBorder(BorderFactory.createLineBorder(cnavbar));
+        jbverwijderen.addActionListener(this);
         jbverwijderen.addActionListener(this);
         jpconf.add(jbverwijderen);
 
         jbterug = new JButton("Terug");
+        jbterug.setBackground(cnavbar);
+        jbterug.setPreferredSize(dbuttons);
+        jbterug.setBorder(BorderFactory.createLineBorder(cnavbar));
+        jbterug.addActionListener(this);
         jbterug.addActionListener(this);
         jpconf.add(jbterug);
 
         JPanel jpinput = new JPanel();
+        jpinput.setBackground(background);
         dialog.add(jpinput, BorderLayout.CENTER);
 
         jlnaam = new JLabel("Naam:");
@@ -76,6 +102,8 @@ public class serversToevoegenDialog extends JDialog implements ActionListener {
         jtnaam = new JTextField();
         Dimension dnaam = new Dimension(110, 25);
         jtnaam.setPreferredSize(dnaam);
+        jtnaam.setBackground(background);
+        jtnaam.setBorder(BorderFactory.createLineBorder(cnavbar));
         jtnaam.setVisible(false);
         jpinput.add(jtnaam);
 
@@ -86,6 +114,8 @@ public class serversToevoegenDialog extends JDialog implements ActionListener {
 
         jttype = new JTextField();
         jttype.setPreferredSize(dcijfer);
+        jttype.setBackground(background);
+        jttype.setBorder(BorderFactory.createLineBorder(cnavbar));
         jttype.setVisible(false);
         jpinput.add(jttype);
 
@@ -95,6 +125,8 @@ public class serversToevoegenDialog extends JDialog implements ActionListener {
 
         jtbeschikbaarheid = new JTextField();
         jtbeschikbaarheid.setPreferredSize(dcijfer);
+        jtbeschikbaarheid.setBackground(background);
+        jtbeschikbaarheid.setBorder(BorderFactory.createLineBorder(cnavbar));
         jtbeschikbaarheid.setVisible(false);
         jpinput.add(jtbeschikbaarheid);
 
@@ -104,10 +136,13 @@ public class serversToevoegenDialog extends JDialog implements ActionListener {
 
         jtprijs = new JTextField();
         jtprijs.setPreferredSize(dcijfer);
+        jtprijs.setBackground(background);
+        jtprijs.setBorder(BorderFactory.createLineBorder(cnavbar));
         jtprijs.setVisible(false);
         jpinput.add(jtprijs);
 
         JPanel jpfout = new JPanel();
+        jpfout.setBackground(background);
         dialog.add(jpfout, BorderLayout.SOUTH);
 
         jlfoutmelding = new JLabel();
@@ -233,6 +268,45 @@ public class serversToevoegenDialog extends JDialog implements ActionListener {
                     ioe.printStackTrace();//error handling
                 }
             }
+        }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) { }
+    @Override
+    public void mousePressed(MouseEvent e) { }
+    @Override
+    public void mouseReleased(MouseEvent e) { }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        if(e.getSource() == jbterug){
+            jbterug.setBackground(background);
+        }
+        if(e.getSource() == jbverwijderen){
+            jbverwijderen.setBackground(background);
+        }
+        if(e.getSource() == jbopslaan){
+            jbopslaan.setBackground(background);
+        }
+        if(e.getSource() == jbbewerken){
+            jbbewerken.setBackground(background);
+        }
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        if(e.getSource() == jbterug){
+            jbterug.setBackground(cnavbar);
+        }
+        if(e.getSource() == jbverwijderen){
+            jbverwijderen.setBackground(cnavbar);
+        }
+        if(e.getSource() == jbopslaan){
+            jbopslaan.setBackground(cnavbar);
+        }
+        if(e.getSource() == jbbewerken){
+            jbbewerken.setBackground(cnavbar);
         }
     }
 }

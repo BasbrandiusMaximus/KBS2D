@@ -18,11 +18,10 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class OntwerpDialog extends JDialog implements MouseListener, ActionListener {
+public class OntwerpDialog extends JDialog implements ActionListener, MouseListener {
     private ArrayList<Server> serverArrayList; //Deze maak ik expres geen lokale variable voor waneer ik hem nodig heb.
     private JPanel[] ArrayComponent;
     private JButton jbopslaan;
-    private JButton jbTerug;
     private ArrayList<String> stringArrayList;
     private String ontwerpSelected;
     private JLabel jlbeschikbaarheid;
@@ -38,7 +37,7 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
         dialog = new JDialog();
         dialog.setModal(true);
         dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        dialog.setSize(1000,500);
+        dialog.setSize(800,500);
         dialog.setTitle("Ontwerp maken");
         dialog.setLayout(new FlowLayout());
         Color background = new Color(230, 244, 255);
@@ -48,15 +47,15 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
         //Aanmaken JPanel voor de infrastructuurcomponenten
         JPanel jpComponents = new JPanel();
         jpComponents.setLayout(new FlowLayout());
-        Dimension dimensionPanelComponents = new Dimension(200, 350);
+        Dimension dimensionPanelComponents = new Dimension(200, 400);
         jpComponents.setPreferredSize(dimensionPanelComponents);
         jpComponents.setBackground(background);
-        jpComponents.setBorder(BorderFactory.createLineBorder(Color.black)); //setborder naar zwart
+        jpComponents.setBorder(BorderFactory.createLineBorder(cnavbar)); //setborder naar zwart
 
         Border borderC = jpComponents.getBorder();
-        Border marginC = new EmptyBorder(10,30,5,10);
+        Border marginC = new EmptyBorder(10,10,5,10);
         jpComponents.setBorder(new CompoundBorder(marginC, borderC)); //add margin aan de JPanel
-        dialog.add(jpComponents, BorderLayout.WEST); //set JPanel naar links (westen) van de JDialog
+        dialog.add(jpComponents);
 
         //Voeg tekst toe aan componentselectie
         JLabel textComponenten = new JLabel("Componentselectie");
@@ -70,11 +69,14 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
         //Voeg server naam en icoon toe aan commponentselectie
         for (Server serverObject : serverArrayList) {
             JPanel component = new JPanel();
+            component.setBorder(new EmptyBorder(10,10,0,10));
             component.setLayout(new GridLayout(2, 1));
             JLabel icon = new JLabel(); //Maak JLabel voor icoon
             icon.setIcon(getImage("/server.png", 30, 30)); //Voeg icoon toe aan JLabel
+            icon.setHorizontalAlignment(JLabel.CENTER);
             component.add(icon);
             JLabel name = new JLabel(serverObject.getNaam()); //Maak JLabel met naam van server
+            name.setHorizontalAlignment(JLabel.CENTER);
             component.add(name);
             component.setBackground(background);
             name.addMouseListener(this); //voeg mouselistener toe aan naam JLabel
@@ -85,18 +87,17 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
 
         //Aanmaken JPanel voor ontwerp
         JPanel jpOntwerp = new JPanel();
-        jpOntwerp.setSize(500, 350);
+        Dimension d = new Dimension(320,400);
+        jpOntwerp.setPreferredSize(d);
         jpOntwerp.setBackground(background);
-        jpOntwerp.setBorder(BorderFactory.createLineBorder(Color.black)); //setborder naar zwart
+        jpOntwerp.setBorder(BorderFactory.createLineBorder(cnavbar)); //setborder naar zwart
         jpOntwerp.setLayout(new GridLayout(4,7));
         Border borderO = jpOntwerp.getBorder();
         Border marginO = new EmptyBorder(10,30,5,30);
         jpOntwerp.setBorder(new CompoundBorder(marginO, borderO)); //add margin aan de JPanel
-        dialog.add(jpOntwerp, BorderLayout.CENTER); //set JPanel naar het midden (center) van de JDialog
-
         dialog.add(jpOntwerp);
 
-
+        dialog.add(jpOntwerp);
 
         int aantalServers = 10;
         ArrayComponent = new JPanel[aantalServers];
@@ -106,11 +107,14 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
         for (int i = 0; i < aantalServers; i++) {
             JPanel component = new JPanel();
             component.setLayout(new GridLayout(2, 1));
+            component.setBorder(new EmptyBorder(10,10,0,10));//top,left,bottom,right
             JLabel icon = new JLabel(); //Maak JLabel voor icoon
             icon.setIcon(getImage("/server.png", 30, 30)); //Voeg icoon toe aan JLabel
+            icon.setHorizontalAlignment(JLabel.CENTER);
             component.add(icon);
             JLabel Ontwerpnaam = new JLabel(); //Maak JLabel met naam van server
             Ontwerpnaam.setText("server");
+            Ontwerpnaam.setHorizontalAlignment(JLabel.CENTER);
             component.add(Ontwerpnaam);
             Ontwerpnaam.addMouseListener(this); //voeg mouselistener toe aan naam JLabel
             component.setVisible(false);
@@ -156,14 +160,26 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
             }
         }
 
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        panel.setBackground(background);
+        Dimension dpanel = new Dimension(175,100);
+        panel.setPreferredSize(dpanel);
+        dialog.add(panel);
+
         jbopslaan = new JButton("Opslaan");
         jbopslaan.addActionListener(this);
+
+        Dimension dd = new Dimension(100,30);
+        jbopslaan.setPreferredSize(dd);
         jbopslaan.setBackground(cnavbar);
-        dialog.add(jbopslaan);
 
-        dialog.add(jlbeschikbaarheid);
-
-        dialog.add(jlprijs);
+        panel.add(jbopslaan, BorderLayout.SOUTH);
+        jbopslaan.setBorder(new EmptyBorder(5,0,5,0));//top,left,bottom,right
+        panel.add(jlbeschikbaarheid, BorderLayout.NORTH);
+        jlbeschikbaarheid.setBorder(new EmptyBorder(5,0,5,0));//top,left,bottom,right
+        panel.add(jlprijs, BorderLayout.CENTER);
+        jlprijs.setBorder(new EmptyBorder(5,0,5,0));//top,left,bottom,right
 
         jlfoutmelding = new JLabel("");
         jlfoutmelding.setVisible(false);
@@ -282,25 +298,12 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
 
     @Override
     public void mousePressed(MouseEvent e) { }
-
     @Override
     public void mouseReleased(MouseEvent e) { }
-
     @Override
-    public void mouseEntered(MouseEvent e) {
-        //Layout knoppen
-        if(e.getSource() == jbopslaan){
-            jbopslaan.setBackground(new Color(230, 244, 255));
-        }
-    }
-
+    public void mouseEntered(MouseEvent e) { }
     @Override
-    public void mouseExited(MouseEvent e) {
-        if(e.getSource() == jbopslaan){
-            jbopslaan.setBackground(new Color(143, 163, 179));
-        }
-    }
-
+    public void mouseExited(MouseEvent e) { }
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == jbopslaan) { //Als op de Opslaan button is gedrukt
