@@ -6,19 +6,51 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class ServersBekijkenDialog extends JDialog implements ActionListener {
     private JButton jbBewerken;
+    private JButton jbTerug;
     private ArrayList<Server> serverArrayList;
+    private JDialog dialog;
 
-    public ServersBekijkenDialog(ArrayList<Server> serverArrayList){
-        this.serverArrayList = serverArrayList;
-        JDialog dialog = new JDialog();
-        dialog.setModal(true);
+    public ServersBekijkenDialog(){
+        //Zelf ophalen van de servers uit servers.txt zodat na het bewerken, toevoegen of verwijderen de lijst automatisch wordt geupdatet.
+        ArrayList<String> lijst = new ArrayList<>();
+        serverArrayList = new ArrayList<>();
+
+        try {
+            File Servers = new File("./Servers.txt");
+            Scanner Reader = new Scanner(Servers);
+            while (Reader.hasNextLine()) {
+                String data = Reader.nextLine();
+                lijst.add(data);
+            }
+            Reader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
+        for (String data : lijst) {
+            try {
+                String[] server = data.split(",", 0);
+                int prijs = Integer.parseInt(server[1]);
+                double beschikbaarheid = Double.parseDouble(server[2]);
+                int type = Integer.parseInt(server[3]);
+                Server serverObject = new Server(server[0], prijs, beschikbaarheid, type);
+                serverArrayList.add(serverObject);
+            }
+            catch(IndexOutOfBoundsException ignore) {}
+        }
+
+        dialog = new JDialog();
         dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         dialog.setSize(900,250);
-        dialog.setTitle("Servers aanpassen en toevoegen");
+        dialog.setTitle("Serverlijst");
         dialog.setLayout(new FlowLayout());
 
         JLabel info = new JLabel("Hier ziet u alle servers die beschikbaar zijn. Om een server te bewerken of om een nieuwe toe te voegen, drukt u op 'bewerken'");
@@ -66,13 +98,23 @@ public class ServersBekijkenDialog extends JDialog implements ActionListener {
         jbBewerken.addActionListener(this);
         dialog.add(jbBewerken);
 
+        //Aanmaken en toevoegen terug JButton
+        jbTerug = new JButton("Terug");
+        jbTerug.addActionListener(this);
+        dialog.add(jbTerug);
+
         dialog.setVisible(true);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == jbBewerken) { //Als er op bewerken wordt gedrukt.
-            serversToevoegen toevoegen = new serversToevoegen(serverArrayList);
+        if (e.getSource() == jbBewerken) { //Als er op bewerken wordt gedrukt, open dan de serversToevoegenDialog
+            serversToevoegenDialog toevoegen = new serversToevoegenDialog(serverArrayList);
+            dialog.dispose();
+        }
+        if(e.getSource() == jbTerug){
+            ApplicatieFrame frame = new ApplicatieFrame();
+            dialog.dispose();
         }
     }
 }

@@ -15,7 +15,9 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class BekijkDialog extends JDialog implements ActionListener, MouseListener {
+    private JDialog dialog;
     private JButton jbMaken;
+    private JButton jbTerug;
     private ArrayList<Server> serverArrayList;
     private JButton jbOpenen;
     private JComboBox<String> comboBox;
@@ -28,8 +30,7 @@ public class BekijkDialog extends JDialog implements ActionListener, MouseListen
 
     public BekijkDialog(ArrayList<Server> serverArrayList){
         this.serverArrayList = serverArrayList;
-        JDialog dialog = new JDialog();
-        dialog.setModal(true);
+        dialog = new JDialog();
         dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         dialog.setSize(900,400);
         dialog.setTitle("Ontwerpen bekijken en bewerken");
@@ -52,7 +53,6 @@ public class BekijkDialog extends JDialog implements ActionListener, MouseListen
 
         dialog.add(comboBox);
 
-
         //Aanmaken JButton die bestaand ontwerp opent.
         jbOpenen = new JButton("Open ontwerp");
         jbOpenen.addActionListener(this);
@@ -73,6 +73,11 @@ public class BekijkDialog extends JDialog implements ActionListener, MouseListen
         jbMaken.addMouseListener(this);
         jbMaken.setBackground(cnavbar);
         dialog.add(jbMaken);
+
+        //Aanmaken JButton die een ApplicatieFrame aanmaakt.
+        jbTerug = new JButton("Terug");
+        jbTerug.addActionListener(this);
+        dialog.add(jbTerug);
 
         //Aanmaken JPanel waar ontwerp in komt te staan.
         JPanel jpBekijk = new JPanel();
@@ -125,6 +130,10 @@ public class BekijkDialog extends JDialog implements ActionListener, MouseListen
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == jbTerug){
+            ApplicatieFrame frame = new ApplicatieFrame();
+            dialog.dispose();
+        }
         if(e.getSource() == jbMaken) {
             OntwerpDialog ontwerpDialog = new OntwerpDialog(serverArrayList, "Geen");
         }

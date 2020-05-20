@@ -22,6 +22,7 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
     private ArrayList<Server> serverArrayList; //Deze maak ik expres geen lokale variable voor waneer ik hem nodig heb.
     private JPanel[] ArrayComponent;
     private JButton jbopslaan;
+    private JButton jbTerug;
     private ArrayList<String> stringArrayList;
     private String ontwerpSelected;
     private JLabel jlbeschikbaarheid;
@@ -167,7 +168,6 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
         jlfoutmelding = new JLabel("");
         jlfoutmelding.setVisible(false);
         dialog.add(jlfoutmelding);
-
 
         dialog.setVisible(true);
     }

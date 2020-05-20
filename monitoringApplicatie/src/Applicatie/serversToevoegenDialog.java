@@ -10,10 +10,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class serversToevoegen extends JDialog implements ActionListener {
+public class serversToevoegenDialog extends JDialog implements ActionListener {
+    private JDialog dialog;
     private JButton jbopslaan;
     private JButton jbbewerken;
     private JButton jbverwijderen;
+    private JButton jbterug;
     private JLabel jlnaam;
     private JLabel jltype;
     private JLabel jlbeschikbaarheid;
@@ -27,10 +29,11 @@ public class serversToevoegen extends JDialog implements ActionListener {
     private JComboBox<String> serverNamen;
     private ArrayList<Server> serverArrayList;
 
-    public serversToevoegen(ArrayList<Server> serverArrayList) {
+    public serversToevoegenDialog(ArrayList<Server> serverArrayList) {
         this.serverArrayList = serverArrayList;
-        JDialog dialog = new JDialog();
+        dialog = new JDialog();
         dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        dialog.setTitle("Serverlijst bewerken");
         dialog.setSize(600, 200);
         dialog.setModal(true);
 
@@ -58,6 +61,10 @@ public class serversToevoegen extends JDialog implements ActionListener {
         jbverwijderen = new JButton("Verwijderen");
         jbverwijderen.addActionListener(this);
         jpconf.add(jbverwijderen);
+
+        jbterug = new JButton("Terug");
+        jbterug.addActionListener(this);
+        jpconf.add(jbterug);
 
         JPanel jpinput = new JPanel();
         dialog.add(jpinput, BorderLayout.CENTER);
@@ -116,9 +123,13 @@ public class serversToevoegen extends JDialog implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == jbterug){
+            ServersBekijkenDialog serversBekijkenDialog = new ServersBekijkenDialog();
+            dialog.dispose();
+        }
         if (e.getSource() == jbbewerken) {
             String x = Objects.requireNonNull(serverNamen.getSelectedItem()).toString(); //Ophalen geselecteerde item in de comboBox
-            jlnaam.setVisible(true);
+            jlnaam.setVisible(true); //'Toevoegen' van JTextfields als een server is geselecteerd.
             jtnaam.setVisible(true);
             jltype.setVisible(true);
             jttype.setVisible(true);
@@ -130,7 +141,7 @@ public class serversToevoegen extends JDialog implements ActionListener {
             jlsucces.setVisible(false);
             if(!(x.equals("<Nieuw>"))) { //Als een server wordt gekozen.
                 for (Server server : serverArrayList) {
-                    if (server.getNaam().equals(x)) {
+                    if (server.getNaam().equals(x)) { //Invullen van de waardes in de JTextFields
                         jtnaam.setText(server.getNaam());
                         jtprijs.setText(String.valueOf(server.getPrijs()));
                         double beschikbaarheid = server.getBeschikbaarheid() * 100;
