@@ -235,7 +235,7 @@ public class serversToevoegenDialog extends JDialog implements ActionListener, M
                 }
             }
             catch(NumberFormatException ne){
-                jlfoutmelding.setText("Invalid input");
+                jlfoutmelding.setText("Ongeldige invoer!");
                 jlfoutmelding.setVisible(true);
             }
         }

@@ -60,7 +60,7 @@ public class ServersBekijkenDialog extends JDialog implements ActionListener, Mo
         cnavbar = new Color(143, 163, 179); //143, 163, 179
         dialog.getContentPane().setBackground(background);
 
-        JLabel info = new JLabel("Hier ziet u alle servers die beschikbaar zijn. Om een server te bewerken of om een nieuwe toe te voegen, drukt u op 'bewerken'");
+        JLabel info = new JLabel("Hier ziet u alle servers die aan een ontwerp toegevoegd kunnen worden. Om een server te bewerken of om een nieuwe toe te voegen, drukt u op 'bewerken'");
         info.setBorder(new EmptyBorder(10,70,10,30));//top,left,bottom,right
         dialog.add(info, BorderLayout.NORTH);
 
