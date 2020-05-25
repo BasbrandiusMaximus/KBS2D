@@ -38,7 +38,7 @@ public class serversToevoegenDialog extends JDialog implements ActionListener, M
         dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         dialog.setTitle("Serverlijst bewerken");
         dialog.setSize(600, 200);
-        dialog.setModal(true);
+        dialog.setModal(false);
         dialog.setLayout(new BorderLayout());
         background = new Color(230, 244, 255); //230, 244, 255
         cnavbar = new Color(143, 163, 179); //143, 163, 179

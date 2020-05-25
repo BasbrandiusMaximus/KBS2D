@@ -145,6 +145,7 @@ public class ApplicatieFrame extends JFrame implements ActionListener, MouseList
             ServersBekijkenDialog serversBekijkenDialog = new ServersBekijkenDialog();
             frame.dispose();
         }
+
         if (e.getSource() == jbmonitor) {
             MonitorDialog monitorDialog = new MonitorDialog();
         }

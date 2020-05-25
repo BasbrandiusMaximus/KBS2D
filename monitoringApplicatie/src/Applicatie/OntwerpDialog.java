@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class OntwerpDialog extends JDialog implements ActionListener, MouseListener {
-    private ArrayList<Server> serverArrayList; //Deze maak ik expres geen lokale variable voor waneer ik hem nodig heb.
+    private ArrayList<Server> serverArrayList;
     private JPanel[] ArrayComponent;
     private JButton jbopslaan;
     private ArrayList<String> stringArrayList;
@@ -28,14 +28,13 @@ public class OntwerpDialog extends JDialog implements ActionListener, MouseListe
     private JLabel jlprijs;
     private JLabel jlfoutmelding;
     private JDialog dialog;
-//TODO: Layout mooier maken + Kijken welke stukken code methodes kunnen worden zodat ik die kan hergebruiken.
+//TODO: Kijken welke stukken code methodes kunnen worden zodat ik die kan hergebruiken.
 
     public OntwerpDialog(ArrayList<Server> serverArrayList, String ontwerpSelected){
         this.serverArrayList = serverArrayList;
         this.ontwerpSelected = ontwerpSelected;
         //Aanmaken ontwerp dialoog
         dialog = new JDialog();
-        dialog.setModal(true);
         dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         dialog.setSize(800,500);
         dialog.setTitle("Ontwerp maken");

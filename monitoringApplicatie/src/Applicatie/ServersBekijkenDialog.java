@@ -21,6 +21,7 @@ public class ServersBekijkenDialog extends JDialog implements ActionListener, Mo
     private JDialog dialog;
     private Color background;
     private Color cnavbar;
+
     public ServersBekijkenDialog(){
         //Zelf ophalen van de servers uit servers.txt zodat na het bewerken, toevoegen of verwijderen de lijst automatisch wordt geupdatet.
         ArrayList<String> lijst = new ArrayList<>();
@@ -139,7 +140,7 @@ public class ServersBekijkenDialog extends JDialog implements ActionListener, Mo
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == jbBewerken) { //Als er op bewerken wordt gedrukt, open dan de serversToevoegenDialog
             serversToevoegenDialog toevoegen = new serversToevoegenDialog(serverArrayList);
-            dialog.dispose();
+            dialog.setVisible(false);
         }
         if(e.getSource() == jbTerug){
             ApplicatieFrame frame = new ApplicatieFrame();
