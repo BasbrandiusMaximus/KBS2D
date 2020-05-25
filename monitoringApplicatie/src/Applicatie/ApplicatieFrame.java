@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ApplicatieFrame extends JFrame implements ActionListener, MouseListener {
+    private JFrame frame;
     private ArrayList<Server> serverArrayList;
     private ArrayList<Double> doubleArrayList;
     private JButton jboptimalisatie;
@@ -21,10 +22,10 @@ public class ApplicatieFrame extends JFrame implements ActionListener, MouseList
 
     public ApplicatieFrame() {
         //Aanmaken applicatie frame
-        JFrame frame = new JFrame();
+        frame = new JFrame();
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.setSize(600, 400);
-        frame.setTitle("Applicatie");
+        frame.setTitle("Nerdy Gadgets");
         frame.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         Color background = new Color(230, 244, 255); //230, 244, 255
         frame.getContentPane().setBackground(background);
@@ -137,11 +138,14 @@ public class ApplicatieFrame extends JFrame implements ActionListener, MouseList
 
         if (e.getSource() == jbontwerpen) {
             BekijkDialog bekijkDialog = new BekijkDialog(serverArrayList);
+            frame.dispose();
         }
 
         if(e.getSource() == jbservers){
-            ServersBekijkenDialog serversBekijkenDialog = new ServersBekijkenDialog(serverArrayList);
+            ServersBekijkenDialog serversBekijkenDialog = new ServersBekijkenDialog();
+            frame.dispose();
         }
+
         if (e.getSource() == jbmonitor) {
             MonitorDialog monitorDialog = new MonitorDialog();
         }

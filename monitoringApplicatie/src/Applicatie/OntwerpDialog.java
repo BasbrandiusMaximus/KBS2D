@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class OntwerpDialog extends JDialog implements MouseListener, ActionListener {
-    private ArrayList<Server> serverArrayList; //Deze maak ik expres geen lokale variable voor waneer ik hem nodig heb.
+public class OntwerpDialog extends JDialog implements ActionListener, MouseListener {
+    private ArrayList<Server> serverArrayList;
     private JPanel[] ArrayComponent;
     private JButton jbopslaan;
     private ArrayList<String> stringArrayList;
@@ -27,16 +27,16 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
     private JLabel jlbeschikbaarheid;
     private JLabel jlprijs;
     private JLabel jlfoutmelding;
-//TODO: Layout mooier maken + Kijken welke stukken code methodes kunnen worden zodat ik die kan hergebruiken.
+    private JDialog dialog;
+//TODO: Kijken welke stukken code methodes kunnen worden zodat ik die kan hergebruiken.
 
     public OntwerpDialog(ArrayList<Server> serverArrayList, String ontwerpSelected){
         this.serverArrayList = serverArrayList;
         this.ontwerpSelected = ontwerpSelected;
         //Aanmaken ontwerp dialoog
-        JDialog dialog = new JDialog();
-        dialog.setModal(true);
+        dialog = new JDialog();
         dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        dialog.setSize(900,400);
+        dialog.setSize(800,500);
         dialog.setTitle("Ontwerp maken");
         dialog.setLayout(new FlowLayout());
         Color background = new Color(230, 244, 255);
@@ -46,15 +46,15 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
         //Aanmaken JPanel voor de infrastructuurcomponenten
         JPanel jpComponents = new JPanel();
         jpComponents.setLayout(new FlowLayout());
-        Dimension dimensionPanelComponents = new Dimension(200, 350);
+        Dimension dimensionPanelComponents = new Dimension(200, 400);
         jpComponents.setPreferredSize(dimensionPanelComponents);
         jpComponents.setBackground(background);
-        jpComponents.setBorder(BorderFactory.createLineBorder(Color.black)); //setborder naar zwart
+        jpComponents.setBorder(BorderFactory.createLineBorder(cnavbar)); //setborder naar zwart
 
         Border borderC = jpComponents.getBorder();
-        Border marginC = new EmptyBorder(10,30,5,10);
+        Border marginC = new EmptyBorder(10,10,5,10);
         jpComponents.setBorder(new CompoundBorder(marginC, borderC)); //add margin aan de JPanel
-        dialog.add(jpComponents, BorderLayout.WEST); //set JPanel naar links (westen) van de JDialog
+        dialog.add(jpComponents);
 
         //Voeg tekst toe aan componentselectie
         JLabel textComponenten = new JLabel("Componentselectie");
@@ -68,11 +68,14 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
         //Voeg server naam en icoon toe aan commponentselectie
         for (Server serverObject : serverArrayList) {
             JPanel component = new JPanel();
+            component.setBorder(new EmptyBorder(10,10,0,10));
             component.setLayout(new GridLayout(2, 1));
             JLabel icon = new JLabel(); //Maak JLabel voor icoon
             icon.setIcon(getImage("/server.png", 30, 30)); //Voeg icoon toe aan JLabel
+            icon.setHorizontalAlignment(JLabel.CENTER);
             component.add(icon);
             JLabel name = new JLabel(serverObject.getNaam()); //Maak JLabel met naam van server
+            name.setHorizontalAlignment(JLabel.CENTER);
             component.add(name);
             component.setBackground(background);
             name.addMouseListener(this); //voeg mouselistener toe aan naam JLabel
@@ -83,18 +86,17 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
 
         //Aanmaken JPanel voor ontwerp
         JPanel jpOntwerp = new JPanel();
-        jpOntwerp.setSize(500, 350);
+        Dimension d = new Dimension(320,400);
+        jpOntwerp.setPreferredSize(d);
         jpOntwerp.setBackground(background);
-        jpOntwerp.setBorder(BorderFactory.createLineBorder(Color.black)); //setborder naar zwart
+        jpOntwerp.setBorder(BorderFactory.createLineBorder(cnavbar)); //setborder naar zwart
         jpOntwerp.setLayout(new GridLayout(4,7));
         Border borderO = jpOntwerp.getBorder();
         Border marginO = new EmptyBorder(10,30,5,30);
         jpOntwerp.setBorder(new CompoundBorder(marginO, borderO)); //add margin aan de JPanel
-        dialog.add(jpOntwerp, BorderLayout.CENTER); //set JPanel naar het midden (center) van de JDialog
-
         dialog.add(jpOntwerp);
 
-
+        dialog.add(jpOntwerp);
 
         int aantalServers = 10;
         ArrayComponent = new JPanel[aantalServers];
@@ -104,11 +106,14 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
         for (int i = 0; i < aantalServers; i++) {
             JPanel component = new JPanel();
             component.setLayout(new GridLayout(2, 1));
+            component.setBorder(new EmptyBorder(10,10,0,10));//top,left,bottom,right
             JLabel icon = new JLabel(); //Maak JLabel voor icoon
             icon.setIcon(getImage("/server.png", 30, 30)); //Voeg icoon toe aan JLabel
+            icon.setHorizontalAlignment(JLabel.CENTER);
             component.add(icon);
             JLabel Ontwerpnaam = new JLabel(); //Maak JLabel met naam van server
             Ontwerpnaam.setText("server");
+            Ontwerpnaam.setHorizontalAlignment(JLabel.CENTER);
             component.add(Ontwerpnaam);
             Ontwerpnaam.addMouseListener(this); //voeg mouselistener toe aan naam JLabel
             component.setVisible(false);
@@ -154,20 +159,30 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
             }
         }
 
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        panel.setBackground(background);
+        Dimension dpanel = new Dimension(175,100);
+        panel.setPreferredSize(dpanel);
+        dialog.add(panel);
+
         jbopslaan = new JButton("Opslaan");
         jbopslaan.addActionListener(this);
-        jbopslaan.addMouseListener(this);
+
+        Dimension dd = new Dimension(100,30);
+        jbopslaan.setPreferredSize(dd);
         jbopslaan.setBackground(cnavbar);
-        dialog.add(jbopslaan);
 
-        dialog.add(jlbeschikbaarheid);
-
-        dialog.add(jlprijs);
+        panel.add(jbopslaan, BorderLayout.SOUTH);
+        jbopslaan.setBorder(new EmptyBorder(5,0,5,0));//top,left,bottom,right
+        panel.add(jlbeschikbaarheid, BorderLayout.NORTH);
+        jlbeschikbaarheid.setBorder(new EmptyBorder(5,0,5,0));//top,left,bottom,right
+        panel.add(jlprijs, BorderLayout.CENTER);
+        jlprijs.setBorder(new EmptyBorder(5,0,5,0));//top,left,bottom,right
 
         jlfoutmelding = new JLabel("");
         jlfoutmelding.setVisible(false);
         dialog.add(jlfoutmelding);
-
 
         dialog.setVisible(true);
     }
@@ -190,6 +205,7 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
         //Kijkt of er op de linker muis gedrukt is.
         if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
             JLabel label = (JLabel) e.getSource(); //JLabel waarop geklikt is. Dit is een servernaam.
+            // label = (JLabel) e.getComponent();
             for (JPanel componenten : ArrayComponent) {
                 JLabel lbl = (JLabel) componenten.getComponent(1); //JLabel in ontwerp JPanel bij default is dit 'server'
                 if (lbl.getText().equals("server")) { //Check of er een JLabel is in de lijst die 'server' heet.
@@ -215,10 +231,18 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
                         }
 
                         List<Object> benp = Server.berekenBeschikbaarheid(berekenen);
-                        jlbeschikbaarheid.setText("Beschikbaarheid: " + benp.get(0) + "%");
-                        jlbeschikbaarheid.setVisible(true);
-                        jlprijs.setText("Prijs: " + benp.get(1) + " euro");
-                        jlprijs.setVisible(true);
+                        if (this.isValid(stringArrayList)) { //Als het ontwerp valide is dan laat hij het beschikbaarheidspercentage en de prijs zien.
+                            jlbeschikbaarheid.setText("Beschikbaarheid: " + benp.get(0) + "%");
+                            jlbeschikbaarheid.setVisible(true);
+                            jlprijs.setText("Prijs: " + benp.get(1) + " euro");
+                            jlprijs.setVisible(true);
+                        }
+                        else{
+                            jlbeschikbaarheid.setText("Beschikbaarheid: 0%");
+                            jlbeschikbaarheid.setVisible(true);
+                            jlprijs.setText("Prijs: " + benp.get(1) + " euro");
+                            jlprijs.setVisible(true);
+                        }
                     }
                     break; //Zorgt ervoor dat de server maar 1 keer toegevoegd wordt.
                 }
@@ -228,6 +252,7 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
         //Kijkt of er op de rechter muis is gedrukt.
         if (SwingUtilities.isRightMouseButton(e) && e.getClickCount() == 1) {
             JLabel label = (JLabel) e.getSource(); //JLabel waarop geklikt is. Dit is een servernaam.
+            //JLabel label = (JLabel) e.getComponent();
             for (int i = 0; i < ArrayComponent.length; i++) { //for loop kan !niet! vervangen worden door een foreach omdat je de int i nodig hebt in de loop.
                 if (ArrayComponent[i].getComponent(1) == label) { //Kijkt welke component in de array hetzelfde is als de label waarop geklikt is.
                     JLabel lbl = (JLabel) ArrayComponent[i].getComponent(1); //Haalt JLabel op van JPanel Component waarop met de rechtermuis is geklikt.
@@ -253,8 +278,14 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
                         jlprijs.setVisible(false);
                         jlbeschikbaarheid.setVisible(false);
                     }
-                    else {
+                    else if(this.isValid(stringArrayList)){
                         jlbeschikbaarheid.setText("Beschikbaarheid: " + benp.get(0) + "%");
+                        jlbeschikbaarheid.setVisible(true);
+                        jlprijs.setText("Prijs: " + benp.get(1) + " euro");
+                        jlprijs.setVisible(true);
+                    }
+                    else{
+                        jlbeschikbaarheid.setText("Beschikbaarheid: 0%");
                         jlbeschikbaarheid.setVisible(true);
                         jlprijs.setText("Prijs: " + benp.get(1) + " euro");
                         jlprijs.setVisible(true);
@@ -266,115 +297,143 @@ public class OntwerpDialog extends JDialog implements MouseListener, ActionListe
 
     @Override
     public void mousePressed(MouseEvent e) { }
-
     @Override
     public void mouseReleased(MouseEvent e) { }
-
     @Override
-    public void mouseEntered(MouseEvent e) {
-        if(e.getSource() == jbopslaan){
-            jbopslaan.setBackground(new Color(230, 244, 255));
-        }
-    }
-
+    public void mouseEntered(MouseEvent e) { }
     @Override
-    public void mouseExited(MouseEvent e) {
-        if(e.getSource() == jbopslaan){
-            jbopslaan.setBackground(new Color(143, 163, 179));
-        }
-    }
-
+    public void mouseExited(MouseEvent e) { }
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == jbopslaan) { //Als op de Opslaan button is gedrukt
-            if(stringArrayList.size() == 0){
-                jlfoutmelding.setText("Het ontwerp is leeg, voeg een component toe aan het ontwerp om hem op te kunnen slaan.");
+            if (stringArrayList.size() == 0) {
                 jlfoutmelding.setVisible(true);
-            }
-            else if (!(ontwerpSelected.equals("Geen"))) { //Als er een ontwerp geselecteerd is.
-                jlfoutmelding.setText("");
-                jlfoutmelding.setVisible(false);
-                String url = "monitoringApplicatie/src/Ontwerpen/";
-                url += ontwerpSelected;
+                jlfoutmelding.setText("Het ontwerp is leeg, voeg een component toe aan het ontwerp om hem op te kunnen slaan.");
+            } else if (!(ontwerpSelected.equals("Geen"))) { //Als er een ontwerp geselecteerd is.
+                if (this.isValid(stringArrayList)) { //checkt of ontwerp valid is.
+                    jlfoutmelding.setText("");
+                    jlfoutmelding.setVisible(false);
+                    String url = "monitoringApplicatie/src/Ontwerpen/";
+                    url += ontwerpSelected;
 
-                StringBuilder text = new StringBuilder();
-                for (String strings : stringArrayList) { //Maakt een string met alle servers om in het Ontwerp[nummer].txt bestand te duwen
-                    text.append(strings).append("\n");
-                }
-
-                text.append(jlbeschikbaarheid.getText()).append("\n");
-                text.append(jlprijs.getText());
-
-                try {
-                    File path = new File(url);
-                    File file = new File(path.getAbsolutePath()); //Maak dynamische url
-                    FileWriter Writer = new FileWriter(file);
-                    Writer.write(text.toString());
-                    Writer.close();
-                    for (JPanel component : ArrayComponent) { //Clear componenten in ontwerp JPanel
-                        JLabel removeall = (JLabel) component.getComponent(1);
-                        removeall.setText("server");
-                        component.setVisible(false);
+                    StringBuilder text = new StringBuilder();
+                    for (String strings : stringArrayList) { //Maakt een string met alle servers om in het Ontwerp[nummer].txt bestand te duwen
+                        text.append(strings).append("\n");
                     }
-                } catch (IOException ioe) {
-                    System.out.println("An error occurred.");
-                    ioe.printStackTrace();//error handling
-                }
 
-                jlbeschikbaarheid.setText("");
-                jlbeschikbaarheid.setVisible(false);
-                jlprijs.setText("");
-                jlprijs.setVisible(false);
+                    text.append(jlbeschikbaarheid.getText()).append("\n");
+                    text.append(jlprijs.getText());
+
+                    try {
+                        File path = new File(url);
+                        File file = new File(path.getAbsolutePath()); //Maak dynamische url
+                        FileWriter Writer = new FileWriter(file);
+                        Writer.write(text.toString());
+                        Writer.close();
+                        for (JPanel component : ArrayComponent) { //Clear componenten in ontwerp JPanel
+                            JLabel removeall = (JLabel) component.getComponent(1);
+                            removeall.setText("server");
+                            component.setVisible(false);
+                        }
+                    } catch (IOException ioe) {
+                        System.out.println("An error occurred.");
+                        ioe.printStackTrace();//error handling
+                    }
+
+                    jlbeschikbaarheid.setText("");
+                    jlbeschikbaarheid.setVisible(false);
+                    jlprijs.setText("");
+                    jlprijs.setVisible(false);
+                    dialog.dispose();
+                }
+                else{
+                    jlfoutmelding.setVisible(true);
+                    jlfoutmelding.setText("Dit is geen geldig ontwerp. Een ontwerp moet minimaal 1 pfSense, 1 databaseserver en 1 webserver hebben.");
+                }
             }
+            else{ //Als er geen ontwerp is geselecteerd
+                if (this.isValid(stringArrayList)) {
+                    jlfoutmelding.setText("");
+                    jlfoutmelding.setVisible(false);
+                    StringBuilder text = new StringBuilder();
+                    for (String strings : stringArrayList) { //Maakt een string met alle servers om in het Ontwerp[nummer].txt bestand te duwen
+                        text.append(strings).append("\n");
+                    }
 
-            else { //Als er geen ontwerp is geselecteerd
-                jlfoutmelding.setText("");
-                jlfoutmelding.setVisible(false);
-                StringBuilder text = new StringBuilder();
-                for (String strings : stringArrayList) { //Maakt een string met alle servers om in het Ontwerp[nummer].txt bestand te duwen
-                    text.append(strings).append("\n");
+                    text.append(jlbeschikbaarheid.getText()).append("\n");
+                    text.append(jlprijs.getText());
+
+                    String url = "monitoringApplicatie/src/Ontwerpen/";
+                    File folder = new File(url);
+                    File[] listOfFiles = folder.listFiles();
+
+                    ArrayList<File> fileArrayList = new ArrayList<>();
+                    for (File file : listOfFiles) { //Er wordt geen nullpointerexception gegeven als er geen files in de directory staan. Er wordt dan simpelweg een 0 aan de fileArrayList meegegeven.
+                        if (file.isFile()) {
+                            fileArrayList.add(file); //Voeg alle ontwerpen toe aan de array.
+                        }
+                    }
+
+                    int TellerOntwerp = fileArrayList.size() + 1; //Haal nummer ontwerp op: aantal ontwerpen + 1
+
+                    url += "Ontwerp" + TellerOntwerp + ".txt";
+                    //Maak file als het nog niet bestaat en schrijf erin.
+                    try {
+                        File path = new File(url);
+                        File file = new File(path.getAbsolutePath()); //Maak dynamische url
+                        FileWriter Writer = new FileWriter(file);
+                        Writer.write(text.toString());
+                        Writer.close();
+                        stringArrayList.clear(); //Clear arraylist met servers
+                        for (JPanel component : ArrayComponent) { //Clear componenten in ontwerp JPanel
+                            JLabel removeall = (JLabel) component.getComponent(1);
+                            removeall.setText("server");
+                            component.setVisible(false);
+                        }
+                    } catch (IOException ioe) {
+                        System.out.println("An error occurred.");
+                        ioe.printStackTrace();//error handling
+                    }
+
+                    jlbeschikbaarheid.setText("");
+                    jlbeschikbaarheid.setVisible(false);
+                    jlprijs.setText("");
+                    jlprijs.setVisible(false);
                 }
+                else{
+                    jlfoutmelding.setVisible(true);
+                    jlfoutmelding.setText("Dit is geen geldig ontwerp. Een ontwerp moet minimaal 1 pfSense, 1 databaseserver en 1 webserver hebben.");
+                }
+            }
+        }
+    }
 
-                text.append(jlbeschikbaarheid.getText()).append("\n");
-                text.append(jlprijs.getText());
+    public boolean isValid(ArrayList<String> stringArrayList){ //checkt of het ontwerp valide is. Return true als het ontwerp valide is.
+        int checkpf = 0;
+        int checkdb = 0;
+        int checkwb = 0;
 
-                String url = "monitoringApplicatie/src/Ontwerpen/";
-                File folder = new File(url);
-                File[] listOfFiles = folder.listFiles();
-
-                ArrayList<File> fileArrayList = new ArrayList<>();
-                for (File file : listOfFiles) { //Er wordt geen nullpointerexception gegeven als er geen files in de directory staan. Er wordt dan simpelweg een 0 aan de fileArrayList meegegeven.
-                    if (file.isFile()) {
-                        fileArrayList.add(file); //Voeg alle ontwerpen toe aan de array.
+        if(stringArrayList.isEmpty()){ //Als er geen componenten in het ontwerp staan, return dan altijd false.
+            return false;
+        }
+        else { //Kijkt of een ontwerp minimaal 1 pfSense, 1 dbserver en 1webserver bevat.
+            for (String strings : stringArrayList) {
+                for (Server servers : serverArrayList) {
+                    if (strings.equals(servers.getNaam())) {
+                        if (servers.getType() == 0) {
+                            checkpf++;
+                        }
+                        if (servers.getType() == 1) {
+                            checkdb++;
+                        }
+                        if (servers.getType() == 2) {
+                            checkwb++;
+                        }
                     }
                 }
-
-                int TellerOntwerp = fileArrayList.size() + 1; //Haal nummer ontwerp op: aantal ontwerpen + 1
-
-                url += "Ontwerp" + TellerOntwerp + ".txt";
-                //Maak file als het nog niet bestaat en schrijf erin.
-                try {
-                    File path = new File(url);
-                    File file = new File(path.getAbsolutePath()); //Maak dynamische url
-                    FileWriter Writer = new FileWriter(file);
-                    Writer.write(text.toString());
-                    Writer.close();
-                    stringArrayList.clear(); //Clear arraylist met servers
-                    for (JPanel component : ArrayComponent) { //Clear componenten in ontwerp JPanel
-                        JLabel removeall = (JLabel) component.getComponent(1);
-                        removeall.setText("server");
-                        component.setVisible(false);
-                    }
-                } catch (IOException ioe) {
-                    System.out.println("An error occurred.");
-                    ioe.printStackTrace();//error handling
-                }
-
-                jlbeschikbaarheid.setText("");
-                jlbeschikbaarheid.setVisible(false);
-                jlprijs.setText("");
-                jlprijs.setVisible(false);
             }
+
+            return checkpf >= 1 && checkdb >= 1 && checkwb >= 1; //returnt true als een opstellen een pfSense, een webserver en een databaseserver heeft.
         }
     }
 }
