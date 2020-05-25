@@ -27,6 +27,7 @@ public class ServersBekijkenDialog extends JDialog implements ActionListener, Mo
         ArrayList<String> lijst = new ArrayList<>();
         serverArrayList = new ArrayList<>();
 
+        
         try {
             File Servers = new File("./Servers.txt");
             Scanner Reader = new Scanner(Servers);
