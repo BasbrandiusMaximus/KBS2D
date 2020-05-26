@@ -2,9 +2,12 @@ package Applicatie;
 
 
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 public class Server {
     private String naam;
@@ -38,6 +41,7 @@ public class Server {
     public double getBeschikbaarheid() {
         return beschikbaarheid;
     }
+
     public static List<Object> berekenBeschikbaarheid(Server... servers) {
         double beschikbaarheid = 0d;
         int prijs = 0;
@@ -94,4 +98,47 @@ public class Server {
             serveropstelling += sopstelling + "<br/>";
         }
         serveropstelling += "</div></html>";
-        return serveropstelling;}}
+        return serveropstelling;}
+
+    public static ArrayList<Server> serversOphalen(){
+        ArrayList<String> lijst = new ArrayList<>(); //ArrayList voor het ophalen van de tekst uit servers.txt
+
+        try {
+            File Servers = new File("./Servers.txt");
+            Scanner Reader = new Scanner(Servers);
+            while (Reader.hasNextLine()) {
+                String data = Reader.nextLine();
+                lijst.add(data);
+            }
+            Reader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
+        ArrayList<Server> serverArrayList = new ArrayList<>(); //Arraylist voor de servers
+
+        for (String data : lijst) {
+            try { // Omzetten van data uit servers.txt in Server objecten.
+                String[] server = data.split(",", 0);
+                int prijs = Integer.parseInt(server[1]);
+                double beschikbaarheid = Double.parseDouble(server[2]);
+                int type = Integer.parseInt(server[3]);
+                Server serverObject = new Server(server[0], prijs, beschikbaarheid, type);
+                ServerList.voegServerToe(serverObject);
+                serverArrayList.add(serverObject);
+            }
+            catch(IndexOutOfBoundsException ignore) {}
+            catch(Exception e) {
+                java.lang.System.exit(10);
+            }
+        }
+        return serverArrayList;
+    }
+
+    public static File getDynamicUrl(String url){
+        File path = new File(url);
+        File files = new File(path.getAbsolutePath()); //Maak dynamische url
+        return files;
+    }
+}

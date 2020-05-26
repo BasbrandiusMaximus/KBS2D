@@ -15,12 +15,8 @@ public class OptimalisatieDialog extends JDialog implements ActionListener, Mous
     private JTextField jtAantalservers;
     private JLabel jlServersamenstelling;
     private JButton jbBereken;
-    private ArrayList<Server> serverArrayList;
-    private ArrayList<Double> doubleArrayList;
 
-    public OptimalisatieDialog(ArrayList<Server> serverArrayList, ArrayList<Double> doubleArrayList){
-        this.serverArrayList = serverArrayList;
-        this.doubleArrayList = doubleArrayList;
+    public OptimalisatieDialog(){
         //Aanmaken optimalisatie dialoog
         dialog = new JDialog();
         dialog.setModal(true);

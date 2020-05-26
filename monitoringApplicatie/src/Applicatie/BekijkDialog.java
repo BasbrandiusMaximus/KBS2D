@@ -19,7 +19,6 @@ public class BekijkDialog extends JDialog implements ActionListener, MouseListen
     private JDialog dialog;
     private JButton jbMaken;
     private JButton jbTerug;
-    private ArrayList<Server> serverArrayList;
     private JButton jbOpenen;
     private JComboBox<String> comboBox;
     private JPanel[] ArrayComponent;
@@ -27,26 +26,24 @@ public class BekijkDialog extends JDialog implements ActionListener, MouseListen
     private JLabel jlbeschikbaarheid;
     private JLabel jlprijs;
     private JLabel jlfoutmelding;
+    private Color background;
+    private Color cnavbar;
 
-
-    public BekijkDialog(ArrayList<Server> serverArrayList){
-        this.serverArrayList = serverArrayList;
+    public BekijkDialog(){
         dialog = new JDialog();
         dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         dialog.setSize(900,400);
         dialog.setTitle("Ontwerpen bekijken en bewerken");
         dialog.setLayout(new FlowLayout());
-        Color background = new Color(230, 244, 255);
-        Color cnavbar = new Color(143, 163, 179);
+        background = new Color(230, 244, 255);
+        cnavbar = new Color(143, 163, 179);
 
         dialog.getContentPane().setBackground(background);
         comboBox = new JComboBox<>(); //Aanmaken comboBox voor alle ontwerpen
         comboBox.setBackground(cnavbar);
 
         String url = "monitoringApplicatie/src/Ontwerpen";
-        File path = new File(url);
-        File files = new File(path.getAbsolutePath()); //Maak dynamische url
-        File directory= new File(String.valueOf(files));
+        File directory= new File(String.valueOf(Server.getDynamicUrl(url)));
 
         for (File file : directory.listFiles()){ //Krijg alle bestand namen uit de Ontwerpen package.
             comboBox.addItem(file.getName()); //Voeg ontwerpen toe aan de comboBox
@@ -102,6 +99,7 @@ public class BekijkDialog extends JDialog implements ActionListener, MouseListen
 
         ArrayComponent = new JPanel[10];
 
+        //Voeg 'lege' componenten toe aan JPanel
         for(int i = 0; i < 10; i++) {
             JPanel component = new JPanel();
             component.setLayout(new GridLayout(2,1));
@@ -112,16 +110,18 @@ public class BekijkDialog extends JDialog implements ActionListener, MouseListen
             naam.setText("server");
             component.add(naam);
             component.setVisible(false);
-            component.setBackground(new Color(230, 244, 255));
+            component.setBackground(background);
             ArrayComponent[i] = component; //voeg component toe aan array
             jpBekijk.add(component);
         }
 
+        //JLabel voor beschikbaarheid
         jlbeschikbaarheid = new JLabel("");
         dialog.add(jlbeschikbaarheid);
         jlprijs = new JLabel("");
         dialog.add(jlprijs);
 
+        //JLabel voor foutmelding
         jlfoutmelding = new JLabel("");
         jlfoutmelding.setVisible(false);
         dialog.add(jlfoutmelding);
@@ -148,7 +148,7 @@ public class BekijkDialog extends JDialog implements ActionListener, MouseListen
             dialog.dispose();
         }
         if(e.getSource() == jbMaken) {
-            OntwerpDialog ontwerpDialog = new OntwerpDialog(serverArrayList, "Geen");
+            OntwerpDialog ontwerpDialog = new OntwerpDialog("Geen");
         }
         if(e.getSource() == jbOpenen){
             int teller = 0;
@@ -199,7 +199,7 @@ public class BekijkDialog extends JDialog implements ActionListener, MouseListen
         if(e.getSource() == jbBewerken){
             try {
                 String x = Objects.requireNonNull(comboBox.getSelectedItem()).toString(); //Pak naam van het bestand dat geselecteerd is in de comboBox
-                OntwerpDialog ontwerpDialog = new OntwerpDialog(serverArrayList, x);
+                OntwerpDialog ontwerpDialog = new OntwerpDialog(x);
                 jlfoutmelding.setText("");
                 jlfoutmelding.setVisible(false);
             }
@@ -212,61 +212,55 @@ public class BekijkDialog extends JDialog implements ActionListener, MouseListen
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
+    public void mousePressed(MouseEvent e) { }
 
     @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
+    public void mouseReleased(MouseEvent e) { }
 
     @Override
     public void mouseEntered(MouseEvent e) {
         if(e.getSource() == jbBewerken){
-            jbBewerken.setBackground(new Color(230, 244, 255));
-            jbBewerken.setBorder(BorderFactory.createLineBorder(new Color(230, 244, 255)));
+            jbBewerken.setBackground(background);
+            jbBewerken.setBorder(BorderFactory.createLineBorder(background));
         }
 
         if(e.getSource() == jbMaken){
-            jbMaken.setBackground(new Color(230, 244, 255));
-            jbMaken.setBorder(BorderFactory.createLineBorder(new Color(230, 244, 255)));
+            jbMaken.setBackground(background);
+            jbMaken.setBorder(BorderFactory.createLineBorder(background));
         }
 
         if(e.getSource() == jbOpenen){
-            jbOpenen.setBackground(new Color(230, 244, 255));
-            jbOpenen.setBorder(BorderFactory.createLineBorder(new Color(230, 244, 255)));
+            jbOpenen.setBackground(background);
+            jbOpenen.setBorder(BorderFactory.createLineBorder(background));
         }
         if(e.getSource() == jbTerug){
-            jbTerug.setBackground(new Color(230, 244, 255));
-            jbTerug.setBorder(BorderFactory.createLineBorder(new Color(230, 244, 255)));
+            jbTerug.setBackground(background);
+            jbTerug.setBorder(BorderFactory.createLineBorder(background));
         }
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
         if(e.getSource() == jbBewerken){
-            jbBewerken.setBackground(new Color(143, 163, 179));
-            jbBewerken.setBorder(BorderFactory.createLineBorder(new Color(143, 163, 179)));
+            jbBewerken.setBackground(cnavbar);
+            jbBewerken.setBorder(BorderFactory.createLineBorder(cnavbar));
         }
 
         if(e.getSource() == jbMaken){
-            jbMaken.setBackground(new Color(143, 163, 179));
-            jbMaken.setBorder(BorderFactory.createLineBorder(new Color(143, 163, 179)));
+            jbMaken.setBackground(cnavbar);
+            jbMaken.setBorder(BorderFactory.createLineBorder(cnavbar));
         }
 
         if(e.getSource() == jbOpenen){
-            jbOpenen.setBackground(new Color(143, 163, 179));
-            jbOpenen.setBorder(BorderFactory.createLineBorder(new Color(143, 163, 179)));
+            jbOpenen.setBackground(cnavbar);
+            jbOpenen.setBorder(BorderFactory.createLineBorder(cnavbar));
         }
         if(e.getSource() == jbTerug){
-            jbTerug.setBackground(new Color(143, 163, 179));
-            jbTerug.setBorder(BorderFactory.createLineBorder(new Color(143, 163, 179)));
+            jbTerug.setBackground(cnavbar);
+            jbTerug.setBorder(BorderFactory.createLineBorder(cnavbar));
         }
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
-
-    }
+    public void mouseClicked(MouseEvent e) { }
 }
