@@ -34,6 +34,7 @@ public class serversToevoegenDialog extends JDialog implements ActionListener, M
     private Color cnavbar;
     public serversToevoegenDialog(ArrayList<Server> serverArrayList) {
         this.serverArrayList = serverArrayList;
+        //Aanmaken dialog
         dialog = new JDialog();
         dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         dialog.setTitle("Serverlijst bewerken");
@@ -44,6 +45,7 @@ public class serversToevoegenDialog extends JDialog implements ActionListener, M
         cnavbar = new Color(143, 163, 179); //143, 163, 179
         dialog.getContentPane().setBackground(background);
 
+        //Aanmaken JPanel buttons
         JPanel jpconf = new JPanel();
         jpconf.setBackground(background);
         dialog.add(jpconf, BorderLayout.NORTH);
@@ -59,6 +61,7 @@ public class serversToevoegenDialog extends JDialog implements ActionListener, M
 
         Dimension dbuttons = new Dimension(100,30);
 
+        //Aanmaken button Bewerken
         jbbewerken = new JButton("Bewerken");
         jbbewerken.setBackground(cnavbar);
         jbbewerken.setBorder(BorderFactory.createLineBorder(cnavbar));
@@ -67,6 +70,7 @@ public class serversToevoegenDialog extends JDialog implements ActionListener, M
         jbbewerken.addMouseListener(this);
         jpconf.add(jbbewerken);
 
+        //Aanmaken button Opslaan
         jbopslaan = new JButton("Opslaan");
         jbopslaan.setBackground(cnavbar);
         jbopslaan.setPreferredSize(dbuttons);
@@ -75,6 +79,7 @@ public class serversToevoegenDialog extends JDialog implements ActionListener, M
         jbopslaan.addMouseListener(this);
         jpconf.add(jbopslaan);
 
+        //Aanmaken button Verwijderen
         jbverwijderen = new JButton("Verwijderen");
         jbverwijderen.setBackground(cnavbar);
         jbverwijderen.setPreferredSize(dbuttons);
@@ -83,6 +88,7 @@ public class serversToevoegenDialog extends JDialog implements ActionListener, M
         jbverwijderen.addActionListener(this);
         jpconf.add(jbverwijderen);
 
+        //Aanmaken button Terug
         jbterug = new JButton("Terug");
         jbterug.setBackground(cnavbar);
         jbterug.setPreferredSize(dbuttons);
@@ -91,14 +97,17 @@ public class serversToevoegenDialog extends JDialog implements ActionListener, M
         jbterug.addActionListener(this);
         jpconf.add(jbterug);
 
+        //JPanel voor input
         JPanel jpinput = new JPanel();
         jpinput.setBackground(background);
         dialog.add(jpinput, BorderLayout.CENTER);
 
+        //JLabel Naam
         jlnaam = new JLabel("Naam:");
         jlnaam.setVisible(false);
         jpinput.add(jlnaam);
 
+        //Input field Naam
         jtnaam = new JTextField();
         Dimension dnaam = new Dimension(110, 25);
         jtnaam.setPreferredSize(dnaam);
@@ -108,10 +117,13 @@ public class serversToevoegenDialog extends JDialog implements ActionListener, M
         jpinput.add(jtnaam);
 
         Dimension dcijfer = new Dimension(50, 25);
+
+        //JLabel Type
         jltype = new JLabel("Type:");
         jltype.setVisible(false);
         jpinput.add(jltype);
 
+        //Input field Type
         jttype = new JTextField();
         jttype.setPreferredSize(dcijfer);
         jttype.setBackground(background);
@@ -119,10 +131,12 @@ public class serversToevoegenDialog extends JDialog implements ActionListener, M
         jttype.setVisible(false);
         jpinput.add(jttype);
 
+        //JLabel Beschikbaarheid
         jlbeschikbaarheid = new JLabel("Beschikbaarheidspercentage:");
         jlbeschikbaarheid.setVisible(false);
         jpinput.add(jlbeschikbaarheid);
 
+        //Input field Beschikbaarheid
         jtbeschikbaarheid = new JTextField();
         jtbeschikbaarheid.setPreferredSize(dcijfer);
         jtbeschikbaarheid.setBackground(background);
@@ -130,10 +144,12 @@ public class serversToevoegenDialog extends JDialog implements ActionListener, M
         jtbeschikbaarheid.setVisible(false);
         jpinput.add(jtbeschikbaarheid);
 
+        //JLabel Prijs
         jlprijs = new JLabel("Prijs:");
         jlprijs.setVisible(false);
         jpinput.add(jlprijs);
 
+        //Input field Prijs
         jtprijs = new JTextField();
         jtprijs.setPreferredSize(dcijfer);
         jtprijs.setBackground(background);
@@ -141,14 +157,17 @@ public class serversToevoegenDialog extends JDialog implements ActionListener, M
         jtprijs.setVisible(false);
         jpinput.add(jtprijs);
 
+        //JPanel foutmelding en succesmeling
         JPanel jpfout = new JPanel();
         jpfout.setBackground(background);
         dialog.add(jpfout, BorderLayout.SOUTH);
 
+        //Foutmelding
         jlfoutmelding = new JLabel();
         jlfoutmelding.setVisible(false);
         jpfout.add(jlfoutmelding);
 
+        //Succesmelding
         jlsucces = new JLabel();
         jlsucces.setVisible(false);
         jpfout.add(jlsucces);
@@ -158,13 +177,13 @@ public class serversToevoegenDialog extends JDialog implements ActionListener, M
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == jbterug){
+        if(e.getSource() == jbterug){ //Openen nieuwe dialog
             ServersBekijkenDialog serversBekijkenDialog = new ServersBekijkenDialog();
             dialog.dispose();
         }
         if (e.getSource() == jbbewerken) {
             String x = Objects.requireNonNull(serverNamen.getSelectedItem()).toString(); //Ophalen geselecteerde item in de comboBox
-            jlnaam.setVisible(true); //'Toevoegen' van JTextfields als een server is geselecteerd.
+            jlnaam.setVisible(true); //'Toevoegen' van JTextfields als een server is geselecteerd. Er is altijd of een Server of <Nieuw> geselecteerd in de comboBox dus een if-statement is niet nodig.
             jtnaam.setVisible(true);
             jltype.setVisible(true);
             jttype.setVisible(true);
@@ -251,11 +270,10 @@ public class serversToevoegenDialog extends JDialog implements ActionListener, M
                 jlsucces.setVisible(false);
                 String url = "./Servers.txt"; //Maak url
                 try {
-                    File path = new File(url);
-                    File file = new File(path.getAbsolutePath()); //Maak dynamische url
+                    File file = Server.getDynamicUrl(url);
                     FileWriter Writer = new FileWriter(file);
                     for (Server server : serverArrayList) {
-                        if (server.getNaam().equals(x)) {
+                        if (server.getNaam().equals(x)) { //Verwijder alleen het geselecteerde ontwerp. Schrijf de rest van de servers wel.
                             jlsucces.setVisible(true);
                             jlsucces.setText("Server is succesvol verwijderd!");
                         } else {
@@ -279,6 +297,7 @@ public class serversToevoegenDialog extends JDialog implements ActionListener, M
     public void mouseReleased(MouseEvent e) { }
 
     @Override
+    //Layout buttons
     public void mouseEntered(MouseEvent e) {
         if(e.getSource() == jbterug){
             jbterug.setBackground(background);

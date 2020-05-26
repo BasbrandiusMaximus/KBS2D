@@ -9,10 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Scanner;
+
 
 public class ServersBekijkenDialog extends JDialog implements ActionListener, MouseListener {
     private JButton jbBewerken;
@@ -24,34 +22,9 @@ public class ServersBekijkenDialog extends JDialog implements ActionListener, Mo
 
     public ServersBekijkenDialog(){
         //Zelf ophalen van de servers uit servers.txt zodat na het bewerken, toevoegen of verwijderen de lijst automatisch wordt geupdatet.
-        ArrayList<String> lijst = new ArrayList<>();
         serverArrayList = new ArrayList<>();
 
-        
-        try {
-            File Servers = new File("./Servers.txt");
-            Scanner Reader = new Scanner(Servers);
-            while (Reader.hasNextLine()) {
-                String data = Reader.nextLine();
-                lijst.add(data);
-            }
-            Reader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-
-        for (String data : lijst) {
-            try {
-                String[] server = data.split(",", 0);
-                int prijs = Integer.parseInt(server[1]);
-                double beschikbaarheid = Double.parseDouble(server[2]);
-                int type = Integer.parseInt(server[3]);
-                Server serverObject = new Server(server[0], prijs, beschikbaarheid, type);
-                serverArrayList.add(serverObject);
-            }
-            catch(IndexOutOfBoundsException ignore) {}
-        }
+        serverArrayList = Server.serversOphalen();
 
         dialog = new JDialog();
         dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -66,6 +39,7 @@ public class ServersBekijkenDialog extends JDialog implements ActionListener, Mo
         info.setBorder(new EmptyBorder(10,70,10,30));//top,left,bottom,right
         dialog.add(info, BorderLayout.NORTH);
 
+        //Maken JTable met serverNamen
         String[] columnNames = {"Naam", "Type", "Prijs", "Beschikbaarheidspercentage"};
         Object[][] rowData = {};
         DefaultTableModel listTableModel = new DefaultTableModel(rowData, columnNames);
@@ -86,6 +60,7 @@ public class ServersBekijkenDialog extends JDialog implements ActionListener, Mo
             listTableModel.addRow(new Object[]{servers.getNaam(), type , prijs, beschikbaarheid});
         }
 
+        //Layout JTable
         JTable listTable = new JTable(listTableModel);
         listTable.setEnabled(false); //Makes cells uneditable
         listTable.setBackground(background);
@@ -107,6 +82,7 @@ public class ServersBekijkenDialog extends JDialog implements ActionListener, Mo
         showWholeTable.add(listTable.getTableHeader(), BorderLayout.NORTH);
         showWholeTable.add(listTable, BorderLayout.CENTER);
 
+        //JPanel buttons
         JPanel jpbuttons = new JPanel();
         jpbuttons.setLayout(new GridBagLayout());
         Dimension djp = new Dimension(230,250);
@@ -139,9 +115,10 @@ public class ServersBekijkenDialog extends JDialog implements ActionListener, Mo
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == jbBewerken) { //Als er op bewerken wordt gedrukt, open dan de serversToevoegenDialog
+        //Openen respectievelijke dialogs
+        if (e.getSource() == jbBewerken) {
             serversToevoegenDialog toevoegen = new serversToevoegenDialog(serverArrayList);
-            dialog.setVisible(false);
+            dialog.dispose();
         }
         if(e.getSource() == jbTerug){
             ApplicatieFrame frame = new ApplicatieFrame();
@@ -156,6 +133,7 @@ public class ServersBekijkenDialog extends JDialog implements ActionListener, Mo
     @Override
     public void mouseReleased(MouseEvent e) { }
     @Override
+    //Layout buttons
     public void mouseEntered(MouseEvent e) {
         if(e.getSource() == jbTerug){
             jbTerug.setBackground(background);

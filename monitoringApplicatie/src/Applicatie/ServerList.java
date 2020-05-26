@@ -25,11 +25,10 @@ final class ReturnValues {
 
 public class ServerList {
     public static ArrayList<Server> serverList = new ArrayList<Server>();
-    private Server Servers;
+    public Server server;
 
     public ServerList()
-    {
-    }
+    { }
 
     public static void voegServerToe(Server server)
     {
@@ -149,14 +148,11 @@ public class ServerList {
         return returnString;
     }
 
-    public Server getServer(int positie){
-        if(serverList.size() > 0) {
-            for (int i = 0; i < serverList.size(); i++) {
-                if (i == positie) {
-                    Servers = serverList.get(i);
-                }
-            }
+    public static ArrayList<Server> getServers(){
+        ArrayList<Server> serverArrayList = new ArrayList<>();
+        for(Server server : serverList){
+            serverArrayList.add(server);
         }
-        return Servers;
+        return serverArrayList;
     }
 }

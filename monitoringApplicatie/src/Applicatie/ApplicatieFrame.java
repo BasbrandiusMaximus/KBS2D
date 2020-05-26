@@ -14,11 +14,12 @@ import java.util.Scanner;
 public class ApplicatieFrame extends JFrame implements ActionListener, MouseListener {
     private JFrame frame;
     private ArrayList<Server> serverArrayList;
-    private ArrayList<Double> doubleArrayList;
     private JButton jboptimalisatie;
     private JButton jbontwerpen;
     private JButton jbservers;
     private JButton jbmonitor;
+    private Color background;
+    private Color cnavbar;
 
     public ApplicatieFrame() {
         //Aanmaken applicatie frame
@@ -27,12 +28,13 @@ public class ApplicatieFrame extends JFrame implements ActionListener, MouseList
         frame.setSize(600, 400);
         frame.setTitle("Nerdy Gadgets");
         frame.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        Color background = new Color(230, 244, 255); //230, 244, 255
+        background = new Color(230, 244, 255); //230, 244, 255
         frame.getContentPane().setBackground(background);
 
+        //JPanel navigatie bar
         JPanel navbar = new JPanel();
         Dimension dnavbar = new Dimension(175,400);
-        Color cnavbar = new Color(143, 163, 179); //143, 163, 179
+        cnavbar = new Color(143, 163, 179); //143, 163, 179
         navbar.setPreferredSize(dnavbar);
         navbar.setLayout(new GridLayout(7,1 , 10,12));
         navbar.setBackground(cnavbar);
@@ -70,42 +72,9 @@ public class ApplicatieFrame extends JFrame implements ActionListener, MouseList
         jbmonitor.addMouseListener(this);
         navbar.add(jbmonitor);
 
-        ArrayList<String> lijst = new ArrayList<>();
-        serverArrayList = new ArrayList<>();
+        serverArrayList = Server.serversOphalen(); //Ophalen van servers uit servers.txt
 
-        try {
-            File Servers = new File("./Servers.txt");
-            Scanner Reader = new Scanner(Servers);
-            while (Reader.hasNextLine()) {
-                String data = Reader.nextLine();
-                lijst.add(data);
-            }
-            Reader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-
-
-        for (String data : lijst) {
-            try {
-                String[] server = data.split(",", 0);
-                int prijs = Integer.parseInt(server[1]);
-                double beschikbaarheid = Double.parseDouble(server[2]);
-                int type = Integer.parseInt(server[3]);
-                Server serverObject = new Server(server[0], prijs, beschikbaarheid, type);
-                ServerList.voegServerToe(serverObject);
-                serverArrayList.add(serverObject);
-            }
-            catch(IndexOutOfBoundsException ignore) {}
-            catch(Exception e)
-            {
-                java.lang.System.exit(10);
-            }
-        }
-
-
-
+        //Info JPanel
         JPanel jpinfo = new JPanel();
         Dimension dinfo = new Dimension(411,400);
         jpinfo.setPreferredSize(dinfo);
@@ -114,16 +83,19 @@ public class ApplicatieFrame extends JFrame implements ActionListener, MouseList
         jpinfo.setBorder(BorderFactory.createLineBorder(background));
         frame.add(jpinfo);
 
+        //JPanel om de header van de tekst en de tekst zelf onder elkaar te krijgen
         JPanel jpgrid = new JPanel();
         jpgrid.setLayout(new GridLayout(2,1));
         jpgrid.setBackground(background);
         jpinfo.add(jpgrid);
 
+        //JPanel tekst header
         JLabel jlheader = new JLabel("Nerdy Gadgets");
         jlheader.setForeground(new Color(255, 188, 50)); //255, 188, 50
         jlheader.setFont(new Font("Impact", Font.BOLD, 30 ));
         jpgrid.add(jlheader);
 
+        //JPanel tekst voor info
         JLabel jlinfo = new JLabel("Informatie over Nerdy Gadgets");
         jpgrid.add(jlinfo);
 
@@ -131,13 +103,13 @@ public class ApplicatieFrame extends JFrame implements ActionListener, MouseList
     }
 
     public void actionPerformed(ActionEvent e) {
-        //Als er op de optimalisatie button gedrukt wordt, dan wordt je naar de optimalisatie dialoog gestuurd. Zie OptimalisatieDialog.java
+        //Openen van de respectievelijke dialogs
         if (e.getSource() == jboptimalisatie) {
-            OptimalisatieDialog optimalisatiedialog = new OptimalisatieDialog(serverArrayList, doubleArrayList);
+            OptimalisatieDialog optimalisatiedialog = new OptimalisatieDialog();
         }
 
         if (e.getSource() == jbontwerpen) {
-            BekijkDialog bekijkDialog = new BekijkDialog(serverArrayList);
+            BekijkDialog bekijkDialog = new BekijkDialog();
             frame.dispose();
         }
 
@@ -151,6 +123,8 @@ public class ApplicatieFrame extends JFrame implements ActionListener, MouseList
         }
     }
 
+    //MouseListeners zorgen ervoor dat de button van kleur veranderd als je met je cursor erin of erin gaat.
+
     public void mouseClicked(MouseEvent e) { }
 
     public void mousePressed(MouseEvent e) { }
@@ -159,37 +133,37 @@ public class ApplicatieFrame extends JFrame implements ActionListener, MouseList
 
     public void mouseEntered(MouseEvent e) {
         if(e.getSource() == jbservers){
-            jbservers.setBackground(new Color(230, 244, 255));
+            jbservers.setBackground(background);
         }
 
         if(e.getSource() == jbmonitor){
-            jbmonitor.setBackground(new Color(230, 244, 255));
+            jbmonitor.setBackground(background);
         }
 
         if(e.getSource() == jboptimalisatie){
-            jboptimalisatie.setBackground(new Color(230, 244, 255));
+            jboptimalisatie.setBackground(background);
         }
 
         if(e.getSource() == jbontwerpen){
-            jbontwerpen.setBackground(new Color(230, 244, 255));
+            jbontwerpen.setBackground(background);
         }
     }
 
     public void mouseExited(MouseEvent e) {
         if(e.getSource() == jbservers){
-            jbservers.setBackground(new Color(143, 163, 179));
+            jbservers.setBackground(cnavbar);
         }
 
         if(e.getSource() == jbmonitor){
-            jbmonitor.setBackground(new Color(143, 163, 179));
+            jbmonitor.setBackground(cnavbar);
         }
 
         if(e.getSource() == jboptimalisatie){
-            jboptimalisatie.setBackground(new Color(143, 163, 179));
+            jboptimalisatie.setBackground(cnavbar);
         }
 
         if(e.getSource() == jbontwerpen){
-            jbontwerpen.setBackground(new Color(143, 163, 179));
+            jbontwerpen.setBackground(cnavbar);
         }
     }
 }

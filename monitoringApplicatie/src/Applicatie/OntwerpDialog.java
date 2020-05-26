@@ -28,10 +28,8 @@ public class OntwerpDialog extends JDialog implements ActionListener, MouseListe
     private JLabel jlprijs;
     private JLabel jlfoutmelding;
     private JDialog dialog;
-//TODO: Kijken welke stukken code methodes kunnen worden zodat ik die kan hergebruiken.
 
-    public OntwerpDialog(ArrayList<Server> serverArrayList, String ontwerpSelected){
-        this.serverArrayList = serverArrayList;
+    public OntwerpDialog(String ontwerpSelected){
         this.ontwerpSelected = ontwerpSelected;
         //Aanmaken ontwerp dialoog
         dialog = new JDialog();
@@ -66,6 +64,8 @@ public class OntwerpDialog extends JDialog implements ActionListener, MouseListe
         jpcomponent.setBackground(background);
 
         //Voeg server naam en icoon toe aan commponentselectie
+        ArrayList<Server> serverArrayList1;
+        serverArrayList = ServerList.getServers();
         for (Server serverObject : serverArrayList) {
             JPanel component = new JPanel();
             component.setBorder(new EmptyBorder(10,10,0,10));
@@ -129,10 +129,8 @@ public class OntwerpDialog extends JDialog implements ActionListener, MouseListe
         stringArrayList = new ArrayList<>();
         if(!(ontwerpSelected.equals("Geen"))){//Als de bewerken button is ingedrukt dan krijg je een Panel te zien met alle servers uit het ontwerp.
             int teller = 0;
-            String url = "monitoringApplicatie/src/Ontwerpen/" + ontwerpSelected; //Maak url
             try { //Lees Ontwerp text file
-                File path = new File(url);
-                File file = new File(path.getAbsolutePath());
+                File file = Server.getDynamicUrl("monitoringApplicatie/src/Ontwerpen/" + ontwerpSelected);
                 Scanner myReader = new Scanner(file);
                 while (myReader.hasNextLine()) {
                     String data = myReader.nextLine();
@@ -433,7 +431,7 @@ public class OntwerpDialog extends JDialog implements ActionListener, MouseListe
                 }
             }
 
-            return checkpf >= 1 && checkdb >= 1 && checkwb >= 1; //returnt true als een opstellen een pfSense, een webserver en een databaseserver heeft.
+            return checkpf >= 1 && checkdb >= 1 && checkwb >= 1; //returnt true als een opstelling een pfSense, een webserver en een databaseserver heeft.
         }
     }
 }
