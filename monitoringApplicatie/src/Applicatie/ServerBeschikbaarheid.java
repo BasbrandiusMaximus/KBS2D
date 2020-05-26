@@ -179,20 +179,15 @@ public class ServerBeschikbaarheid {
         String output = "";
         String url = "monitoringApplicatie/logWindowsServer2/DISKWindowsServer2.txt";
         File path = new File(url);
-        File DISKWindows2 = new File(path.getAbsolutePath());
-        BufferedReader reader = new BufferedReader(new FileReader(DISKWindows2));
-        FileWriter fw = new FileWriter(DISKWindows2);
-        BufferedWriter bw = new BufferedWriter(fw);
+        File CPUWindows2 = new File(path.getAbsolutePath());
+        BufferedReader reader = new BufferedReader(new FileReader(CPUWindows2));
         String line = reader.readLine();
-        while (line != null) {
+        while (line != null ) {
             output = line;
             line = reader.readLine();
-            if (line.equals("kaas")){
-                line = line.replace("kaas", " ");
-            }
         }
         reader.close();
-        System.out.println(output);
+        output = output.replace("C: ", "");
         return output;
     }
 
