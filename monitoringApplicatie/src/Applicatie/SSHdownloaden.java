@@ -45,9 +45,9 @@ public class SSHdownloaden {
             BufferedInputStream bis1 = new BufferedInputStream(channelSftp.get("MEMORYlog.txt"));
             BufferedInputStream bis2 = new BufferedInputStream(channelSftp.get("DISKlog.txt"));
 
-            File newFile = new File("C:/Users/Student/Documents/Github/KBS2D-master/monitoringApplicatie/logLinuxServer1/CPULinuxServer1.txt");
-            File newFile1 = new File("C:/Users/Student/Documents/Github/KBS2D-master/monitoringApplicatie/logLinuxServer1/MEMORYLinuxServer1.txt");
-            File newFile2 = new File("C:/Users/Student/Documents/Github/KBS2D-master/monitoringApplicatie/logLinuxServer1/DISKLinuxServer1.txt");
+            File newFile = new File("C:/Users/Student/Documents/Master/monitoringApplicatie/logLinuxServer1/CPULinuxServer1.txt");
+            File newFile1 = new File("C:/Users/Student/Documents/Master/monitoringApplicatie/logLinuxServer1/MEMORYLinuxServer1.txt");
+            File newFile2 = new File("C:/Users/Student/Documents/Master/monitoringApplicatie/logLinuxServer1/DISKLinuxServer1.txt");
 
             OutputStream os = new FileOutputStream(newFile);
             OutputStream os1 = new FileOutputStream(newFile1);
@@ -118,9 +118,9 @@ public class SSHdownloaden {
             BufferedInputStream bis1 = new BufferedInputStream(channelSftp.get("MEMORYlog.txt"));
             BufferedInputStream bis2 = new BufferedInputStream(channelSftp.get("DISKlog.txt"));
 
-            File newFile = new File("C:/Users/Student/Documents/Github/KBS2D-master/monitoringApplicatie/logLinuxServer2/CPULinuxServer2.txt");
-            File newFile1 = new File("C:/Users/Student/Documents/Github/KBS2D-master/monitoringApplicatie/logLinuxServer2/MEMORYLinuxServer2.txt");
-            File newFile2 = new File("C:/Users/Student/Documents/Github/KBS2D-master/monitoringApplicatie/logLinuxServer2/DISKLinuxServer2.txt");
+            File newFile = new File("C:/Users/Student/Documents/Master/monitoringApplicatie/logLinuxServer2/CPULinuxServer2.txt");
+            File newFile1 = new File("C:/Users/Student/Documents/Master/monitoringApplicatie/logLinuxServer2/MEMORYLinuxServer2.txt");
+            File newFile2 = new File("C:/Users/Student/Documents/Master/monitoringApplicatie/logLinuxServer2/DISKLinuxServer2.txt");
 
             OutputStream os = new FileOutputStream(newFile);
             OutputStream os1 = new FileOutputStream(newFile1);
@@ -191,9 +191,9 @@ public class SSHdownloaden {
             BufferedInputStream bis1 = new BufferedInputStream(channelSftp.get("MEMORYlog.txt"));
             BufferedInputStream bis2 = new BufferedInputStream(channelSftp.get("DISKlog.txt"));
 
-            File newFile = new File("C:/Users/Student/Documents/Github/KBS2D-master/monitoringApplicatie/logWindowsServer1/CPUWindowsServer1.txt");
-            File newFile1 = new File("C:/Users/Student/Documents/Github/KBS2D-master/monitoringApplicatie/logWindowsServer1/MEMORYWindowsServer1.txt");
-            File newFile2 = new File("C:/Users/Student/Documents/Github/KBS2D-master/monitoringApplicatie/logWindowsServer1/DISKWindowsServer1.txt");
+            File newFile = new File("C:/Users/Student/Documents/Master/monitoringApplicatie/logWindowsServer1/CPUWindowsServer1.txt");
+            File newFile1 = new File("C:/Users/Student/Documents/Master/monitoringApplicatie/logWindowsServer1/MEMORYWindowsServer1.txt");
+            File newFile2 = new File("C:/Users/Student/Documents/Master/monitoringApplicatie/logWindowsServer1/DISKWindowsServer1.txt");
 
             OutputStream os = new FileOutputStream(newFile);
             OutputStream os1 = new FileOutputStream(newFile1);
@@ -264,9 +264,9 @@ public class SSHdownloaden {
            // BufferedInputStream bis1 = new BufferedInputStream(channelSftp.get("MEMORYlog.txt"));
             BufferedInputStream bis2 = new BufferedInputStream(channelSftp.get("DISKlog.txt"));
 
-            File newFile = new File("C:/Users/Student/Documents/Github/KBS2D-master/monitoringApplicatie/logWindowsServer2/CPUWindowsServer2.txt");
+            File newFile = new File("C:/Users/Student/Documents/Master/monitoringApplicatie/logWindowsServer2/CPUWindowsServer2.txt");
            // File newFile1 = new File("C:/Users/Student/Documents/Github/KBS2D-master/monitoringApplicatie/logWindowsServer2/MEMORYWindowsServer2.txt");
-            File newFile2 = new File("C:/Users/Student/Documents/Github/KBS2D-master/monitoringApplicatie/logWindowsServer2/DISKWindowsServer2.txt");
+            File newFile2 = new File("C:/Users/Student/Documents/Master/monitoringApplicatie/logWindowsServer2/DISKWindowsServer2.txt");
 
             OutputStream os = new FileOutputStream(newFile);
            // OutputStream os1 = new FileOutputStream(newFile1);
@@ -338,9 +338,9 @@ public class SSHdownloaden {
             BufferedInputStream bis1 = new BufferedInputStream(channelSftp.get("MEMORYlog.txt"));
             BufferedInputStream bis2 = new BufferedInputStream(channelSftp.get("DISKlog.txt"));
 
-            File newFile = new File("C:/Users/Student/Documents/Github/KBS2D-master/monitoringApplicatie/logPfSense/CPUPfSense.txt");
-            File newFile1 = new File("C:/Users/Student/Documents/Github/KBS2D-master/monitoringApplicatie/logPfSense/MEMORYPfSense.txt");
-            File newFile2 = new File("C:/Users/Student/Documents/Github/KBS2D-master/monitoringApplicatie/logPfSense/DISKPfSense.txt");
+            File newFile = new File("C:/Users/Student/Documents/Master/monitoringApplicatie/logPfSense/CPUPfSense.txt");
+            File newFile1 = new File("C:/Users/Student/Documents/Master/monitoringApplicatie/logPfSense/MEMORYPfSense.txt");
+            File newFile2 = new File("C:/Users/Student/Documents/Master/monitoringApplicatie/logPfSense/DISKPfSense.txt");
 
             OutputStream os = new FileOutputStream(newFile);
             OutputStream os1 = new FileOutputStream(newFile1);

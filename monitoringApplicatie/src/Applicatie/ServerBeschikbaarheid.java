@@ -27,7 +27,7 @@ public class ServerBeschikbaarheid {
 
     public static String getCPUprocentLinux1() throws IOException {        //deze methode scant het tekstbestand en onthoudt de laatste waarde daarin
         String output = "";
-        String url = "logLinuxServer1/CPULinuxServer1.txt";
+        String url = "monitoringApplicatie/logLinuxServer1/CPULinuxServer1.txt";
         File path = new File(url);
         File CPULinux1 = new File(path.getAbsolutePath());
         BufferedReader reader = new BufferedReader(new FileReader(CPULinux1));
@@ -42,7 +42,7 @@ public class ServerBeschikbaarheid {
 
     public static String getDISKprocentLinux1() throws IOException {
         String output = "";
-        String url = "logLinuxServer1/DISKLinuxServer1.txt";
+        String url = "monitoringApplicatie/logLinuxServer1/DISKLinuxServer1.txt";
         File path = new File(url);
         File DISKLinux1 = new File(path.getAbsolutePath());
         BufferedReader reader = new BufferedReader(new FileReader(DISKLinux1));
@@ -57,7 +57,7 @@ public class ServerBeschikbaarheid {
 
     public static String getMEMprocentLinux1() throws IOException {
         String output = "";
-        String url = "logLinuxServer1/MEMORYLinuxServer1.txt";
+        String url = "monitoringApplicatie/logLinuxServer1/MEMORYLinuxServer1.txt";
         File path = new File(url);
         File MEMLinux1 = new File(path.getAbsolutePath());
         BufferedReader reader = new BufferedReader(new FileReader(MEMLinux1));
@@ -72,7 +72,7 @@ public class ServerBeschikbaarheid {
 
     public static String getCPUprocentLinux2() throws IOException {
         String output = "";
-        String url = "logLinuxServer2/CPULinuxServer2.txt";
+        String url = "monitoringApplicatie/logLinuxServer2/CPULinuxServer2.txt";
         File path = new File(url);
         File CPULinux2 = new File(path.getAbsolutePath());
         BufferedReader reader = new BufferedReader(new FileReader(CPULinux2));
@@ -87,7 +87,7 @@ public class ServerBeschikbaarheid {
 
     public static String getDISKprocentLinux2() throws IOException {
         String output = "";
-        String url = "logLinuxServer2/DiskLinuxServer2.txt";
+        String url = "monitoringApplicatie/logLinuxServer2/DiskLinuxServer2.txt";
         File path = new File(url);
         File DISKLinux2 = new File(path.getAbsolutePath());
         BufferedReader reader = new BufferedReader(new FileReader(DISKLinux2));
@@ -102,7 +102,7 @@ public class ServerBeschikbaarheid {
 
     public static String getMEMprocentLinux2() throws IOException {
         String output = "";
-        String url = "logLinuxServer2/MEMORYLinuxServer2.txt";
+        String url = "monitoringApplicatie/logLinuxServer2/MEMORYLinuxServer2.txt";
         File path = new File(url);
         File CPULinux1 = new File(path.getAbsolutePath());
         BufferedReader reader = new BufferedReader(new FileReader(CPULinux1));
@@ -117,7 +117,7 @@ public class ServerBeschikbaarheid {
 
     public static String getCPUprocentWindows1() throws IOException {
         String output = "";
-        String url = "logWindowsServer1/CPUWindowsServer1.txt";
+        String url = "monitoringApplicatie/logWindowsServer1/CPUWindowsServer1.txt";
         File path = new File(url);
         File CPUWindows1 = new File(path.getAbsolutePath());
         BufferedReader reader = new BufferedReader(new FileReader(CPUWindows1));
@@ -132,7 +132,7 @@ public class ServerBeschikbaarheid {
 
     public static String getDISKprocentWindows1() throws IOException {
         String output = "";
-        String url = "logWindowsServer1/DISKWindowsServer1.txt";
+        String url = "monitoringApplicatie/logWindowsServer1/DISKWindowsServer1.txt";
         File path = new File(url);
         File DISKWindows1 = new File(path.getAbsolutePath());
         BufferedReader reader = new BufferedReader(new FileReader(DISKWindows1));
@@ -147,7 +147,7 @@ public class ServerBeschikbaarheid {
 
     public static String getMEMprocentWindows1() throws IOException {
         String output = "";
-        String url = "logWindowsServer1/MEMORYWindowsServer1.txt";
+        String url = "monitoringApplicatie/logWindowsServer1/MEMORYWindowsServer1.txt";
         File path = new File(url);
         File MEMWindows1 = new File(path.getAbsolutePath());
         BufferedReader reader = new BufferedReader(new FileReader(MEMWindows1));
@@ -162,7 +162,7 @@ public class ServerBeschikbaarheid {
 
     public static String getCPUprocentWindows2() throws IOException {
             String output = "";
-            String url = "logWindowsServer2/CPUWindowsServer2.txt";
+            String url = "monitoringApplicatie/logWindowsServer2/CPUWindowsServer2.txt";
             File path = new File(url);
             File CPUWindows2 = new File(path.getAbsolutePath());
             BufferedReader reader = new BufferedReader(new FileReader(CPUWindows2));
@@ -177,22 +177,28 @@ public class ServerBeschikbaarheid {
 
     public static String getDISKprocentWindows2() throws IOException {
         String output = "";
-        String url = "logWindowsServer2/DISKWindowsServer2.txt";
+        String url = "monitoringApplicatie/logWindowsServer2/DISKWindowsServer2.txt";
         File path = new File(url);
         File DISKWindows2 = new File(path.getAbsolutePath());
         BufferedReader reader = new BufferedReader(new FileReader(DISKWindows2));
+        FileWriter fw = new FileWriter(DISKWindows2);
+        BufferedWriter bw = new BufferedWriter(fw);
         String line = reader.readLine();
         while (line != null) {
             output = line;
             line = reader.readLine();
+            if (line.equals("kaas")){
+                line = line.replace("kaas", " ");
+            }
         }
         reader.close();
+        System.out.println(output);
         return output;
     }
 
     public static String getMEMprocentWindows2() throws IOException {
         String output = "";
-        String url = "logWindowsServer2/MEMORYWindowsServer2.txt";
+        String url = "monitoringApplicatie/logWindowsServer2/MEMORYWindowsServer2.txt";
         File path = new File(url);
         File MEMWindows2 = new File(path.getAbsolutePath());
         BufferedReader reader = new BufferedReader(new FileReader(MEMWindows2));
@@ -207,7 +213,7 @@ public class ServerBeschikbaarheid {
 
     public static String getCPUprocentPfSense() throws IOException {
         String output = "";
-        String url = "logPfSense/CPUPfSense.txt";
+        String url = "monitoringApplicatie/logPfSense/CPUPfSense.txt";
         File path = new File(url);
         File CPUPfSense = new File(path.getAbsolutePath());
         BufferedReader reader = new BufferedReader(new FileReader(CPUPfSense));
@@ -222,7 +228,7 @@ public class ServerBeschikbaarheid {
 
     public static String getDISKprocentPfSense() throws IOException {
         String output = "";
-        String url = "logPfSense/DISKPfSense.txt";
+        String url = "monitoringApplicatie/logPfSense/DISKPfSense.txt";
         File path = new File(url);
         File DISKPfSense = new File(path.getAbsolutePath());
         BufferedReader reader = new BufferedReader(new FileReader(DISKPfSense));
@@ -237,7 +243,7 @@ public class ServerBeschikbaarheid {
 
     public static String getMEMprocentPfSense() throws IOException {
         String output = "";
-        String url = "logPfSense/MEMPfSense.txt";
+        String url = "monitoringApplicatie/logPfSense/MEMPfSense.txt";
         File path = new File(url);
         File MEMPfSense = new File(path.getAbsolutePath());
         BufferedReader reader = new BufferedReader(new FileReader(MEMPfSense));

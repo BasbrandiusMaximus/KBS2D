@@ -91,7 +91,6 @@ public class MonitorDialog extends JDialog implements ActionListener {
                         percDISKLinux1.setText("= " + ServerBeschikbaarheid.getDISKprocentLinux1() + "vrij");
                         percMEMLinux1.setText("= " + ServerBeschikbaarheid.getMEMprocentLinux1());
                         percCPULinux1.setText("= " + ServerBeschikbaarheid.getCPUprocentLinux1());
-                        System.out.println("hier komt hij langs");
                     } catch (NullPointerException | IOException e1) {
                         percCPULinux1.setText(" = Kan gegevens niet ophalen");
                         percMEMLinux1.setText(" = Kan gegevens niet ophalen");
