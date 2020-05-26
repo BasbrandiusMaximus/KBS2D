@@ -175,35 +175,46 @@ public class ServerBeschikbaarheid {
             return output;
     }
 
-    public static String getDISKprocentWindows2() throws IOException {
-        String output = "";
-        String url = "monitoringApplicatie/logWindowsServer2/DISKWindowsServer2.txt";
-        File path = new File(url);
-        File CPUWindows2 = new File(path.getAbsolutePath());
-        BufferedReader reader = new BufferedReader(new FileReader(CPUWindows2));
-        String line = reader.readLine();
-        while (line != null ) {
-            output = line;
-            line = reader.readLine();
+    public static String getDISKprocentWindows2() {
+        try {
+            String output = "";
+            String url = "monitoringApplicatie/logWindowsServer2/DISKWindowsServer2.txt";
+            File path = new File(url);
+            File CPUWindows2 = new File(path.getAbsolutePath());
+            BufferedReader reader = new BufferedReader(new FileReader(CPUWindows2));
+            String line = reader.readLine();
+            while (line != null) {
+                output = line;
+                line = reader.readLine();
+            }
+            System.out.println(output);
+            output = output.replaceAll("C", "");
+            output = output.replaceAll(":", "");
+            output = output.trim();
+            reader.close();
+            return output;
+        } catch (IOException io){
+            io.printStackTrace();
+            return "An error occured!";
         }
-        reader.close();
-        output = output.replace("C: ", "");
-        return output;
     }
 
     public static String getMEMprocentWindows2() throws IOException {
-        String output = "";
-        String url = "monitoringApplicatie/logWindowsServer2/MEMORYWindowsServer2.txt";
-        File path = new File(url);
-        File MEMWindows2 = new File(path.getAbsolutePath());
-        BufferedReader reader = new BufferedReader(new FileReader(MEMWindows2));
-        String line = reader.readLine();
-        while (line != null) {
-            output = line;
-            line = reader.readLine();
-        }
-        reader.close();
-        return output;
+            String output = "";
+            String url = "monitoringApplicatie/logWindowsServer2/MEMORYWindowsServer2.txt";
+            File path = new File(url);
+            File MEMWindows2 = new File(path.getAbsolutePath());
+            BufferedReader reader = new BufferedReader(new FileReader(MEMWindows2));
+            String line = reader.readLine();
+            while (line != null) {
+                output = line;
+                line = reader.readLine();
+            }
+            reader.close();
+            ReplaceText.modifyFile(url, "DeviceID  FreeSpace    \n" + "C:       ", "");
+            ReplaceText.modifyFile(url, "��", "");
+            ReplaceText.modifyFile(url, "\t\n", "");
+            return output;
     }
 
     public static String getCPUprocentPfSense() throws IOException {
