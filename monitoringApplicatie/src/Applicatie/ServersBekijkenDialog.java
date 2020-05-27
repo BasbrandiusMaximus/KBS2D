@@ -28,9 +28,10 @@ public class ServersBekijkenDialog extends JDialog implements ActionListener, Mo
 
         dialog = new JDialog();
         dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        dialog.setSize(900,250);
+        dialog.setSize(1010,250);
         dialog.setTitle("Serverlijst");
         dialog.setLayout(new BorderLayout());
+        dialog.setModal(true);
         background = new Color(230, 244, 255); //230, 244, 255
         cnavbar = new Color(143, 163, 179); //143, 163, 179
         dialog.getContentPane().setBackground(background);
@@ -117,10 +118,13 @@ public class ServersBekijkenDialog extends JDialog implements ActionListener, Mo
     public void actionPerformed(ActionEvent e) {
         //Openen respectievelijke dialogs
         if (e.getSource() == jbBewerken) {
-            serversToevoegenDialog toevoegen = new serversToevoegenDialog(serverArrayList);
+            dialog.setModal(false);
             dialog.dispose();
+            ServersToevoegenDialog toevoegen = new ServersToevoegenDialog(serverArrayList);
         }
+
         if(e.getSource() == jbTerug){
+            dialog.setModal(false);
             ApplicatieFrame frame = new ApplicatieFrame();
             dialog.dispose();
         }

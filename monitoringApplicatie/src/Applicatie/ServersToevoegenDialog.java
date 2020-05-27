@@ -12,9 +12,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class serversToevoegenDialog extends JDialog implements ActionListener, MouseListener {
+public class ServersToevoegenDialog extends JDialog implements ActionListener, MouseListener {
+    private Boolean hasDisposed = false;
     private JDialog dialog;
-    private JButton jbopslaan;
+    private JButton jbOpslaan;
     private JButton jbbewerken;
     private JButton jbverwijderen;
     private JButton jbterug;
@@ -32,10 +33,13 @@ public class serversToevoegenDialog extends JDialog implements ActionListener, M
     private ArrayList<Server> serverArrayList;
     private Color background;
     private Color cnavbar;
-    public serversToevoegenDialog(ArrayList<Server> serverArrayList) {
+    private Boolean bewerkenPressed = false;
+
+    public ServersToevoegenDialog(ArrayList<Server> serverArrayList) {
         this.serverArrayList = serverArrayList;
         //Aanmaken dialog
         dialog = new JDialog();
+        dialog.setModal(true);
         dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         dialog.setTitle("Serverlijst bewerken");
         dialog.setSize(600, 200);
@@ -71,13 +75,13 @@ public class serversToevoegenDialog extends JDialog implements ActionListener, M
         jpconf.add(jbbewerken);
 
         //Aanmaken button Opslaan
-        jbopslaan = new JButton("Opslaan");
-        jbopslaan.setBackground(cnavbar);
-        jbopslaan.setPreferredSize(dbuttons);
-        jbopslaan.setBorder(BorderFactory.createLineBorder(cnavbar));
-        jbopslaan.addActionListener(this);
-        jbopslaan.addMouseListener(this);
-        jpconf.add(jbopslaan);
+        jbOpslaan = new JButton("Opslaan");
+        jbOpslaan.setBackground(cnavbar);
+        jbOpslaan.setPreferredSize(dbuttons);
+        jbOpslaan.setBorder(BorderFactory.createLineBorder(cnavbar));
+        jbOpslaan.addActionListener(this);
+        jbOpslaan.addMouseListener(this);
+        jpconf.add(jbOpslaan);
 
         //Aanmaken button Verwijderen
         jbverwijderen = new JButton("Verwijderen");
@@ -177,22 +181,15 @@ public class serversToevoegenDialog extends JDialog implements ActionListener, M
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == jbterug){ //Openen nieuwe dialog
+        if(e.getSource() == jbterug && !hasDisposed){ //Openen nieuwe dialog
+            hasDisposed = true;
             ServersBekijkenDialog serversBekijkenDialog = new ServersBekijkenDialog();
             dialog.dispose();
+            return;
         }
         if (e.getSource() == jbbewerken) {
             String x = Objects.requireNonNull(serverNamen.getSelectedItem()).toString(); //Ophalen geselecteerde item in de comboBox
-            jlnaam.setVisible(true); //'Toevoegen' van JTextfields als een server is geselecteerd. Er is altijd of een Server of <Nieuw> geselecteerd in de comboBox dus een if-statement is niet nodig.
-            jtnaam.setVisible(true);
-            jltype.setVisible(true);
-            jttype.setVisible(true);
-            jlbeschikbaarheid.setVisible(true);
-            jtbeschikbaarheid.setVisible(true);
-            jlprijs.setVisible(true);
-            jtprijs.setVisible(true);
-            jlfoutmelding.setVisible(false);
-            jlsucces.setVisible(false);
+            changeVisibility(true);
             if(!(x.equals("<Nieuw>"))) { //Als een server wordt gekozen.
                 for (Server server : serverArrayList) {
                     if (server.getNaam().equals(x)) { //Invullen van de waardes in de JTextFields
@@ -206,57 +203,64 @@ public class serversToevoegenDialog extends JDialog implements ActionListener, M
             }
         }
 
-        if (e.getSource() == jbopslaan) {
-            try{
-                //Input check, gooit een exception als de variabele niet omgezet kan worden.
-                String naam = jtnaam.getText();
-                int prijs = Integer.parseInt(jtprijs.getText());
-                Double beschikbaarheid = Double.parseDouble(jtbeschikbaarheid.getText());
-                int type = Integer.parseInt(jttype.getText());
-                if(!(prijs > 0)){ //check of de prijs groter is dan 0, zo niet throw exception
-                    throw new NumberFormatException();
-                }
-                if(!(beschikbaarheid >= 1 && beschikbaarheid < 100)){ //check of de beschikbaarheid tussen 1 en 100 zit, zo niet throw exception
-                    throw new NumberFormatException();
-                }
-                if(!(type == 0 || type == 1 || type == 2)){ //check of type 0,1 of 2 is, zo niet throw exception
-                    throw new NumberFormatException();
-                }
+        if (e.getSource() == jbOpslaan) {
+            try {
+                if (bewerkenPressed) { //Check of een server is bewerkt. Checkt niet of de waardes hetzelfde zijn gebleven.
+                    //Input check, gooit een exception als de variabele niet omgezet kan worden.
+                    String naam = jtnaam.getText();
+                    int prijs = Integer.parseInt(jtprijs.getText());
+                    Double beschikbaarheid = Double.parseDouble(jtbeschikbaarheid.getText());
+                    int type = Integer.parseInt(jttype.getText());
+                    if (!(prijs > 0)) { //check of de prijs groter is dan 0, zo niet throw exception
+                        throw new NumberFormatException();
+                    }
+                    if (!(beschikbaarheid >= 1 && beschikbaarheid < 100)) { //check of de beschikbaarheid tussen 1 en 100 zit, zo niet throw exception
+                        throw new NumberFormatException();
+                    }
+                    if (!(type == 0 || type == 1 || type == 2)) { //check of type 0,1 of 2 is, zo niet throw exception
+                        throw new NumberFormatException();
+                    }
 
-                jlfoutmelding.setVisible(false);
-                jlsucces.setVisible(false);
-                beschikbaarheid = beschikbaarheid / 100;
+                    jlfoutmelding.setVisible(false);
+                    jlsucces.setVisible(false);
+                    beschikbaarheid = beschikbaarheid / 100;
 
-                String x = Objects.requireNonNull(serverNamen.getSelectedItem()).toString(); //Ophalen geselecteerde item in de comboBox
-                String url = "./Servers.txt"; //Maak url
-                try {
-                    File path = new File(url);
-                    File file = new File(path.getAbsolutePath()); //Maak dynamische url
-                    FileWriter Writer = new FileWriter(file);
-                    for (Server server : serverArrayList) { //Als een server is geselecteerd, voeg de informatie vanuit de JTextFields toe aan servers.txt
-                        if (server.getNaam().equals(x)) {
-                            Writer.write(naam + "," + prijs + "," + beschikbaarheid + "," + type + "\n");
-                            jlsucces.setVisible(true);
-                            jlsucces.setText("Server is succesvol bewerkt.");
-                        } else {
-                            Writer.write(server.getNaam() + "," + server.getPrijs() + "," + server.getBeschikbaarheid() + "," + server.getType() + "\n");
+                    String x = Objects.requireNonNull(serverNamen.getSelectedItem()).toString(); //Ophalen geselecteerde item in de comboBox
+                    String url = "./Servers.txt"; //Maak url
+                    try {
+                        File path = new File(url);
+                        File file = new File(path.getAbsolutePath()); //Maak dynamische url
+                        FileWriter Writer = new FileWriter(file);
+                        for (Server server : serverArrayList) { //Als een server is geselecteerd, voeg de informatie vanuit de JTextFields toe aan servers.txt
+                            if (server.getNaam().equals(x)) {
+                                Writer.write(naam + "," + prijs + "," + beschikbaarheid + "," + type + "\n");
+                                jlsucces.setVisible(true);
+                                jlsucces.setText("Server is succesvol bewerkt.");
+                            } else {
+                                Writer.write(server.getNaam() + "," + server.getPrijs() + "," + server.getBeschikbaarheid() + "," + server.getType() + "\n");
+                            }
                         }
+                        if (x.equals("<Nieuw>")) { //Als een nieuwe server wordt toegevoegd, voeg hem dan pas toe nadat de al bestaande servers zijn toegevoegd aan servers.txt
+                            Writer.write(naam + "," + prijs + "," + beschikbaarheid + "," + type);
+                            jlsucces.setText("Server is succesvol toegevoegd");
+                            jlsucces.setVisible(true);
+                        }
+                        Writer.close();
+                    } catch (IOException ioe) {
+                        System.out.println("An error occurred.");
+                        ioe.printStackTrace();//error handling
                     }
-                    if (x.equals("<Nieuw>")) { //Als een nieuwe server wordt toegevoegd, voeg hem dan pas toe nadat de al bestaande servers zijn toegevoegd aan servers.txt
-                        Writer.write(naam + "," + prijs + "," + beschikbaarheid + "," + type);
-                        jlsucces.setText("Server is succesvol toegevoegd");
-                        jlsucces.setVisible(true);
-                    }
-                    Writer.close();
-                } catch (IOException ioe) {
-                    System.out.println("An error occurred.");
-                    ioe.printStackTrace();//error handling
+                }
+                else{
+                    jlfoutmelding.setText("Voordat u een bewerk kunt opslaan, moet u hem eerst bewerken.");
+                    jlfoutmelding.setVisible(true);
                 }
             }
             catch(NumberFormatException ne){
                 jlfoutmelding.setText("Ongeldige invoer!");
                 jlfoutmelding.setVisible(true);
             }
+            changeVisibility(false);
         }
 
         if (e.getSource() == jbverwijderen) {
@@ -286,6 +290,7 @@ public class serversToevoegenDialog extends JDialog implements ActionListener, M
                     ioe.printStackTrace();//error handling
                 }
             }
+            dialog.dispose();
         }
     }
 
@@ -305,8 +310,8 @@ public class serversToevoegenDialog extends JDialog implements ActionListener, M
         if(e.getSource() == jbverwijderen){
             jbverwijderen.setBackground(background);
         }
-        if(e.getSource() == jbopslaan){
-            jbopslaan.setBackground(background);
+        if(e.getSource() == jbOpslaan){
+            jbOpslaan.setBackground(background);
         }
         if(e.getSource() == jbbewerken){
             jbbewerken.setBackground(background);
@@ -321,11 +326,25 @@ public class serversToevoegenDialog extends JDialog implements ActionListener, M
         if(e.getSource() == jbverwijderen){
             jbverwijderen.setBackground(cnavbar);
         }
-        if(e.getSource() == jbopslaan){
-            jbopslaan.setBackground(cnavbar);
+        if(e.getSource() == jbOpslaan){
+            jbOpslaan.setBackground(cnavbar);
         }
         if(e.getSource() == jbbewerken){
             jbbewerken.setBackground(cnavbar);
         }
+    }
+
+    public void changeVisibility(Boolean bool){
+        bewerkenPressed = bool;
+        jlnaam.setVisible(bool); // if true: 'Toevoegen' van JTextfields als een server is geselecteerd. Er is altijd of een Server of <Nieuw> geselecteerd in de comboBox dus een if-statement is niet nodig.
+        jtnaam.setVisible(bool); // if false: 'Verwijderen' van JTextfields als een server is bewerkt of verwijderd.
+        jltype.setVisible(bool);
+        jttype.setVisible(bool);
+        jlbeschikbaarheid.setVisible(bool);
+        jtbeschikbaarheid.setVisible(bool);
+        jlprijs.setVisible(bool);
+        jtprijs.setVisible(bool);
+        jlfoutmelding.setVisible(!bool);
+        jlsucces.setVisible(!bool);
     }
 }

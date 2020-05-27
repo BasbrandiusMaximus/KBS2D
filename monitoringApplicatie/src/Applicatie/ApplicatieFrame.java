@@ -6,14 +6,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class ApplicatieFrame extends JFrame implements ActionListener, MouseListener {
     private JFrame frame;
-    private ArrayList<Server> serverArrayList;
     private JButton jboptimalisatie;
     private JButton jbontwerpen;
     private JButton jbservers;
@@ -72,7 +68,7 @@ public class ApplicatieFrame extends JFrame implements ActionListener, MouseList
         jbmonitor.addMouseListener(this);
         navbar.add(jbmonitor);
 
-        serverArrayList = Server.serversOphalen(); //Ophalen van servers uit servers.txt
+        ArrayList<Server> serverArrayList = Server.serversOphalen(); //Ophalen van servers uit servers.txt
 
         //Info JPanel
         JPanel jpinfo = new JPanel();
@@ -123,7 +119,7 @@ public class ApplicatieFrame extends JFrame implements ActionListener, MouseList
         }
     }
 
-    //MouseListeners zorgen ervoor dat de button van kleur veranderd als je met je cursor erin of erin gaat.
+    //MouseListeners zorgen ervoor dat de button van kleur veranderd als je met je cursor erin of erin gaat. Het is daarom ook niet handig om er een methode van te maken.
 
     public void mouseClicked(MouseEvent e) { }
 
