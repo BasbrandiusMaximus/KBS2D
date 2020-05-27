@@ -37,6 +37,12 @@ public class ReplaceText {
                 e.printStackTrace();
             }
         }
+    }
 
+    public static void main(String[] args) {
+
+        modifyFile("monitoringApplicatie/logWindowsServer2/DISKWindowsServer2.txt", "��", "");
+        modifyFile("monitoringApplicatie/logWindowsServer2/DISKWindowsServer2.txt", "DeviceID  FreeSpace    \n" + "C:       ", "");
+        System.out.println("done");
     }
 }
