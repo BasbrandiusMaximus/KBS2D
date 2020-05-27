@@ -2,6 +2,7 @@ package Applicatie;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,8 +11,6 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.ByteOrder;
-import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -21,7 +20,7 @@ public class BekijkDialog extends JDialog implements ActionListener, MouseListen
     private JButton jbTerug;
     private JButton jbOpenen;
     private JComboBox<String> comboBox;
-    private JPanel[] ArrayComponent;
+    private JPanel[] arrayComponent;
     private JButton jbBewerken;
     private JLabel jlbeschikbaarheid;
     private JLabel jlprijs;
@@ -32,7 +31,7 @@ public class BekijkDialog extends JDialog implements ActionListener, MouseListen
     public BekijkDialog(){
         dialog = new JDialog();
         dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        dialog.setSize(900,400);
+        dialog.setSize(900,250);
         dialog.setTitle("Ontwerpen bekijken en bewerken");
         dialog.setLayout(new FlowLayout());
         background = new Color(230, 244, 255);
@@ -91,13 +90,13 @@ public class BekijkDialog extends JDialog implements ActionListener, MouseListen
 
         //Aanmaken JPanel waar ontwerp in komt te staan.
         JPanel jpBekijk = new JPanel();
-        Dimension test = new Dimension(800,300);
+        Dimension test = new Dimension(800,150);
         jpBekijk.setPreferredSize(test);
         jpBekijk.setBackground(background);
         jpBekijk.setBorder(BorderFactory.createLineBorder(cnavbar));
         dialog.add(jpBekijk);
 
-        ArrayComponent = new JPanel[10];
+        arrayComponent = new JPanel[10];
 
         //Voeg 'lege' componenten toe aan JPanel
         for(int i = 0; i < 10; i++) {
@@ -105,13 +104,16 @@ public class BekijkDialog extends JDialog implements ActionListener, MouseListen
             component.setLayout(new GridLayout(2,1));
             JLabel icon = new JLabel(); //Maak JLabel voor icoon
             icon.setIcon(getImage("/server.png", 30, 30)); //Voeg icoon toe aan JLabel
+            icon.setHorizontalAlignment(JLabel.CENTER);
             component.add(icon);
             JLabel naam = new JLabel(); //Maak JLabel met naam van server
             naam.setText("server");
+            naam.setHorizontalAlignment(JLabel.CENTER);
             component.add(naam);
+            component.setBorder(new EmptyBorder(5,5,5,5));
             component.setVisible(false);
             component.setBackground(background);
-            ArrayComponent[i] = component; //voeg component toe aan array
+            arrayComponent[i] = component; //voeg component toe aan array
             jpBekijk.add(component);
         }
 
@@ -152,7 +154,7 @@ public class BekijkDialog extends JDialog implements ActionListener, MouseListen
         }
         if(e.getSource() == jbOpenen){
             int teller = 0;
-            for(JPanel c : ArrayComponent){ //Deze for loop is om de componenten in JPanel Bekijk te resetten als er meerdere ontwerpen na elkaar bekeken worden.
+            for(JPanel c : arrayComponent){ //Deze for loop is om de componenten in JPanel Bekijk te resetten als er meerdere ontwerpen na elkaar bekeken worden.
                 JLabel lbl = (JLabel) c.getComponent(1);
                 lbl.setText("server");
                 c.setVisible(false);
@@ -171,8 +173,7 @@ public class BekijkDialog extends JDialog implements ActionListener, MouseListen
             }
 
             try { //Lees Ontwerp text file
-                File path = new File(url);
-                File file = new File(path.getAbsolutePath());
+                File file = Server.getDynamicUrl(url);
                 Scanner myReader = new Scanner(file);
                 while (myReader.hasNextLine()) {
                     String data = myReader.nextLine();
@@ -183,9 +184,9 @@ public class BekijkDialog extends JDialog implements ActionListener, MouseListen
                         jlprijs.setText(data);
                     }
                     else{
-                    JLabel lbl = (JLabel) ArrayComponent[teller].getComponent(1); //Voeg servers toe aan de Bekijk JPanel
+                    JLabel lbl = (JLabel) arrayComponent[teller].getComponent(1); //Voeg servers toe aan de Bekijk JPanel
                     lbl.setText(data);
-                    ArrayComponent[teller].setVisible(true);
+                    arrayComponent[teller].setVisible(true);
                     teller++;
                     }
                 }
@@ -211,6 +212,7 @@ public class BekijkDialog extends JDialog implements ActionListener, MouseListen
         }
     }
 
+    //Layout knoppen. Ze veranderen van kleur als je met de cursor in en uit de button gaat.
     @Override
     public void mousePressed(MouseEvent e) { }
 

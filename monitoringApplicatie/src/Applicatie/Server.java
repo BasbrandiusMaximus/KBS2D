@@ -43,21 +43,31 @@ public class Server {
     }
 
     public static List<Object> berekenBeschikbaarheid(Server... servers) {
-        double beschikbaarheid = 0d;
+        double beschikbaarheid = 0;
+        double beschikbaarheidd = 1; //beschikbaarheid db servers
+        double beschikbaarheidw = 1; //beschikbaarheid web servers
+        double beschikbaarheidp = 1; //Beschikbaarheid firewall
         int prijs = 0;
         for(Server server : servers) {
             if (server != null) {
-                prijs += server.prijs;
-                // berekent (1-server1.beschikbaarheid)*(1-server2.beschikbaarheid)*(1-server3.beschikbaarheid)
-                if (beschikbaarheid == 0d) {
-                    beschikbaarheid += 1 - server.beschikbaarheid;
-                } else {
-                    beschikbaarheid = beschikbaarheid * (1 - server.beschikbaarheid);
+                   prijs += server.getPrijs();
+                if(server.getType() == 1){
+                    beschikbaarheidd = beschikbaarheidd * (1-server.getBeschikbaarheid());
+                }
+                if(server.getType() == 2){
+                    beschikbaarheidw = beschikbaarheidw * (1-server.getBeschikbaarheid());
+                }
+                if(server.getType() == 0){
+                    beschikbaarheidp = server.getBeschikbaarheid();
                 }
             }
         }
         // doet achteraf nog 1x 1-berekende getal
-        beschikbaarheid = 1 - beschikbaarheid;
+        beschikbaarheidd = 1 - beschikbaarheidd;
+        beschikbaarheidw = 1 - beschikbaarheidw;
+
+        beschikbaarheid = beschikbaarheidp * beschikbaarheidd * beschikbaarheidw;
+        beschikbaarheid = beschikbaarheid * 100;
 
         return Arrays.asList(beschikbaarheid, prijs);
     }

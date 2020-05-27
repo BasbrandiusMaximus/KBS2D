@@ -12,7 +12,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 
-public class ServersBekijkenDialog extends JDialog implements ActionListener, MouseListener {
+public class ServersBekijkenDialog implements ActionListener, MouseListener {
     private JButton jbBewerken;
     private JButton jbTerug;
     private ArrayList<Server> serverArrayList;
@@ -23,15 +23,13 @@ public class ServersBekijkenDialog extends JDialog implements ActionListener, Mo
     public ServersBekijkenDialog(){
         //Zelf ophalen van de servers uit servers.txt zodat na het bewerken, toevoegen of verwijderen de lijst automatisch wordt geupdatet.
         serverArrayList = new ArrayList<>();
-
         serverArrayList = Server.serversOphalen();
 
         dialog = new JDialog();
-        dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        dialog.setDefaultCloseOperation(dialog.DISPOSE_ON_CLOSE);
         dialog.setSize(1010,250);
         dialog.setTitle("Serverlijst");
         dialog.setLayout(new BorderLayout());
-        dialog.setModal(true);
         background = new Color(230, 244, 255); //230, 244, 255
         cnavbar = new Color(143, 163, 179); //143, 163, 179
         dialog.getContentPane().setBackground(background);
@@ -118,13 +116,11 @@ public class ServersBekijkenDialog extends JDialog implements ActionListener, Mo
     public void actionPerformed(ActionEvent e) {
         //Openen respectievelijke dialogs
         if (e.getSource() == jbBewerken) {
-            dialog.setModal(false);
             dialog.dispose();
             ServersToevoegenDialog toevoegen = new ServersToevoegenDialog(serverArrayList);
         }
 
         if(e.getSource() == jbTerug){
-            dialog.setModal(false);
             ApplicatieFrame frame = new ApplicatieFrame();
             dialog.dispose();
         }

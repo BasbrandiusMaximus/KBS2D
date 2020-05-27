@@ -12,9 +12,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class ServersToevoegenDialog extends JDialog implements ActionListener, MouseListener {
-    private Boolean hasDisposed = false;
-    private JDialog dialog;
+public class ServersToevoegenDialog implements ActionListener, MouseListener {
+    private Boolean hasDisposed = false; //Zodat deze dialog, maar 1 keer gesloten word. Er was een bug dat deze dialog ook geopend werd als je op terug klikt naar de ApplicatieFrame. Dit is de oplossing hiervoor.
+    private JDialog dialog;             //Een andere oplossing is om alle klasses te extenden met JDialog en dan de code dialog = new JDialog(); Te verwijderen en overal waar dialog staat te veranderen door this.
     private JButton jbOpslaan;
     private JButton jbbewerken;
     private JButton jbverwijderen;
@@ -37,13 +37,11 @@ public class ServersToevoegenDialog extends JDialog implements ActionListener, M
 
     public ServersToevoegenDialog(ArrayList<Server> serverArrayList) {
         this.serverArrayList = serverArrayList;
-        //Aanmaken dialog
+        //Aanmaken dialog]
         dialog = new JDialog();
-        dialog.setModal(true);
-        dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        dialog.setDefaultCloseOperation(dialog.DISPOSE_ON_CLOSE);
         dialog.setTitle("Serverlijst bewerken");
         dialog.setSize(600, 200);
-        dialog.setModal(false);
         dialog.setLayout(new BorderLayout());
         background = new Color(230, 244, 255); //230, 244, 255
         cnavbar = new Color(143, 163, 179); //143, 163, 179
@@ -185,7 +183,6 @@ public class ServersToevoegenDialog extends JDialog implements ActionListener, M
             hasDisposed = true;
             ServersBekijkenDialog serversBekijkenDialog = new ServersBekijkenDialog();
             dialog.dispose();
-            return;
         }
         if (e.getSource() == jbbewerken) {
             String x = Objects.requireNonNull(serverNamen.getSelectedItem()).toString(); //Ophalen geselecteerde item in de comboBox

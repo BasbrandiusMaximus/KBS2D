@@ -19,14 +19,15 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class OntwerpDialog extends JDialog implements ActionListener, MouseListener {
-    private ArrayList<Server> serverArrayList;
-    private JPanel[] ArrayComponent;
+    private static ArrayList<Server> serverArrayList;
+    private JPanel[] arrayComponent;
     private JButton jbopslaan;
     private ArrayList<String> stringArrayList;
     private String ontwerpSelected;
     private JLabel jlbeschikbaarheid;
     private JLabel jlprijs;
     private JLabel jlfoutmelding;
+    private JLabel jlsucces;
     private JDialog dialog;
 
     public OntwerpDialog(String ontwerpSelected){
@@ -54,18 +55,18 @@ public class OntwerpDialog extends JDialog implements ActionListener, MouseListe
         jpComponents.setBorder(new CompoundBorder(marginC, borderC)); //add margin aan de JPanel
         dialog.add(jpComponents);
 
-        //Voeg tekst toe aan componentselectie
+        //JLabel Header componentselectie
         JLabel textComponenten = new JLabel("Componentselectie");
         textComponenten.setBackground(background);
         jpComponents.add(textComponenten, BorderLayout.NORTH);
 
+        //JPanel componenten
         JPanel jpcomponent = new JPanel();
         jpcomponent.setLayout(new GridLayout(5,2));
         jpcomponent.setBackground(background);
 
         //Voeg server naam en icoon toe aan commponentselectie
-        ArrayList<Server> serverArrayList1;
-        serverArrayList = ServerList.getServers();
+        serverArrayList = Server.serversOphalen();
         for (Server serverObject : serverArrayList) {
             JPanel component = new JPanel();
             component.setBorder(new EmptyBorder(10,10,0,10));
@@ -98,8 +99,8 @@ public class OntwerpDialog extends JDialog implements ActionListener, MouseListe
 
         dialog.add(jpOntwerp);
 
-        int aantalServers = 10;
-        ArrayComponent = new JPanel[aantalServers];
+        int aantalServers = 10; //max aantal servers. Dit is 10 omdat de optimalisatiefunctie max opstellingen met 10 servers kan uitrekenen ivm memory issues. Meerdere is mogelijk, maar het apparaat heeft dan signifanct veel meer memory opslag nodig.
+        arrayComponent = new JPanel[aantalServers];
         //Aanmaken JPanels voor servers die aan het ontwerp toe worden gevoegd. Ze staan eerst onzichtbaar omdat je anders de servers niet kan toevoegen
         //en zou je een andere dialog nodig hebben. Daarom staan ze eerst op setVisible(false) en worden ze op setVisible(true) gezet als er een server aan wordt
         //toegevoegd.
@@ -118,7 +119,7 @@ public class OntwerpDialog extends JDialog implements ActionListener, MouseListe
             Ontwerpnaam.addMouseListener(this); //voeg mouselistener toe aan naam JLabel
             component.setVisible(false);
             component.setBackground(background);
-            ArrayComponent[i] = component; //voeg component toe aan array
+            arrayComponent[i] = component; //voeg component toe aan array
             jpOntwerp.add(component);
         }
 
@@ -143,10 +144,10 @@ public class OntwerpDialog extends JDialog implements ActionListener, MouseListe
                         jlprijs.setVisible(true);
                     }
                     else {
-                        JLabel lbl = (JLabel) ArrayComponent[teller].getComponent(1); //Voeg servers toe aan de Bekijk JPanel
+                        JLabel lbl = (JLabel) arrayComponent[teller].getComponent(1); //Voeg servers toe aan de Bekijk JPanel
                         lbl.setText(data);
                         stringArrayList.add(data);
-                        ArrayComponent[teller].setVisible(true);
+                        arrayComponent[teller].setVisible(true);
                         teller++;
                     }
                 }
@@ -157,13 +158,15 @@ public class OntwerpDialog extends JDialog implements ActionListener, MouseListe
             }
         }
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-        panel.setBackground(background);
+        //JPanel knoppen
+        JPanel jpKnoppen = new JPanel();
+        jpKnoppen.setLayout(new BorderLayout());
+        jpKnoppen.setBackground(background);
         Dimension dpanel = new Dimension(175,100);
-        panel.setPreferredSize(dpanel);
-        dialog.add(panel);
+        jpKnoppen.setPreferredSize(dpanel);
+        dialog.add(jpKnoppen);
 
+        //Opslaan button
         jbopslaan = new JButton("Opslaan");
         jbopslaan.addActionListener(this);
 
@@ -171,16 +174,20 @@ public class OntwerpDialog extends JDialog implements ActionListener, MouseListe
         jbopslaan.setPreferredSize(dd);
         jbopslaan.setBackground(cnavbar);
 
-        panel.add(jbopslaan, BorderLayout.SOUTH);
+        jpKnoppen.add(jbopslaan, BorderLayout.SOUTH);
         jbopslaan.setBorder(new EmptyBorder(5,0,5,0));//top,left,bottom,right
-        panel.add(jlbeschikbaarheid, BorderLayout.NORTH);
+        jpKnoppen.add(jlbeschikbaarheid, BorderLayout.NORTH);
         jlbeschikbaarheid.setBorder(new EmptyBorder(5,0,5,0));//top,left,bottom,right
-        panel.add(jlprijs, BorderLayout.CENTER);
+        jpKnoppen.add(jlprijs, BorderLayout.CENTER);
         jlprijs.setBorder(new EmptyBorder(5,0,5,0));//top,left,bottom,right
 
         jlfoutmelding = new JLabel("");
         jlfoutmelding.setVisible(false);
         dialog.add(jlfoutmelding);
+
+        jlsucces = new JLabel("");
+        jlsucces.setVisible(false);
+        dialog.add(jlsucces);
 
         dialog.setVisible(true);
     }
@@ -204,7 +211,7 @@ public class OntwerpDialog extends JDialog implements ActionListener, MouseListe
         if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
             JLabel label = (JLabel) e.getSource(); //JLabel waarop geklikt is. Dit is een servernaam.
             // label = (JLabel) e.getComponent();
-            for (JPanel componenten : ArrayComponent) {
+            for (JPanel componenten : arrayComponent) {
                 JLabel lbl = (JLabel) componenten.getComponent(1); //JLabel in ontwerp JPanel bij default is dit 'server'
                 if (lbl.getText().equals("server")) { //Check of er een JLabel is in de lijst die 'server' heet.
                     lbl.setText(label.getText()); //Veranderd 'server' in de naam van de aangeklikte server.
@@ -251,12 +258,12 @@ public class OntwerpDialog extends JDialog implements ActionListener, MouseListe
         if (SwingUtilities.isRightMouseButton(e) && e.getClickCount() == 1) {
             JLabel label = (JLabel) e.getSource(); //JLabel waarop geklikt is. Dit is een servernaam.
             //JLabel label = (JLabel) e.getComponent();
-            for (int i = 0; i < ArrayComponent.length; i++) { //for loop kan !niet! vervangen worden door een foreach omdat je de int i nodig hebt in de loop.
-                if (ArrayComponent[i].getComponent(1) == label) { //Kijkt welke component in de array hetzelfde is als de label waarop geklikt is.
-                    JLabel lbl = (JLabel) ArrayComponent[i].getComponent(1); //Haalt JLabel op van JPanel Component waarop met de rechtermuis is geklikt.
+            for (int i = 0; i < arrayComponent.length; i++) { //for loop kan !niet! vervangen worden door een foreach omdat je de int i nodig hebt in de loop.
+                if (arrayComponent[i].getComponent(1) == label) { //Kijkt welke component in de array hetzelfde is als de label waarop geklikt is.
+                    JLabel lbl = (JLabel) arrayComponent[i].getComponent(1); //Haalt JLabel op van JPanel Component waarop met de rechtermuis is geklikt.
                     stringArrayList.remove(lbl.getText());
                     lbl.setText("server"); //Veranderd JLabel naar 'server'
-                    ArrayComponent[i].setVisible(false); //Zet JPanel op invisble
+                    arrayComponent[i].setVisible(false); //Zet JPanel op invisble
 
                     int teller = 0;
                     Server[] berekenen = new Server[10];
@@ -311,6 +318,8 @@ public class OntwerpDialog extends JDialog implements ActionListener, MouseListe
                 if (this.isValid(stringArrayList)) { //checkt of ontwerp valid is.
                     jlfoutmelding.setText("");
                     jlfoutmelding.setVisible(false);
+                    jlsucces.setText("");
+                    jlsucces.setVisible(false);
                     String url = "monitoringApplicatie/src/Ontwerpen/";
                     url += ontwerpSelected;
 
@@ -328,7 +337,7 @@ public class OntwerpDialog extends JDialog implements ActionListener, MouseListe
                         FileWriter Writer = new FileWriter(file);
                         Writer.write(text.toString());
                         Writer.close();
-                        for (JPanel component : ArrayComponent) { //Clear componenten in ontwerp JPanel
+                        for (JPanel component : arrayComponent) { //Clear componenten in ontwerp JPanel
                             JLabel removeall = (JLabel) component.getComponent(1);
                             removeall.setText("server");
                             component.setVisible(false);
@@ -342,6 +351,8 @@ public class OntwerpDialog extends JDialog implements ActionListener, MouseListe
                     jlbeschikbaarheid.setVisible(false);
                     jlprijs.setText("");
                     jlprijs.setVisible(false);
+                    jlsucces.setText("Ontwerp is succesvol opgeslagen!");
+                    jlsucces.setVisible(true);
                     dialog.dispose();
                 }
                 else{
@@ -353,6 +364,8 @@ public class OntwerpDialog extends JDialog implements ActionListener, MouseListe
                 if (this.isValid(stringArrayList)) {
                     jlfoutmelding.setText("");
                     jlfoutmelding.setVisible(false);
+                    jlsucces.setText("");
+                    jlsucces.setVisible(false);
                     StringBuilder text = new StringBuilder();
                     for (String strings : stringArrayList) { //Maakt een string met alle servers om in het Ontwerp[nummer].txt bestand te duwen
                         text.append(strings).append("\n");
@@ -383,7 +396,7 @@ public class OntwerpDialog extends JDialog implements ActionListener, MouseListe
                         Writer.write(text.toString());
                         Writer.close();
                         stringArrayList.clear(); //Clear arraylist met servers
-                        for (JPanel component : ArrayComponent) { //Clear componenten in ontwerp JPanel
+                        for (JPanel component : arrayComponent) { //Clear componenten in ontwerp JPanel
                             JLabel removeall = (JLabel) component.getComponent(1);
                             removeall.setText("server");
                             component.setVisible(false);
@@ -397,6 +410,8 @@ public class OntwerpDialog extends JDialog implements ActionListener, MouseListe
                     jlbeschikbaarheid.setVisible(false);
                     jlprijs.setText("");
                     jlprijs.setVisible(false);
+                    jlsucces.setText("Ontwerp is succesvol opgeslagen!");
+                    jlsucces.setVisible(true);
                 }
                 else{
                     jlfoutmelding.setVisible(true);
