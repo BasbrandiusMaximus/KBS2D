@@ -33,7 +33,7 @@ public class OptimalisatieDialog extends JDialog implements ActionListener, Mous
         dialog.getContentPane().setBackground(background);
 
         //Aanmaken JLabel tekst
-        JLabel panel1 = new JLabel("<html><div>Voer hieronder een beschikbaarheidspercentage en het aantal servers in om een server samenstelling te maken.</div></html>");
+        JLabel panel1 = new JLabel("<html><div>Voer hieronder een beschikbaarheidspercentage in om een optimale serversamenstelling te maken.</div></html>");
         Dimension d2 = new Dimension(500,30);
         panel1.setPreferredSize(d2);
         dialog.add(panel1);
@@ -47,15 +47,6 @@ public class OptimalisatieDialog extends JDialog implements ActionListener, Mous
         jtBeschikbaarheid.setBorder(BorderFactory.createLineBorder(cnavbar));
         jtBeschikbaarheid.setBackground(cnavbar);
         dialog.add(jtBeschikbaarheid);
-
-
-        //Aanmaken JTextField om aantal servers in te voeren
-        jtAantalservers = new JTextField();
-        jtAantalservers.setPreferredSize(d);
-        jtAantalservers.addMouseListener(this);
-        jtAantalservers.setBorder(BorderFactory.createLineBorder(cnavbar));
-        jtAantalservers.setBackground(cnavbar);
-        dialog.add(jtAantalservers);
 
         //Aanmaken Button Bereken
         jbBereken = new JButton("Bereken");
@@ -76,12 +67,11 @@ public class OptimalisatieDialog extends JDialog implements ActionListener, Mous
             try
             {
                 double original = Double.parseDouble(jtBeschikbaarheid.getText());
-                int aantalServers = Integer.parseInt(jtAantalservers.getText());
                 original = original / 100;
                 double bh = BigDecimal.valueOf(original).setScale(jtBeschikbaarheid.getText().length() + 1, java.math.RoundingMode.HALF_UP).doubleValue();
-                if (bh > 0 && aantalServers > 0)
+                if (bh > 0)
                 {
-                    jlServersamenstelling.setText(ServerList.serversUitrekenen(bh, aantalServers));
+                    jlServersamenstelling.setText(ServerList.serversUitrekenen(bh));
                 }
                 else
                 {

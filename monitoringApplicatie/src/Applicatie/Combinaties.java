@@ -11,7 +11,7 @@ public class Combinaties {
         return combinaties;
     }
 
-    static void wrapCombinaties(char[] set, int k)
+    static void wrapCombinaties(char[] set, int k )
     {
         int n = set.length;
         getCombinaties(set, "", n, k);

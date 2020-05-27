@@ -27,6 +27,8 @@ public class ServerList {
     public static ArrayList<Server> serverList = new ArrayList<Server>();
     private Server Servers;
 
+    public static final int MaxServers = 10;
+
     public ServerList()
     {
     }
@@ -45,7 +47,7 @@ public class ServerList {
         return servers;
     }
 
-    public static ReturnValues kiesServers(double beschikbaarheid, int aantal) {
+    public static ReturnValues kiesServers(double beschikbaarheid) {
         ArrayList<Server> geselecteerdeServers = new ArrayList<>();
         ArrayList<Server> allServers = new ArrayList<>();
 
@@ -65,99 +67,99 @@ public class ServerList {
         }
 
         char[] serverSet = {'0','1','2','3','4','5'};
-        Combinaties.combinaties.clear();
-        Combinaties.wrapCombinaties(serverSet, aantal - 1);
-        ArrayList<String> mogelijkeCombinaties = new ArrayList<>(Combinaties.getCombinaties());
 
         // Bereken mogelijke combinaties, dit zou eigenlijk een aparte class moeten zijn.
-        for (String c : mogelijkeCombinaties)
-        {
-            ArrayList<Server> combinatie = new ArrayList<>();
-            ArrayList<Double> beschikbaarheidsPercentages = new ArrayList<>();
+        try {
+            for (int t = 0; t < MaxServers; t++) {
+                Combinaties.combinaties.clear();
+                Combinaties.wrapCombinaties(serverSet, t);
+                ArrayList<String> mogelijkeCombinaties = new ArrayList<>(Combinaties.getCombinaties());
 
-            ArrayList<Server> tempDatabase = new ArrayList<>();
-            ArrayList<Server> tempWeb = new ArrayList<>();
-            int prijs = 0;
+                for (String c : mogelijkeCombinaties) {
+                    ArrayList<Server> combinatie = new ArrayList<>();
+                    ArrayList<Double> beschikbaarheidsPercentages = new ArrayList<>();
 
-            if (c.length() == aantal - 1)
-            {
-                for (char i : c.toCharArray())
-                {
-                    int n = Integer.parseInt(String.valueOf(i));
-                    combinatie.add(allServers.get(n));
-                }
-                for (Server s : combinatie)
-                {
-                    prijs += s.getPrijs();
-                    if (s.getType() == 1) {
-                        tempDatabase.add(s);
+                    ArrayList<Server> tempDatabase = new ArrayList<>();
+                    ArrayList<Server> tempWeb = new ArrayList<>();
+                    int prijs = 0;
+
+                    if (c.length() == t) {
+                        for (char i : c.toCharArray()) {
+                            int n = Integer.parseInt(String.valueOf(i));
+                            combinatie.add(allServers.get(n));
+                        }
+                        for (Server s : combinatie) {
+                            prijs += s.getPrijs();
+                            if (s.getType() == 1) {
+                                tempDatabase.add(s);
+                            }
+                            if (s.getType() == 2) {
+                                tempWeb.add(s);
+                            }
+                            beschikbaarheidsPercentages.add(s.getBeschikbaarheid());
+                        }
+
+                        double somWebBeschikbaarheid = 1;
+                        double somDatabaseBeschikbaarheid = 1;
+
+                        // Bereken totale beschikbaarheid van de webservers
+                        for (Server server : tempWeb) {
+                            somWebBeschikbaarheid = somWebBeschikbaarheid * (1 - server.getBeschikbaarheid());
+                        }
+
+                        // Bereken totale beschikbaarheid van de database servers
+                        for (Server server : tempDatabase) {
+                            somDatabaseBeschikbaarheid = somDatabaseBeschikbaarheid * (1 - server.getBeschikbaarheid());
+                        }
+
+                        somWebBeschikbaarheid = 1 - somWebBeschikbaarheid;
+                        somDatabaseBeschikbaarheid = 1 - somDatabaseBeschikbaarheid;
+
+                        double combinatieBeschikbaarheid = firewallBeschikbaarheid * somWebBeschikbaarheid * somDatabaseBeschikbaarheid;
+
+                        // Validatie op basis van regels
+                        if (tempWeb.size() != 0 && tempDatabase.size() != 0) {
+                            if (((prijs < goedkoopstePrijs) || (goedkoopstePrijs == 0)) && combinatieBeschikbaarheid >= beschikbaarheid) {
+                                goedkoopstePrijs = prijs;
+                                besteCombinatie.clear();
+                                besteCombinatie.addAll(combinatie);
+                            }
+                        }
+                        tempWeb.clear();
+                        tempDatabase.clear();
                     }
-                    if (s.getType() == 2) {
-                        tempWeb.add(s);
-                    }
-                    beschikbaarheidsPercentages.add(s.getBeschikbaarheid());
                 }
-
-                double somBeschikbaarheidServers = 1;
-                double somWebBeschikbaarheid = 1;
-                double somDatabaseBeschikbaarheid = 1;
-
-                // Bereken totale beschikbaarheid van de webservers
-                for (Server server : tempWeb)
-                {
-                    somWebBeschikbaarheid = somWebBeschikbaarheid * (1 - server.getBeschikbaarheid());
-                }
-
-                // Bereken totale beschikbaarheid van de database servers
-                for (Server server : tempDatabase)
-                {
-                    somDatabaseBeschikbaarheid = somDatabaseBeschikbaarheid * (1 - server.getBeschikbaarheid());
-                }
-
-                somWebBeschikbaarheid = 1 - somWebBeschikbaarheid;
-                somDatabaseBeschikbaarheid = 1 - somDatabaseBeschikbaarheid;
-
-                double combinatieBeschikbaarheid = firewallBeschikbaarheid * somWebBeschikbaarheid * somDatabaseBeschikbaarheid;
-
-                // Validatie op basis van regels
-                if (tempWeb.size() != 0 && tempDatabase.size() != 0)
-                {
-                    if (((prijs < goedkoopstePrijs) || (goedkoopstePrijs == 0)) && combinatieBeschikbaarheid >= beschikbaarheid)
-                    {
-                        goedkoopstePrijs = prijs;
-                        besteCombinatie.clear();
-                        besteCombinatie.addAll(combinatie);
-                    }
-                }
-
-                tempWeb.clear();
-                tempDatabase.clear();
             }
         }
-        geselecteerdeServers.addAll(besteCombinatie);
+        catch (java.lang.OutOfMemoryError err)
+        {
+            System.out.println("De gevraagde bewerking kostte teveel rekenkracht. Het programma is afgesloten. Verander MaxServers en probeer het opnieuw.");
+            System.out.println("Deze foutmelding trad op bij een waarde van MaxServers van " + MaxServers);
+            System.exit(10);
+        }
+
+        if (!besteCombinatie.isEmpty()) {
+            geselecteerdeServers.addAll(besteCombinatie);
+        }
 
         return new ReturnValues(geselecteerdeServers, goedkoopstePrijs + firewallPrijs);
     }
 
-    public static String serversUitrekenen(double beschikbaarheid, int aantal) {
-        ReturnValues r = kiesServers(beschikbaarheid, aantal);
+    public static String serversUitrekenen(double beschikbaarheid) {
+        ReturnValues r = kiesServers(beschikbaarheid);
         ArrayList<Server> servers = r.getServers();
 
         String returnString = "<html><div style='text-align: center;'>";
-        if (aantal<3){
-            returnString += "U heeft minder dan 3 servers ingevuld.<br/>Vul 3 of meer servers in en probeer opnieuw.<br/><br/>";
-        }
 
-        else{
-            if (servers.size() == 1) {
-                returnString += "Kon geen combinatie vinden met deze gegevens.<br/> Verander uw gegevens en probeer opnieuw.";
-            } else { returnString += "Beste combinatie:<br/><br/>";
-                for (Server server : servers)
-                {
-                    returnString += server + "<br/>";
-                }
-                returnString += "<br/>Totale kosten: " + r.getPrijs();
-            }}
+        if (servers.size() == 1) {
+            returnString += "Kon geen combinatie vinden met deze gegevens.<br/> Verander uw gegevens en probeer opnieuw.";
+        } else { returnString += "Beste combinatie:<br/><br/>";
+            for (Server server : servers)
+            {
+                returnString += server + "<br/>";
+            }
+            returnString += "<br/>Totale kosten: " + r.getPrijs();
+        }
 
         returnString += "</div></html>";
 
