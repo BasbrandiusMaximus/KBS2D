@@ -153,6 +153,7 @@ public class MonitorDialog extends JDialog implements ActionListener {
         IsDialoogActief = true;
         setTitle("Server Beschikbaarheid");
         setSize(325, 300);
+        getContentPane().setBackground(new Color(230, 244, 255));
         //setDefaultCloseOperation(HIDE_ON_CLOSE);
         setLayout(new FlowLayout());
         Dimension d = new Dimension(150, 50);
