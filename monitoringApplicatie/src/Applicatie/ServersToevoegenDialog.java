@@ -204,6 +204,8 @@ public class ServersToevoegenDialog implements ActionListener, MouseListener {
             try {
                 if (bewerkenPressed) { //Check of een server is bewerkt. Checkt niet of de waardes hetzelfde zijn gebleven.
                     //Input check, gooit een exception als de variabele niet omgezet kan worden.
+                    jlfoutmelding.setVisible(false);
+                    jlsucces.setVisible(false);
                     String naam = jtnaam.getText();
                     int prijs = Integer.parseInt(jtprijs.getText());
                     Double beschikbaarheid = Double.parseDouble(jtbeschikbaarheid.getText());
@@ -218,8 +220,6 @@ public class ServersToevoegenDialog implements ActionListener, MouseListener {
                         throw new NumberFormatException();
                     }
 
-                    jlfoutmelding.setVisible(false);
-                    jlsucces.setVisible(false);
                     beschikbaarheid = beschikbaarheid / 100;
 
                     String x = Objects.requireNonNull(serverNamen.getSelectedItem()).toString(); //Ophalen geselecteerde item in de comboBox
@@ -233,6 +233,8 @@ public class ServersToevoegenDialog implements ActionListener, MouseListener {
                                 Writer.write(naam + "," + prijs + "," + beschikbaarheid + "," + type + "\n");
                                 jlsucces.setVisible(true);
                                 jlsucces.setText("Server is succesvol bewerkt.");
+                                jlfoutmelding.setVisible(false);
+                                jlfoutmelding.setText("");
                             } else {
                                 Writer.write(server.getNaam() + "," + server.getPrijs() + "," + server.getBeschikbaarheid() + "," + server.getType() + "\n");
                             }
@@ -287,7 +289,7 @@ public class ServersToevoegenDialog implements ActionListener, MouseListener {
                     ioe.printStackTrace();//error handling
                 }
             }
-            dialog.dispose();
+
         }
     }
 
