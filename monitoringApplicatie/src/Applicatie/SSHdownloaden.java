@@ -26,7 +26,7 @@ public class SSHdownloaden {
         Session session = null;
         Channel channel = null;
         ChannelSftp channelSftp = null;
-        
+
         try {
             JSch jsch = new JSch();
             session = jsch.getSession(SFTPUSER, SFTPHOST, SFTPPORT);
