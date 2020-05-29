@@ -57,7 +57,7 @@ public class MonitorDialog extends JDialog {
 
                     try {
                         //ssHdownloaden.downloadLinuxServer1();
-                        if (ServerBeschikbaarheid.getCPUprocentLinux1().isEmpty() && ServerBeschikbaarheid.getDISKprocentLinux1().isEmpty()) {
+                        if ((ServerBeschikbaarheid.getCPUprocentLinux1().isEmpty() && ServerBeschikbaarheid.getDISKprocentLinux1().isEmpty()) || (!SSHdownloaden.downloadLinuxServer1())) {
                             percCPULinux1.setText(" = Server is niet beschikbaar");
                             percDISKLinux1.setText(" = Server is niet beschikbaar");
                         } else {
@@ -72,7 +72,7 @@ public class MonitorDialog extends JDialog {
 
                     try {
                         //ssHdownloaden.downloadLinuxServer2();
-                        if (ServerBeschikbaarheid.getCPUprocentLinux2().isEmpty() && ServerBeschikbaarheid.getDISKprocentLinux2().isEmpty()) {
+                        if ((ServerBeschikbaarheid.getCPUprocentLinux2().isEmpty() && ServerBeschikbaarheid.getDISKprocentLinux2().isEmpty()) || !SSHdownloaden.downloadLinuxServer2()) {
                             percCPULinux2.setText(" = Server is niet beschikbaar");
                             percDISKLinux2.setText(" = Server is niet beschikbaar");
                         } else {
@@ -121,8 +121,8 @@ public class MonitorDialog extends JDialog {
                         diskWindw2 = diskWindw2.replaceAll("a", "");
                         diskWindw2 = diskWindw2.trim();
 
-                        if (diskWindw2.isEmpty() && cpuWindw1.isEmpty()){
-                            percDISKWindows1.setText("= Server is niet beschikbaar" );
+                        if ((diskWindw2.isEmpty() && cpuWindw1.isEmpty()) || !SSHdownloaden.downloadWindowsServer1()){
+                            percDISKWindows1.setText("= Server is niet beschikbaar");
                             percCPUWindows1.setText("= Server is niet beschikbaar");
                         } else {
                             percDISKWindows1.setText("= " + diskWindw2 + " bytes vrij");
@@ -170,7 +170,7 @@ public class MonitorDialog extends JDialog {
                         diskWindw = diskWindw.trim();
 
 
-                        if (diskWindw.isEmpty() && cpuWindw.isEmpty()){
+                        if ((diskWindw.isEmpty() && cpuWindw.isEmpty()) || !SSHdownloaden.downloadWindowsServer2()){
                             percDISKWindows2.setText("= Server is niet beschikbaar" );
                             percCPUWindows2.setText("= Server is niet beschikbaar");
                         } else {
@@ -185,7 +185,7 @@ public class MonitorDialog extends JDialog {
 
                     Thread.sleep(1000); // de tijd die nodig is om te refreshen
                 }
-            } catch (InterruptedException interruptedException) {
+            } catch (InterruptedException | IOException interruptedException) {
                 interruptedException.printStackTrace();
             }
         }

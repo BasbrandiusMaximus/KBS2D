@@ -1,10 +1,9 @@
 package Applicatie;
 
-import com.jcraft.jsch.Channel;
-import com.jcraft.jsch.ChannelSftp;
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.Session;
+import com.jcraft.jsch.*;
+
 import java.io.*;
+import java.net.ConnectException;
 
 public class SSHdownloaden {
 
@@ -14,7 +13,7 @@ public class SSHdownloaden {
         }
     }
 
-    public static void downloadLinuxServer1() {
+    public static boolean downloadLinuxServer1() throws IOException {
         SFTPinJava sftPinJava = new SFTPinJava();
 
         String SFTPHOST = "192.168.2.100"; // IP van de host
@@ -45,9 +44,9 @@ public class SSHdownloaden {
             BufferedInputStream bis1 = new BufferedInputStream(channelSftp.get("MEMORYlog.txt"));
             BufferedInputStream bis2 = new BufferedInputStream(channelSftp.get("DISKlog.txt"));
 
-            File newFile = new File("C:/Users/Student/Documents/Master/monitoringApplicatie/logLinuxServer1/CPULinuxServer1.txt"); // kiest een bestand waar de gegevens in worden gezet
-            File newFile1 = new File("C:/Users/Student/Documents/Master/monitoringApplicatie/logLinuxServer1/MEMORYLinuxServer1.txt");
-            File newFile2 = new File("C:/Users/Student/Documents/Master/monitoringApplicatie/logLinuxServer1/DISKLinuxServer1.txt");
+            File newFile = new File("C:/Users/Student/Documents/KBS/monitoringApplicatie/logLinuxServer1/CPULinuxServer1.txt"); // kiest een bestand waar de gegevens in worden gezet
+            File newFile1 = new File("C:/Users/Student/Documents/KBS/monitoringApplicatie/logLinuxServer1/MEMORYLinuxServer1.txt");
+            File newFile2 = new File("C:/Users/Student/Documents/KBS/monitoringApplicatie/logLinuxServer1/DISKLinuxServer1.txt");
 
             OutputStream os = new FileOutputStream(newFile); // output gaat in de nieuwe file
             OutputStream os1 = new FileOutputStream(newFile1);
@@ -79,15 +78,17 @@ public class SSHdownloaden {
             bos.close();
             bos1.close();
             bos2.close();
-        } catch (
-                Exception ex) {
+        } catch (ConnectException | JSchException | SftpException ex) {
             ex.printStackTrace();
+            return false;
         }
-        session.disconnect(); // disconnect van de SSH sessie
+        session.disconnect();
         channel.disconnect();
+        channelSftp.disconnect();
+        return true;
     }
 
-    public static void downloadLinuxServer2() {
+    public static boolean downloadLinuxServer2() throws IOException {
         SFTPinJava sftPinJava = new SFTPinJava();
 
         String SFTPHOST = "192.168.2.101";
@@ -118,9 +119,9 @@ public class SSHdownloaden {
             //BufferedInputStream bis1 = new BufferedInputStream(channelSftp.get("MEMORYlog.txt"));
             BufferedInputStream bis2 = new BufferedInputStream(channelSftp.get("DISKlog.txt"));
 
-            File newFile = new File("C:/Users/Student/Documents/Master/monitoringApplicatie/logLinuxServer2/CPULinuxServer2.txt");
+            File newFile = new File("C:/Users/Student/Documents/KBS/monitoringApplicatie/logLinuxServer2/CPULinuxServer2.txt");
             //File newFile1 = new File("C:/Users/Student/Documents/Master/monitoringApplicatie/logLinuxServer2/MEMORYLinuxServer2.txt");
-            File newFile2 = new File("C:/Users/Student/Documents/Master/monitoringApplicatie/logLinuxServer2/DISKLinuxServer2.txt");
+            File newFile2 = new File("C:/Users/Student/Documents/KBS/monitoringApplicatie/logLinuxServer2/DISKLinuxServer2.txt");
 
             OutputStream os = new FileOutputStream(newFile);
             //OutputStream os1 = new FileOutputStream(newFile1);
@@ -153,15 +154,17 @@ public class SSHdownloaden {
             bos.close();
             //bos1.close();
             bos2.close();
-        } catch (
-                Exception ex) {
+        } catch (ConnectException | JSchException | SftpException ex) {
             ex.printStackTrace();
+            return false;
         }
         session.disconnect();
         channel.disconnect();
+        channelSftp.disconnect();
+        return true;
     }
 
-    public static void downloadWindowsServer1() {
+    public static boolean downloadWindowsServer1() throws IOException {
         SFTPinJava sftPinJava = new SFTPinJava();
 
         String SFTPHOST = "192.168.1.106";
@@ -191,8 +194,8 @@ public class SSHdownloaden {
             BufferedInputStream bis = new BufferedInputStream(channelSftp.get("CPUlog.txt"));
             BufferedInputStream bis2 = new BufferedInputStream(channelSftp.get("DISKlog.txt"));
 
-            File newFile = new File("C:/Users/Student/Documents/Master/monitoringApplicatie/logWindowsServer1/CPUWindowsServer1.txt");
-            File newFile2 = new File("C:/Users/Student/Documents/Master/monitoringApplicatie/logWindowsServer1/DISKWindowsServer1.txt");
+            File newFile = new File("C:/Users/Student/Documents/KBS/monitoringApplicatie/logWindowsServer1/CPUWindowsServer1.txt");
+            File newFile2 = new File("C:/Users/Student/Documents/KBS/monitoringApplicatie/logWindowsServer1/DISKWindowsServer1.txt");
 
             OutputStream os = new FileOutputStream(newFile);
             OutputStream os2 = new FileOutputStream(newFile2);
@@ -216,15 +219,17 @@ public class SSHdownloaden {
             bis2.close();
             bos.close();
             bos2.close();
-        } catch (
-                Exception ex) {
+        } catch (ConnectException | JSchException | SftpException ex) {
             ex.printStackTrace();
+            return false;
         }
         session.disconnect();
         channel.disconnect();
+        channelSftp.disconnect();
+        return true;
     }
 
-    public static void downloadWindowsServer2() {
+    public static boolean downloadWindowsServer2() throws IOException {
         SFTPinJava sftPinJava = new SFTPinJava();
 
         String SFTPHOST = "192.168.1.107";
@@ -252,18 +257,18 @@ public class SSHdownloaden {
             byte[] buffer = new byte[1024];
 
             BufferedInputStream bis = new BufferedInputStream(channelSftp.get("CPUlog.txt"));
-           // BufferedInputStream bis1 = new BufferedInputStream(channelSftp.get("MEMORYlog.txt"));
+            // BufferedInputStream bis1 = new BufferedInputStream(channelSftp.get("MEMORYlog.txt"));
             BufferedInputStream bis2 = new BufferedInputStream(channelSftp.get("DISKlog.txt"));
 
-            File newFile = new File("C:/Users/Student/Documents/Master/monitoringApplicatie/logWindowsServer2/CPUWindowsServer2.txt");
-           // File newFile1 = new File("C:/Users/Student/Documents/Github/KBS2D-master/monitoringApplicatie/logWindowsServer2/MEMORYWindowsServer2.txt");
-            File newFile2 = new File("C:/Users/Student/Documents/Master/monitoringApplicatie/logWindowsServer2/DISKWindowsServer2.txt");
+            File newFile = new File("C:/Users/Student/Documents/KBS/monitoringApplicatie/logWindowsServer2/CPUWindowsServer2.txt");
+            // File newFile1 = new File("C:/Users/Student/Documents/Github/KBS2D-master/monitoringApplicatie/logWindowsServer2/MEMORYWindowsServer2.txt");
+            File newFile2 = new File("C:/Users/Student/Documents/KBS/monitoringApplicatie/logWindowsServer2/DISKWindowsServer2.txt");
 
             OutputStream os = new FileOutputStream(newFile);
-           // OutputStream os1 = new FileOutputStream(newFile1);
+            // OutputStream os1 = new FileOutputStream(newFile1);
             OutputStream os2 = new FileOutputStream(newFile2);
             BufferedOutputStream bos = new BufferedOutputStream(os);
-           // BufferedOutputStream bos1 = new BufferedOutputStream(os1);
+            // BufferedOutputStream bos1 = new BufferedOutputStream(os1);
             BufferedOutputStream bos2 = new BufferedOutputStream(os2);
 
             int readCount;
@@ -273,10 +278,10 @@ public class SSHdownloaden {
                 bos.write(buffer, 0, readCount);
             }
 
-          //  while ((readCount = bis1.read(buffer)) > 0) {
-          //      System.out.println("Writing: ");
-          //      bos1.write(buffer, 0, readCount);
-          //  }
+            //  while ((readCount = bis1.read(buffer)) > 0) {
+            //      System.out.println("Writing: ");
+            //      bos1.write(buffer, 0, readCount);
+            //  }
 
             while ((readCount = bis2.read(buffer)) > 0) {
                 System.out.println("Writing: ");
@@ -284,18 +289,18 @@ public class SSHdownloaden {
             }
 
             bis.close();
-           // bis1.close();
+            // bis1.close();
             bis2.close();
             bos.close();
-           // bos1.close();
+            // bos1.close();
             bos2.close();
-        } catch (
-                Exception ex) {
+        } catch (ConnectException | JSchException | SftpException ex) {
             ex.printStackTrace();
+            return false;
         }
         session.disconnect();
         channel.disconnect();
         channelSftp.disconnect();
+        return true;
     }
-
 }
