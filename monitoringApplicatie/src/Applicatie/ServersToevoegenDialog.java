@@ -203,9 +203,11 @@ public class ServersToevoegenDialog implements ActionListener, MouseListener {
         if (e.getSource() == jbOpslaan) {
             try {
                 if (bewerkenPressed) { //Check of een server is bewerkt. Checkt niet of de waardes hetzelfde zijn gebleven.
-                    //Input check, gooit een exception als de variabele niet omgezet kan worden.
+                    //Input check, gooit een exception als de variabele niet omgezet kan worden en niet voldoet aan de voorwaarden.
+                    jlfoutmelding.setText("");
                     jlfoutmelding.setVisible(false);
                     jlsucces.setVisible(false);
+                    jlsucces.setText("");
                     String naam = jtnaam.getText();
                     int prijs = Integer.parseInt(jtprijs.getText());
                     Double beschikbaarheid = Double.parseDouble(jtbeschikbaarheid.getText());
@@ -243,6 +245,8 @@ public class ServersToevoegenDialog implements ActionListener, MouseListener {
                             Writer.write(naam + "," + prijs + "," + beschikbaarheid + "," + type);
                             jlsucces.setText("Server is succesvol toegevoegd");
                             jlsucces.setVisible(true);
+                            jlfoutmelding.setVisible(false);
+                            jlfoutmelding.setText("");
                         }
                         Writer.close();
                     } catch (IOException ioe) {
@@ -253,11 +257,13 @@ public class ServersToevoegenDialog implements ActionListener, MouseListener {
                 else{
                     jlfoutmelding.setText("Voordat u een bewerk kunt opslaan, moet u hem eerst bewerken.");
                     jlfoutmelding.setVisible(true);
+                    jlsucces.setVisible(false);
                 }
             }
             catch(NumberFormatException ne){
                 jlfoutmelding.setText("Ongeldige invoer!");
                 jlfoutmelding.setVisible(true);
+                jlsucces.setVisible(false);
             }
             changeVisibility(false);
         }
